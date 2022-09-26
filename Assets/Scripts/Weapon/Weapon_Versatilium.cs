@@ -4,16 +4,53 @@ using UnityEngine;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
+
+    public enum ProjectileTypes {Hitscan, Projectile }
+
     public bool debugMode = true;
 
-    [Header("Weapon Settings")]
-    public Attack_Mode_Settings currentMode;
-    public Attack_Projectile_Setting currentProjectile;
-    public Attack_Delivery_Setting currentDelivery;
-    public Attack_OnHit_Settings currentOnHit;
+    [Header("General")]
+    public float damage = 10;
+    public float knockback = 10;
+    public float fireRate = 2;
+    float fireRate_CD;
+    public int PelletCount = 1;
+    public float Deviation = 0.01f;
+
+    [Header("Alt-Fire: Charge")]
+    public bool trigger_scaleOffCharge = false;
+    public Weapon_Versatilium altFire_Charge;
+    public float Charge_minimumTime = 0.1f;
+    public float Charge_maximumTime = 1f;
+    float Charge_current;
+
+    [Header("Alt-Fire: Double Tap")]
+    public bool trigger_doubleTab;
+    public Weapon_Versatilium altFire_doubleTap;
+
+
+    [Header("Physics")]
+    public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
+    public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
+    public float Projectile_Gravity = 9.807f;
+    public bool deleteProjectileOnImpact = true;
+    public int bounceCount = 0;
+    public bool freezeOnImpact = true;
 
     [Header("Misc. Settings")]
+    public float lingerTimeAtLocation = 0;
+
+    [Header("Variables")]
     public Transform playerEyes;
+    public Transform Model_Weapon;
+    public Transform Origin_Barrel;
+    public ParticleSystem gunParticles;
+
+    public void OnHit(string testValue)
+    {
+        Debug.Log(testValue + " + " + damage + " actual damage.");
+
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -26,29 +63,13 @@ public class Weapon_Versatilium : MonoBehaviour
     void Update()
     {
         
-       OnFire(currentMode);
+       OnFire();
     }
 
 				#region OnFire
-				[System.Serializable]
-    public class Attack_Mode_Settings
-    {
-        [Header("General")]
-        public float fireRate = 2;
-
-        [Header("Charging")]
-        public bool basedOffCharge;
-        public float Charge_minimumTime = 0.1f;
-        public float Charge_maximumTime = 1f;
-
-        [Header("Other")]
-        public bool doubleTab;
-    }
-
-    float fireRate_CD;
 
 
-    void OnFire(Attack_Mode_Settings attackMode)
+    void OnFire()
     {
         fireRate_CD -= Time.deltaTime;
 
@@ -56,8 +77,8 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (fireRate_CD < 0)
             {
-                fireRate_CD = 1f / attackMode.fireRate;
-                CreateProjectile(currentProjectile);
+                fireRate_CD = 1f / fireRate;
+                CreateProjectile();
             }
         }
         
@@ -67,34 +88,15 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#region Projectile
 
-				[System.Serializable]
-    public class Attack_Projectile_Setting
-    {
-        [Header("General")]
-        public int Projectile_Count = 1;
-        public float Projectile_Deviation = 0;
-        public bool Projectile_FixedSpread;
-
-        [Header("Physics")]
-        public bool UseProjectiles;
-        public float Projectile_Physics_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
-        public float Projectile__Physics_Gravity = 9.807f;
-    }
-
-
-    public Vector2 TestDeviation;
-
-    void CreateProjectile(Attack_Projectile_Setting projectileMode)
+    void CreateProjectile()
     {
 
-        if (!projectileMode.UseProjectiles) // Hitscan
+        if (ProjectileType == ProjectileTypes.Hitscan)
         {
 
-            for (int i = 0; i < projectileMode.Projectile_Count; i++)
+            for (int i = 0; i < PelletCount; i++)
             {
-                float projectile_Deviation = projectileMode.Projectile_Deviation;
-
-                Vector3 rayDeviation = playerEyes.right * Random.Range(-projectile_Deviation, projectile_Deviation) + playerEyes.up * Random.Range(-projectile_Deviation, projectile_Deviation);
+                Vector3 rayDeviation = playerEyes.right * Random.Range(-Deviation, Deviation) + playerEyes.up * Random.Range(-Deviation, Deviation);
 
                 Vector3 rayOrigin = playerEyes.position;
                 Vector3 rayDirection = playerEyes.forward + rayDeviation;
@@ -106,14 +108,19 @@ public class Weapon_Versatilium : MonoBehaviour
 																{
                     float debugRange = hit.distance + (hit.distance == 0 ? 100 : 0);
 
-                    Debug.DrawRay(rayOrigin, rayDirection * debugRange, Color.red, currentMode.fireRate);
-																}
+                    Debug.DrawRay(rayOrigin, rayDirection * debugRange, Color.red, fireRate_CD); // The firerate CD is 1f/ firerate in this tic
+
+
+                    Debug.DrawLine(Origin_Barrel.position, rayOrigin + rayDirection * debugRange, Color.blue, fireRate_CD); // The firerate CD is 1f/ firerate in this tic
+                }
 
                 /// Raycast hit gives me a lot of information I need to take with me
                 /// hit.point being the biggest one.
                 /// 
 
-                DetectTargets(currentDelivery, hit.point);
+                gunParticles.Play();
+
+                DetectTargets(hit.point);
 
             }
         }
@@ -122,20 +129,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#region Delivery
 
-				[System.Serializable]
-    public class Attack_Delivery_Setting
-    {
-        [Header("General")]
-        public bool deleteProjectileOnImpact = true;
-        public int bounceCount = 0;
-        public bool freezeOnImpact = true;
-
-        [Header("Triggering OnHit")]
-        public bool instant = true;
-        public float lingerTimeAtLocation = 0;
-    }
-
-    void DetectTargets(Attack_Delivery_Setting deliveryMode, Vector3 impactPosition)
+		
+    void DetectTargets(Vector3 impactPosition)
     {
 
 
@@ -147,16 +142,12 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (enemyScript != null)
             {
-                OnHit(currentOnHit, enemyScript);
+                OnHit(enemyScript);
             }
 
 
             
         }
-
-
-        OnHit(currentOnHit, null);
-
 
     }
 
@@ -164,21 +155,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#region OnHit
 
-				[System.Serializable]
-    public class Attack_OnHit_Settings
-    {
-        [Header("General")]
-        public float damage;
-        public float knockback;
 
-        public void OnHit(string testValue)
-        {
-            Debug.Log(testValue + " + " + damage + " actual damage.");
-
-        }
-    }
-
-    void OnHit(Attack_OnHit_Settings onHitMode, Controller_Enemy enemyScript)
+    void OnHit(Controller_Enemy enemyScript)
 				{
 
         if (enemyScript != null) // Hit enemy
@@ -200,5 +178,14 @@ public class Weapon_Versatilium : MonoBehaviour
     }
 
 				#endregion
+
+
+    void ParticlesAndEffects(int state)// State 0 = OnFire
+				{
+        if(state == 0) // On Fire
+								{
+
+								}
+				}
 
 }
