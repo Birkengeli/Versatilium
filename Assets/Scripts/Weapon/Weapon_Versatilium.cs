@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
-
-  
-
-   
     public bool debugMode = true;
 
     [Header("Weapon Settings")]
@@ -29,8 +25,8 @@ public class Weapon_Versatilium : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            OnFire(currentMode);
+        
+       OnFire(currentMode);
     }
 
 				#region OnFire
@@ -49,11 +45,21 @@ public class Weapon_Versatilium : MonoBehaviour
         public bool doubleTab;
     }
 
+    float fireRate_CD;
+
 
     void OnFire(Attack_Mode_Settings attackMode)
     {
+        fireRate_CD -= Time.deltaTime;
 
-        CreateProjectile(currentProjectile);
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            if (fireRate_CD < 0)
+            {
+                fireRate_CD = 1f / attackMode.fireRate;
+                CreateProjectile(currentProjectile);
+            }
+        }
         
     }
 
