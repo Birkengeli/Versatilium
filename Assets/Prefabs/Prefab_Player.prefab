@@ -4981,6 +4981,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 1
+  WeaponStats:
+    damage: 10
+    knockback: 10
+    fireRate: 2
+    PelletCount: 1
+    Deviation: 0.01
+    trigger_scaleOffCharge: 0
+    Charge_minimumTime: 0.1
+    Charge_maximumTime: 1
+    trigger_doubleTab: 0
+    ProjectileType: 2
+    Projectile_Speed: 25
+    Projectile_Gravity: 9.807
+    deleteProjectileOnImpact: 1
+    bounceCount: 0
+    freezeOnImpact: 1
+    lingerTimeAtLocation: 0
+    Visuals_UseCustom: 1
+    Visuals_Projectile:
+      name: Idle
+      sprites:
+      - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+      - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+      - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+      - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+      DoLoop: 1
+  WeaponStats_Alt:
+    damage: 10
+    knockback: 10
+    fireRate: 2
+    PelletCount: 1
+    Deviation: 0.01
+    trigger_scaleOffCharge: 0
+    Charge_minimumTime: 0.1
+    Charge_maximumTime: 1
+    trigger_doubleTab: 0
+    ProjectileType: 0
+    Projectile_Speed: 25
+    Projectile_Gravity: 9.807
+    deleteProjectileOnImpact: 1
+    bounceCount: 0
+    freezeOnImpact: 1
+    lingerTimeAtLocation: 0
+    Visuals_UseCustom: 0
+    Visuals_Projectile:
+      name: 
+      sprites: []
+      DoLoop: 0
   damage: 10
   knockback: 10
   fireRate: 2
@@ -4992,7 +5040,7 @@ MonoBehaviour:
   Charge_maximumTime: 1
   trigger_doubleTab: 0
   altFire_doubleTap: {fileID: 0}
-  ProjectileType: 0
+  ProjectileType: 2
   Projectile_Speed: 25
   Projectile_Gravity: 9.807
   deleteProjectileOnImpact: 1
@@ -5003,6 +5051,8 @@ MonoBehaviour:
   Model_Weapon: {fileID: 5794621778294434877}
   Origin_Barrel: {fileID: 1121983416118808254}
   gunParticles: {fileID: 3912959059411891414}
+  Prefab_Projectile: {fileID: 0}
+  Projectiles: []
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0
@@ -5016,7 +5066,7 @@ GameObject:
   - component: {fileID: 6332088235026572215}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

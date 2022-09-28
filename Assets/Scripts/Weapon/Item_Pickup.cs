@@ -7,6 +7,10 @@ public class Item_Pickup : MonoBehaviour
     public bool debugMode = true;
     float orbitTimer = 0;
 
+    [Header("Pickup")]
+    public Weapon_Versatilium.WeaponStatistics Option_A;
+    public Weapon_Versatilium.WeaponStatistics Option_B;
+
     [Header("Settings")]
     public float distance = 2f;
 
