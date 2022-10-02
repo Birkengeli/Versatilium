@@ -10,6 +10,7 @@ public class Tools_Animator : MonoBehaviour
         public string name;
         public Sprite[] sprites;
         public bool DoLoop;
+        public bool startRandom;
     }
 
     public CustomAnimation[] Animations;
@@ -58,7 +59,7 @@ public class Tools_Animator : MonoBehaviour
             if (Animations[i].name == name)
             {
                 CurrentAnimation = Animations[i];
-                frameIndex = 0;
+                frameIndex = Animations[i].startRandom ? Random.Range(0, Animations[i].sprites.Length) : 0;
                 return;
             }
 

@@ -23,7 +23,7 @@ public class Controller_Character : MonoBehaviour
     public float sprintSpeedModifier = 2;
     public float jumpHeight = 2;
     public bool hasAirControl;
-    Vector3 velocity;
+    public Vector3 velocity;
     private float characterHeight;
 
     [Header("Vertical Attributes")]

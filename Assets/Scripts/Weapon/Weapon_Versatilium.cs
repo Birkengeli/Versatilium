@@ -7,9 +7,95 @@ public class Weapon_Versatilium : MonoBehaviour
 
     public enum ProjectileTypes {Hitscan, ProjectilePhysics, ProjectileSimulated }
 
+    [System.Flags]
+    public enum OptionReplace // i think I should actually sort this in Weapon parts.
+    {
+        Nothing = 0 << 0,
+
+        Damage = 1 << 0,
+        Firerate = 1 << 1,
+        TriggerPrimary = 1 << 2,
+        TriggerSecondary = 1 << 3,
+    }
+
+    [System.Serializable]
+    public class Sound
+    {
+        public string name = "No Name";
+        public AudioClip[] audioClips;
+        [Header("Settings")]
+        public float volumeScale = 1;
+        public randomTypes random = randomTypes.NeverTwice;
+
+        private int lastIndex = 999;
+
+        public static void Play(string name, Sound[] sounds, AudioSource audioSource, bool ignoreMissing = false)
+        {
+            for (int i = 0; i < sounds.Length; i++)
+            {
+                if (sounds[i].name == name)
+                {
+                    Play(sounds[i], audioSource);
+                    return;
+                }
+            }
+
+            if(!ignoreMissing)
+                Debug.LogWarning("Could Not find the Sound called '" + name + "'.");
+        }
+
+        public static void Play(Sound sound, AudioSource audioSource)
+        {
+            AudioClip clip = sound.audioClips[0];
+
+												#region Random Order
+												if (sound.random == randomTypes.Random)
+                clip = sound.audioClips[Random.Range(0, sound.audioClips.Length)];
+
+            if (sound.random == randomTypes.NeverTwice)
+            {
+                int randomIndex = -1;
+                while (true)
+                {
+                    randomIndex = Random.Range(0, sound.audioClips.Length);
+
+                    if (randomIndex != sound.lastIndex)
+                    {
+                        sound.lastIndex = randomIndex;
+                        clip = sound.audioClips[randomIndex];
+
+                        break;
+                    }
+                }
+            }
+
+            if (sound.random == randomTypes.Sequential)
+            {
+                int clipCount = sound.audioClips.Length;
+
+                if (sound.lastIndex >= clipCount)
+                    sound.lastIndex = 0;
+
+                clip = sound.audioClips[sound.lastIndex];
+                sound.lastIndex++;
+            }
+
+												#endregion
+
+												audioSource.PlayOneShot(clip, sound.volumeScale);
+        }
+
+        public enum randomTypes
+        {Sequential, NeverTwice, Random }
+    }
+
+    public Sound[] Sounds;
+
     [System.Serializable]
     public class WeaponStatistics
 				{
+        public OptionReplace WhatIsReplaced;
+
         [Header("General")]
         public float damage = 10;
         public float knockback = 10;
@@ -33,12 +119,17 @@ public class Weapon_Versatilium : MonoBehaviour
         public bool deleteProjectileOnImpact = true;
         public int bounceCount = 0;
         public bool freezeOnImpact = true;
+        public bool inheritUserVelocity = true;
 
         [Header("Misc. Settings")]
         public float lingerTimeAtLocation = 0;
         public bool Visuals_UseCustom;
         public Tools_Animator.CustomAnimation Visuals_Projectile;
         public float Visuals_ProjectileScale = 1f;
+        public bool isWieldedByPlayer = true;
+
+        [HideInInspector]
+        public Controller_Character characterController;
     }
 
     [System.Serializable]
@@ -67,6 +158,8 @@ public class Weapon_Versatilium : MonoBehaviour
     public List<Projectile> Projectiles;
     public float fireRate_GlobalCD;
 
+    private AudioSource audioSource;
+
     public void OnHit(string testValue)
     {
         Debug.Log(testValue + " + " + 99999 + " actual damage.");
@@ -78,6 +171,9 @@ public class Weapon_Versatilium : MonoBehaviour
     {
         if (playerEyes == null)
             playerEyes = GetComponentInChildren<Camera>().transform;
+
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -142,6 +238,7 @@ public class Weapon_Versatilium : MonoBehaviour
             if (fireRate_GlobalCD < 0)
             {
                 currentStats = WeaponStats; // The Default Firemode
+                Sound.Play("Fire", Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.fireRate;
                 CreateProjectile(currentStats);
@@ -217,6 +314,14 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.gravity = currentStats.Projectile_Gravity;
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
+
+                if(WeaponStats.inheritUserVelocity && WeaponStats.isWieldedByPlayer)
+																{
+                    if (WeaponStats.characterController == null)
+                        WeaponStats.characterController = transform.GetComponent<Controller_Character>();
+
+                    currentProjectile.velocity += WeaponStats.characterController.velocity;
+                }
 
                 if (WeaponStats.Visuals_UseCustom)
                 {

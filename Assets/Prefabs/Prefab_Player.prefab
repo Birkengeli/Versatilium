@@ -4907,6 +4907,7 @@ GameObject:
   - component: {fileID: 6332088234781394693}
   - component: {fileID: 6332088234781394715}
   - component: {fileID: 6332088234781394695}
+  - component: {fileID: 8907207702403650227}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -4957,12 +4958,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb12cd339662a54a9b95ff625e17e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusEffects: 0
+  StatusEffects: 4
   speed: 5
   friction: 10
   sprintSpeedModifier: 2
   jumpHeight: 2
   hasAirControl: 0
+  velocity: {x: 0, y: 0, z: 0}
   gravity: 9.81
   terminalVelocity: 80.55
   fallingInformatiom: '[Read Only]'
@@ -4980,8 +4982,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ea4276fc3d2dc429232485a36a4974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Sounds:
+  - name: Fire
+    audioClips:
+    - {fileID: 8300000, guid: ec1cd9653fffef2439ff23de84d33819, type: 3}
+    - {fileID: 8300000, guid: 2032bd4ce8ce8904d8acc21ac3987761, type: 3}
+    - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
+    volumeScale: 1
+    random: 1
   debugMode: 1
   WeaponStats:
+    WhatIsReplaced: 0
     damage: 10
     knockback: 10
     fireRate: 2
@@ -4992,11 +5003,12 @@ MonoBehaviour:
     Charge_maximumTime: 1
     trigger_doubleTab: 0
     ProjectileType: 2
-    Projectile_Speed: 25
-    Projectile_Gravity: 9.807
+    Projectile_Speed: 11
+    Projectile_Gravity: 0
     deleteProjectileOnImpact: 1
     bounceCount: 0
     freezeOnImpact: 1
+    inheritUserVelocity: 1
     lingerTimeAtLocation: 0
     Visuals_UseCustom: 1
     Visuals_Projectile:
@@ -5007,7 +5019,12 @@ MonoBehaviour:
       - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
       - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
       DoLoop: 1
+      startRandom: 1
+    Visuals_ProjectileScale: 0.5
+    isWieldedByPlayer: 1
+    characterController: {fileID: 0}
   WeaponStats_Alt:
+    WhatIsReplaced: 0
     damage: 10
     knockback: 10
     fireRate: 2
@@ -5023,36 +5040,120 @@ MonoBehaviour:
     deleteProjectileOnImpact: 1
     bounceCount: 0
     freezeOnImpact: 1
+    inheritUserVelocity: 1
     lingerTimeAtLocation: 0
     Visuals_UseCustom: 0
     Visuals_Projectile:
       name: 
       sprites: []
       DoLoop: 0
-  damage: 10
-  knockback: 10
-  fireRate: 2
-  PelletCount: 1
-  Deviation: 0.01
-  trigger_scaleOffCharge: 0
-  altFire_Charge: {fileID: 0}
-  Charge_minimumTime: 0.1
-  Charge_maximumTime: 1
-  trigger_doubleTab: 0
-  altFire_doubleTap: {fileID: 0}
-  ProjectileType: 2
-  Projectile_Speed: 25
-  Projectile_Gravity: 9.807
-  deleteProjectileOnImpact: 1
-  bounceCount: 0
-  freezeOnImpact: 1
-  lingerTimeAtLocation: 0
+      startRandom: 0
+    Visuals_ProjectileScale: 1
+    isWieldedByPlayer: 1
+    characterController: {fileID: 0}
   playerEyes: {fileID: 6332088235026572212}
   Model_Weapon: {fileID: 5794621778294434877}
   Origin_Barrel: {fileID: 1121983416118808254}
   gunParticles: {fileID: 3912959059411891414}
-  Prefab_Projectile: {fileID: 0}
+  Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
   Projectiles: []
+  fireRate_GlobalCD: 0
+--- !u!82 &8907207702403650227
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0
