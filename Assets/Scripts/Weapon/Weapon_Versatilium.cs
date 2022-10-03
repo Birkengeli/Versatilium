@@ -94,6 +94,12 @@ public class Weapon_Versatilium : MonoBehaviour
     [System.Serializable]
     public class WeaponStatistics
 				{
+
+        public enum TriggerTypes
+        {
+            SemiAutomatic, Automatic, Charge
+        }
+
         public OptionReplace WhatIsReplaced;
 
         [Header("General")]
@@ -102,12 +108,13 @@ public class Weapon_Versatilium : MonoBehaviour
         public float fireRate = 2;
         public int PelletCount = 1;
         public float Deviation = 0.01f;
+        public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
 
         [Header("Alt-Fire: Charge")]
         public bool trigger_scaleOffCharge = false;
         public float Charge_minimumTime = 0.1f;
         public float Charge_maximumTime = 1f;
-        float Charge_current;
+        [HideInInspector] public float Charge_current;
 
         [Header("Alt-Fire: Double Tap")]
         public bool trigger_doubleTab;
@@ -222,29 +229,76 @@ public class Weapon_Versatilium : MonoBehaviour
         }
     }
 
-				#region OnFire
+    #region OnFire
 
 
     void OnFire()
     {
-        WeaponStatistics currentStats;
+        WeaponStatistics currentStats = WeaponStats;  // The Default Firemode
 
         fireRate_GlobalCD -= Time.deltaTime;
 
 
-        if (Input.GetKey(KeyCode.Mouse0)) // basic Fire
+        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.SemiAutomatic)
         {
-
-            if (fireRate_GlobalCD < 0)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // basic Fire
             {
-                currentStats = WeaponStats; // The Default Firemode
                 Sound.Play("Fire", Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.fireRate;
                 CreateProjectile(currentStats);
             }
+
+       }
+
+
+        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.Automatic)
+        {
+            if (Input.GetKey(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // basic Fire
+            {
+                Sound.Play("Fire", Sounds, audioSource);
+
+                fireRate_GlobalCD = 1f / currentStats.fireRate;
+                CreateProjectile(currentStats);
+            }
+
         }
-        
+
+        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.Charge)
+        {
+
+            if (Input.GetKeyDown(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Start Charge
+                WeaponStats_Alt.Charge_current = 0;
+            
+            if (Input.GetKey(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Charging
+                WeaponStats_Alt.Charge_current += Time.deltaTime;
+
+            if (Input.GetKeyUp(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Release Charge
+            {
+                if (WeaponStats_Alt.Charge_current < WeaponStats_Alt.Charge_minimumTime)
+                {
+                    // On Tap fire
+
+                    Sound.Play("Fire", Sounds, audioSource);
+
+                    fireRate_GlobalCD = 1f / currentStats.fireRate;
+                    CreateProjectile(currentStats);
+                }
+                else
+                {
+                    // On Charged shot
+
+                    Sound.Play("Charged Fire", Sounds, audioSource);
+
+                    fireRate_GlobalCD = 1f / WeaponStats_Alt.fireRate;
+                    CreateProjectile(WeaponStats_Alt);
+                }
+
+                WeaponStats_Alt.Charge_current = 0;
+            }
+
+        }
+
     }
 
 				#endregion
@@ -315,22 +369,22 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
 
-                if(WeaponStats.inheritUserVelocity && WeaponStats.isWieldedByPlayer)
+                if(currentStats.inheritUserVelocity && currentStats.isWieldedByPlayer)
 																{
-                    if (WeaponStats.characterController == null)
-                        WeaponStats.characterController = transform.GetComponent<Controller_Character>();
+                    if (currentStats.characterController == null)
+                        currentStats.characterController = transform.GetComponent<Controller_Character>();
 
-                    currentProjectile.velocity += WeaponStats.characterController.velocity;
+                    currentProjectile.velocity += currentStats.characterController.velocity;
                 }
 
-                if (WeaponStats.Visuals_UseCustom)
+                if (currentStats.Visuals_UseCustom)
                 {
                     currentProjectile.visualTransform = Instantiate(Prefab_Projectile).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
                     currentProjectile.visualTransform.localScale = Vector3.one * currentStats.Visuals_ProjectileScale;
 
                     currentProjectile.anim = currentProjectile.visualTransform.GetComponent<Tools_Animator>();
-                    currentProjectile.anim.Animations[0] = WeaponStats.Visuals_Projectile;
+                    currentProjectile.anim.Animations[0] = currentStats.Visuals_Projectile;
 
                     if(true) // This part is what corrects the sprite, but right now I don't want the sprite to start in my face.
                     { 

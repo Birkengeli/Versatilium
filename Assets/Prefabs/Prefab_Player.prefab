@@ -4908,6 +4908,7 @@ GameObject:
   - component: {fileID: 6332088234781394715}
   - component: {fileID: 6332088234781394695}
   - component: {fileID: 8907207702403650227}
+  - component: {fileID: 1427095473}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -4987,6 +4988,10 @@ MonoBehaviour:
     audioClips:
     - {fileID: 8300000, guid: ec1cd9653fffef2439ff23de84d33819, type: 3}
     - {fileID: 8300000, guid: 2032bd4ce8ce8904d8acc21ac3987761, type: 3}
+    volumeScale: 1
+    random: 1
+  - name: Charged Fire
+    audioClips:
     - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
     volumeScale: 1
     random: 1
@@ -4998,12 +5003,48 @@ MonoBehaviour:
     fireRate: 2
     PelletCount: 1
     Deviation: 0.01
+    triggerType: 2
     trigger_scaleOffCharge: 0
-    Charge_minimumTime: 0.1
+    Charge_minimumTime: 0.2
     Charge_maximumTime: 1
+    Charge_current: 0
     trigger_doubleTab: 0
     ProjectileType: 2
     Projectile_Speed: 11
+    Projectile_Gravity: 0
+    deleteProjectileOnImpact: 1
+    bounceCount: 0
+    freezeOnImpact: 1
+    inheritUserVelocity: 1
+    lingerTimeAtLocation: 0
+    Visuals_UseCustom: 1
+    Visuals_Projectile:
+      name: Idle
+      sprites:
+      - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+      - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+      - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+      - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+      DoLoop: 1
+      startRandom: 1
+    Visuals_ProjectileScale: 0.2
+    isWieldedByPlayer: 1
+    characterController: {fileID: 0}
+  WeaponStats_Alt:
+    WhatIsReplaced: 0
+    damage: 10
+    knockback: 10
+    fireRate: 2
+    PelletCount: 1
+    Deviation: 0
+    triggerType: 2
+    trigger_scaleOffCharge: 0
+    Charge_minimumTime: 0.1
+    Charge_maximumTime: 1
+    Charge_current: 0
+    trigger_doubleTab: 0
+    ProjectileType: 2
+    Projectile_Speed: 10
     Projectile_Gravity: 0
     deleteProjectileOnImpact: 1
     bounceCount: 0
@@ -5020,35 +5061,7 @@ MonoBehaviour:
       - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
       DoLoop: 1
       startRandom: 1
-    Visuals_ProjectileScale: 0.5
-    isWieldedByPlayer: 1
-    characterController: {fileID: 0}
-  WeaponStats_Alt:
-    WhatIsReplaced: 0
-    damage: 10
-    knockback: 10
-    fireRate: 2
-    PelletCount: 1
-    Deviation: 0.01
-    trigger_scaleOffCharge: 0
-    Charge_minimumTime: 0.1
-    Charge_maximumTime: 1
-    trigger_doubleTab: 0
-    ProjectileType: 0
-    Projectile_Speed: 25
-    Projectile_Gravity: 9.807
-    deleteProjectileOnImpact: 1
-    bounceCount: 0
-    freezeOnImpact: 1
-    inheritUserVelocity: 1
-    lingerTimeAtLocation: 0
-    Visuals_UseCustom: 0
-    Visuals_Projectile:
-      name: 
-      sprites: []
-      DoLoop: 0
-      startRandom: 0
-    Visuals_ProjectileScale: 1
+    Visuals_ProjectileScale: 0.2
     isWieldedByPlayer: 1
     characterController: {fileID: 0}
   playerEyes: {fileID: 6332088235026572212}
@@ -5154,6 +5167,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1427095473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656dbbad0e80c534abb57322a3b8aa32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthMax: 0
+  isDead: 0
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0
@@ -5180,7 +5207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6332088235026572213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

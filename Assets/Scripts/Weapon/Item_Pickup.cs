@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Item_Pickup : MonoBehaviour
 {
+
+    public enum Pickup
+				{
+        GiveVersatilium, RemoveVersatilium, PickOneOfTwo
+				}
+
     public bool debugMode = true;
     float orbitTimer = 0;
 
     [Header("Pickup")]
+    public Pickup pickupType = Pickup.PickOneOfTwo;
     public Weapon_Versatilium.WeaponStatistics Option_A;
     public Weapon_Versatilium.WeaponStatistics Option_B;
 
@@ -39,8 +46,26 @@ public class Item_Pickup : MonoBehaviour
 								{
             // On Pickup
 
-
+            OnPickup();
 
 								}
+    }
+
+
+    void OnPickup()
+    {
+        if (pickupType == Pickup.GiveVersatilium || pickupType == Pickup.RemoveVersatilium)
+        {
+            playerTransform.GetComponent<Weapon_Versatilium>().enabled = pickupType == Pickup.GiveVersatilium;
+        }
+
+        if (pickupType == Pickup.PickOneOfTwo)
+        {
+            Weapon_Versatilium weapon = playerTransform.GetComponent<Weapon_Versatilium>();
+        }
+
+
+
+
     }
 }
