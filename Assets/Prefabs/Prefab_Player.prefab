@@ -4994,7 +4994,7 @@ MonoBehaviour:
     audioClips:
     - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
     volumeScale: 1
-    random: 1
+    random: 2
   debugMode: 1
   WeaponStats:
     WhatIsReplaced: 0
