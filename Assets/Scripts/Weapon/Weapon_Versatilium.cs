@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class Weapon_Versatilium : MonoBehaviour
 {
+				#region Enums
+				public enum ProjectileTypes
+    {
+        Hitscan, ProjectilePhysics, ProjectileSimulated
+    }
 
-    public enum ProjectileTypes {Hitscan, ProjectilePhysics, ProjectileSimulated }
+    public enum ChargeOptions // I want damage and pellets at least.
+    {
+        Nothing, 
+    }
+
+    public enum TriggerTypes
+    {
+        None, SemiAutomatic, Automatic, Charge, Sight
+    }
 
     [System.Flags]
     public enum OptionReplace // i think I should actually sort this in Weapon parts.
@@ -17,8 +30,10 @@ public class Weapon_Versatilium : MonoBehaviour
         TriggerPrimary = 1 << 2,
         TriggerSecondary = 1 << 3,
     }
+				#endregion
 
-    [System.Serializable]
+				#region Classes & Structs
+				[System.Serializable]
     public class Sound
     {
         public string name = "No Name";
@@ -95,54 +110,6 @@ public class Weapon_Versatilium : MonoBehaviour
     public Sound[] Sounds;
 
     [System.Serializable]
-    public class WeaponStatistics
-				{
-
-        public enum TriggerTypes
-        {
-            SemiAutomatic, Automatic, Charge
-        }
-
-        public OptionReplace WhatIsReplaced;
-
-        [Header("General")]
-        public float damage = 10;
-        public float knockback = 10;
-        public float fireRate = 2;
-        public int PelletCount = 1;
-        public float Deviation = 0.01f;
-        public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
-
-        [Header("Alt-Fire: Charge")]
-        public bool trigger_scaleOffCharge = false;
-        public float Charge_minimumTime = 0.1f;
-        public float Charge_maximumTime = 1f;
-        [HideInInspector] public float Charge_current;
-
-        [Header("Alt-Fire: Double Tap")]
-        public bool trigger_doubleTab;
-
-        [Header("Physics")]
-        public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
-        public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
-        public float Projectile_Gravity = 9.807f;
-        public bool deleteProjectileOnImpact = true;
-        public int bounceCount = 0;
-        public bool freezeOnImpact = true;
-        public bool inheritUserVelocity = true;
-
-        [Header("Misc. Settings")]
-        public float lingerTimeAtLocation = 0;
-        public bool Visuals_UseCustom;
-        public Tools_Animator.CustomAnimation Visuals_Projectile;
-        public float Visuals_ProjectileScale = 1f;
-        public bool isWieldedByPlayer = true;
-
-        [HideInInspector]
-        public Controller_Character characterController;
-    }
-
-    [System.Serializable]
     public struct Projectile
     {
         public Transform visualTransform;
@@ -153,30 +120,72 @@ public class Weapon_Versatilium : MonoBehaviour
         public float lifeTime;
     }
 
-    public bool debugMode = true;
+    [System.Serializable]
+    public class WeaponStatistics
+				{
+        [Header("General")]
+        public float damage = 10;
+        public float knockback = 10;
+        public float fireRate = 2;
+        public int PelletCount = 1;
+        public float Deviation = 0.01f;
+
+        [Header("Physics")]
+        public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
+        public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
+        public float Projectile_Gravity = 9.807f;
+       // public bool deleteProjectileOnImpact = true;
+       // public int bounceCount = 0;
+      //  public bool freezeOnImpact = true;
+        public bool inheritUserVelocity = true;
+
+        [Header("Misc. Settings")]
+        public bool isWieldedByPlayer = true;
+        //  public float lingerTimeAtLocation = 0;
+        public bool Visuals_UseCustom;
+        public Tools_Animator.CustomAnimation Visuals_Projectile;
+        public float Visuals_ProjectileScale = 1f;
+
+
+        [HideInInspector]
+        public Controller_Character characterController;
+    }
+
+
+
+				#endregion
+
+				public bool debugMode = true;
 
     public WeaponStatistics WeaponStats;
     public WeaponStatistics WeaponStats_Alt;
+
+    [Header("Inputs")]
+    public KeyCode TriggerPrimary = KeyCode.Mouse0;
+    public KeyCode TriggerSecondary = KeyCode.Mouse1;
+
+    public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
+    public TriggerTypes triggerType_Secondary = TriggerTypes.Sight;
+
+    [Header("Trigger Settings: (Charge)")]
+    public ChargeOptions chargeOption = ChargeOptions.Nothing;
+    public float Charge_minimumTime = 0.1f;
+    public float Charge_maximumTime = 1f;
+    private float Charge_current;
 
     [Header("Variables")]
     public Transform playerEyes;
     public Transform Model_Weapon;
     public Transform Origin_Barrel;
-    public ParticleSystem gunParticles;
     public GameObject Prefab_Projectile;
+
+    [Header("Components")]
+    public ParticleSystem gunParticles;
+    private AudioSource audioSource;
 
     public List<Projectile> Projectiles;
     public float fireRate_GlobalCD;
 
-    private AudioSource audioSource;
-
-    public void OnHit(string testValue)
-    {
-        Debug.Log(testValue + " + " + 99999 + " actual damage.");
-
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         if (playerEyes == null)
@@ -186,7 +195,6 @@ public class Weapon_Versatilium : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         float timeStep = Time.deltaTime;
@@ -242,9 +250,9 @@ public class Weapon_Versatilium : MonoBehaviour
         fireRate_GlobalCD -= Time.deltaTime;
 
 
-        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.SemiAutomatic)
+        if (triggerType == TriggerTypes.SemiAutomatic)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // basic Fire
+            if (Input.GetKeyDown(TriggerPrimary) && fireRate_GlobalCD < 0) // basic Fire
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
@@ -255,9 +263,9 @@ public class Weapon_Versatilium : MonoBehaviour
        }
 
 
-        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.Automatic)
+        if (triggerType == TriggerTypes.Automatic)
         {
-            if (Input.GetKey(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // basic Fire
+            if (Input.GetKey(TriggerPrimary) && fireRate_GlobalCD < 0) // basic Fire
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
@@ -267,18 +275,18 @@ public class Weapon_Versatilium : MonoBehaviour
 
         }
 
-        if (currentStats.triggerType == WeaponStatistics.TriggerTypes.Charge)
+        if (triggerType == TriggerTypes.Charge)
         {
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Start Charge
-                WeaponStats_Alt.Charge_current = 0;
+            if (Input.GetKeyDown(TriggerPrimary) && fireRate_GlobalCD < 0) // Start Charge
+                Charge_current = 0;
             
-            if (Input.GetKey(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Charging
-                WeaponStats_Alt.Charge_current += Time.deltaTime;
+            if (Input.GetKey(TriggerPrimary) && fireRate_GlobalCD < 0) // Charging
+                Charge_current += Time.deltaTime;
 
-            if (Input.GetKeyUp(KeyCode.Mouse0) && fireRate_GlobalCD < 0) // Release Charge
+            if (Input.GetKeyUp(TriggerPrimary) && fireRate_GlobalCD < 0) // Release Charge
             {
-                if (WeaponStats_Alt.Charge_current < WeaponStats_Alt.Charge_minimumTime)
+                if (Charge_current < Charge_minimumTime)
                 {
                     // On Tap fire
 
@@ -297,7 +305,7 @@ public class Weapon_Versatilium : MonoBehaviour
                     CreateProjectile(WeaponStats_Alt);
                 }
 
-                WeaponStats_Alt.Charge_current = 0;
+                Charge_current = 0;
             }
 
         }
@@ -312,8 +320,14 @@ public class Weapon_Versatilium : MonoBehaviour
     {
         gunParticles.Play();
 
-        #region Hitscan
-        if (currentStats.ProjectileType == ProjectileTypes.Hitscan)
+        #region Charge Options
+        float chargePercentage = (triggerType == TriggerTypes.Charge) ? Charge_current / Charge_maximumTime : 1;
+        
+
+								#endregion
+
+								#region Hitscan
+								if (currentStats.ProjectileType == ProjectileTypes.Hitscan)
         {
 
             for (int i = 0; i < currentStats.PelletCount; i++)
@@ -465,15 +479,10 @@ public class Weapon_Versatilium : MonoBehaviour
         }
     }
 
-				#endregion
+    #endregion
 
-
-    void ParticlesAndEffects(int state)// State 0 = OnFire
-				{
-        if(state == 0) // On Fire
-								{
-
-								}
-				}
-
+    public void OnHit(string testValue)
+    {
+        Debug.Log(testValue + " + " + 99999 + " actual damage.");
+    }
 }

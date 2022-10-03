@@ -4997,17 +4997,11 @@ MonoBehaviour:
     random: 2
   debugMode: 1
   WeaponStats:
-    WhatIsReplaced: 0
     damage: 10
     knockback: 10
     fireRate: 2
     PelletCount: 1
     Deviation: 0.01
-    triggerType: 2
-    trigger_scaleOffCharge: 0
-    Charge_minimumTime: 0.2
-    Charge_maximumTime: 1
-    Charge_current: 0
     trigger_doubleTab: 0
     ProjectileType: 2
     Projectile_Speed: 11
@@ -5015,7 +5009,7 @@ MonoBehaviour:
     deleteProjectileOnImpact: 1
     bounceCount: 0
     freezeOnImpact: 1
-    inheritUserVelocity: 1
+    inheritUserVelocity: 0
     lingerTimeAtLocation: 0
     Visuals_UseCustom: 1
     Visuals_Projectile:
@@ -5031,17 +5025,11 @@ MonoBehaviour:
     isWieldedByPlayer: 1
     characterController: {fileID: 0}
   WeaponStats_Alt:
-    WhatIsReplaced: 0
     damage: 10
     knockback: 10
     fireRate: 2
     PelletCount: 1
     Deviation: 0
-    triggerType: 2
-    trigger_scaleOffCharge: 0
-    Charge_minimumTime: 0.1
-    Charge_maximumTime: 1
-    Charge_current: 0
     trigger_doubleTab: 0
     ProjectileType: 2
     Projectile_Speed: 10
@@ -5049,7 +5037,7 @@ MonoBehaviour:
     deleteProjectileOnImpact: 1
     bounceCount: 0
     freezeOnImpact: 1
-    inheritUserVelocity: 1
+    inheritUserVelocity: 0
     lingerTimeAtLocation: 0
     Visuals_UseCustom: 1
     Visuals_Projectile:
@@ -5064,11 +5052,18 @@ MonoBehaviour:
     Visuals_ProjectileScale: 0.2
     isWieldedByPlayer: 1
     characterController: {fileID: 0}
+  TriggerPrimary: 323
+  TriggerSecondary: 324
+  triggerType: 3
+  triggerType_Secondary: 4
+  chargeOption: 0
+  Charge_minimumTime: 0.5
+  Charge_maximumTime: 1
   playerEyes: {fileID: 6332088235026572212}
   Model_Weapon: {fileID: 5794621778294434877}
   Origin_Barrel: {fileID: 1121983416118808254}
-  gunParticles: {fileID: 3912959059411891414}
   Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
+  gunParticles: {fileID: 3912959059411891414}
   Projectiles: []
   fireRate_GlobalCD: 0
 --- !u!82 &8907207702403650227
@@ -5179,7 +5174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656dbbad0e80c534abb57322a3b8aa32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthMax: 0
+  HealthMax: 100
   isDead: 0
 --- !u!1 &6332088235026572213
 GameObject:
