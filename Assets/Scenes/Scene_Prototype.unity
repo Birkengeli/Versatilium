@@ -682,13 +682,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3397605693041890364, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_isOrthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4281479730
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493850282950764588, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5257742221931657015, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
       propertyPath: m_Name
       value: _Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 5257742221931657015, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
