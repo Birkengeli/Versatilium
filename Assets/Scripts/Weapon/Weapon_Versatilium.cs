@@ -48,6 +48,9 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             AudioClip clip = sound.audioClips[0];
 
+            if (sound.audioClips.Length < 2) // If it's set to never twice and it's 1 or zero files, it will never find it.
+                sound.random = randomTypes.Random;
+
 												#region Random Order
 												if (sound.random == randomTypes.Random)
                 clip = sound.audioClips[Random.Range(0, sound.audioClips.Length)];
