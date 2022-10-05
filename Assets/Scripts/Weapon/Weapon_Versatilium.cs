@@ -118,6 +118,8 @@ public class Weapon_Versatilium : MonoBehaviour
         public Vector3 position;
         public float gravity;
         public float lifeTime;
+
+        public WeaponStatistics projectileStats;
     }
 
     [System.Serializable]
@@ -155,6 +157,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				public bool debugMode = true;
     public bool isWieldedByPlayer = true;
+    public bool canFire = true;
 
     public WeaponStatistics WeaponStats;
     public WeaponStatistics WeaponStats_Alt;
@@ -200,21 +203,49 @@ public class Weapon_Versatilium : MonoBehaviour
 
     }
 
+    public int frameCounter;
+
     void Update()
     {
+        frameCounter++;
+
         float timeStep = Time.deltaTime;
         float projectileMaxLife = 10f;
 
-        if(isWieldedByPlayer) // NPCs decide themselves when to run "OnFire()";
+        if(isWieldedByPlayer && canFire) // NPCs decide themselves when to run "OnFire()";
              OnFire();
 
         for (int i = 0; i < Projectiles.Count; i++)
         {
             Projectile currentProjectile = Projectiles[i];
+            bool impacted = false;
+
+            if (currentProjectile.lifeTime == 0)
+                print("I got fired at '"+ frameCounter + "'.");
+
+            {
+                RaycastHit hit;
+                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
+
+                impacted = hit.transform != null;
+
+               if(impacted)
+                    OnHit(currentProjectile.projectileStats, hit.point);
+            }
+
+            if (debugMode)
+            {
+                float ColorGradeUp = currentProjectile.lifeTime / projectileMaxLife;
+                float ColorGradeDown = 1f - ColorGradeUp;
+
+                Color customColor = new Color(ColorGradeDown, 0, ColorGradeUp);
+
+                Debug.DrawRay(currentProjectile.position, currentProjectile.velocity * timeStep, customColor, 1f);
+            }
 
             currentProjectile.lifeTime += timeStep;
-            currentProjectile.velocity += Vector3.down * currentProjectile.gravity * timeStep;
             currentProjectile.position += currentProjectile.velocity * timeStep;
+            currentProjectile.velocity += Vector3.down * currentProjectile.gravity * timeStep;
 
 
             if (currentProjectile.visualTransform != null)
@@ -226,15 +257,7 @@ public class Weapon_Versatilium : MonoBehaviour
            Projectiles[i] = currentProjectile;
 
 
-            if(debugMode)
-												{
-                float ColorGradeUp = currentProjectile.lifeTime / projectileMaxLife;
-                float ColorGradeDown = 1f - ColorGradeUp;
-
-                Color customColor = new Color(ColorGradeDown, 0, ColorGradeUp);
-
-                Debug.DrawRay(currentProjectile.position, -currentProjectile.velocity * timeStep, customColor, 1f); // Fun Fact: I am drawing this ray backwards (to compensate for already applying velocity)
-												}
+           
 
             if (currentProjectile.lifeTime > projectileMaxLife)
             {
@@ -372,7 +395,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 /// 
 
        
-                DetectTargets(currentStats, hit.point);
+                OnHit(currentStats, hit.point);
 
             }
 
@@ -402,6 +425,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.gravity = currentStats.Projectile_Gravity;
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
+                currentProjectile.projectileStats = currentStats;
 
                 if(isWieldedByPlayer && currentStats.inheritUserVelocity)
 																{
@@ -427,6 +451,9 @@ public class Weapon_Versatilium : MonoBehaviour
                     }
                 }
 
+
+                    print("I got created at '" + frameCounter + "'.");
+
                 Projectiles.Add(currentProjectile);
 
                 if (debugMode)
@@ -449,7 +476,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void DetectTargets(WeaponStatistics currentStats, Vector3 impactPosition)
+    void OnHit(WeaponStatistics currentStats, Vector3 impactPosition) // i want to skip this step at some point.
     {
 
 
@@ -457,11 +484,13 @@ public class Weapon_Versatilium : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            Controller_Enemy enemyScript = hits[i].transform.GetComponent<Controller_Enemy>();
+            Transform currentHit = hits[i].transform;
 
-            if (enemyScript != null)
+            
+
+            if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
             {
-                OnHit(currentStats, enemyScript);
+                Component_Health.Get(currentHit).OnTakingDamage((int)currentStats.damage, Vector3.up *  currentStats.knockback);
             }
 
 
@@ -472,31 +501,6 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#endregion
 
-				#region OnHit
-
-
-    void OnHit(WeaponStatistics currentStats, Controller_Enemy enemyScript)
-				{
-
-        if (enemyScript != null) // Hit enemy
-        {
-            // Damage
-
-            // Knockback
-            
-
-            Debug.Log("PEW! ~Splunk~");
-
-
-        }
-
-        if (enemyScript == null) // Hit terrain
-        {
-            Debug.Log("PEW! ~Thud~");
-        }
-    }
-
-    #endregion
 
     public void OnHit(string testValue)
     {

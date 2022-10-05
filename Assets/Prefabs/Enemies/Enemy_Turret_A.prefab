@@ -129,6 +129,8 @@ GameObject:
   - component: {fileID: 3765674564435915198}
   - component: {fileID: 4877620946721651445}
   - component: {fileID: 6847554088592959845}
+  - component: {fileID: 3469287836890342317}
+  - component: {fileID: 3469287836890342316}
   m_Layer: 0
   m_Name: Enemy_Turret_A
   m_TagString: Enemy
@@ -217,6 +219,7 @@ MonoBehaviour:
   debugMode: 1
   DetectionRange: 10
   AimSpeed: 50
+  ConeOfFire: 45
   Weapon: {fileID: 4877620946721651445}
   HealthMax: 100
   enemyType: 0
@@ -244,6 +247,7 @@ MonoBehaviour:
     random: 0
   debugMode: 0
   isWieldedByPlayer: 0
+  canFire: 1
   WeaponStats:
     damage: 10
     knockback: 10
@@ -296,6 +300,7 @@ MonoBehaviour:
   gunParticles: {fileID: 0}
   Projectiles: []
   fireRate_GlobalCD: 0
+  frameCounter: 0
 --- !u!82 &6847554088592959845
 AudioSource:
   m_ObjectHideFlags: 0
@@ -392,6 +397,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &3469287836890342317
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072156493587378807}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.0000005
+  m_Center: {x: -0.000000002247831, y: -0.000000011480828, z: 0.050000012}
+--- !u!114 &3469287836890342316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072156493587378807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656dbbad0e80c534abb57322a3b8aa32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthMax: 30
+  healthCurrent: -1
+  knockback_Multiplier: 0
+  isDead: 0
+  deathCountdown: 5
+  deathCountdown_SpeedModifier: 2
+  deathCountdown_SpeedDuration: 0.5
 --- !u!1 &5139203246875817703
 GameObject:
   m_ObjectHideFlags: 0

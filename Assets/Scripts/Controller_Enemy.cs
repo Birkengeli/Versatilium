@@ -13,6 +13,7 @@ public class Controller_Enemy : MonoBehaviour
     [Header("Attack")]
     public float DetectionRange = 10;
     public float AimSpeed = 100;
+    public float ConeOfFire = 45;
     public Weapon_Versatilium Weapon;
 
     [Header("Defense")]
@@ -82,14 +83,17 @@ public class Controller_Enemy : MonoBehaviour
                 {
                     isInvincible = false;
 
-                    float degreesOff = (1f - LookAt(player.position, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
+                    Vector3 targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+
+                    float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
                     bool fire = false;
 
-                    if (Weapon.WeaponStats.Deviation > degreesOff)
+                    if(degreesOff > ConeOfFire)
                         fire = true;
 
                     Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None);
 
+                    
 
                 }
                 else
@@ -109,20 +113,56 @@ public class Controller_Enemy : MonoBehaviour
 
     float LookAt(Vector3 targetPosition, Vector3 currentForward, Transform horizontalTransform, Transform verticalTransform)
     {
+        /// I think it is possible to get the vertical need from a static point, so it doens't turn awkwardly and excessibvely while rotating
+
         Vector3 directionToTarget = targetPosition - horizontalTransform.position;
 
         float dot_Forward = Vector3.Dot(directionToTarget.normalized, -verticalTransform.up);
         float dot_Vertical = Vector3.Dot(verticalTransform.forward, directionToTarget.normalized);
         float dot_Horizontal = Vector3.Dot(horizontalTransform.right, directionToTarget.normalized);
 
-        bool isCloseEnough = dot_Forward > 0.999f;
-        bool isToMyRight = dot_Horizontal < 0;
-        bool isAboveMe = dot_Vertical < 0;
+
+
+
 
         if (true)
         {
+            bool isCloseEnough = dot_Forward > 0.999f;
+            bool isToMyRight = dot_Horizontal < 0;
+            bool isAboveMe = dot_Vertical < 0;
+
+            float lerpKickIn = 1f * 0.01f;
+            float lerpPercentage = dot_Forward > (1f - lerpKickIn) ? (1f - dot_Forward) / lerpKickIn : 1;
+
             float input_X = Time.deltaTime * AimSpeed * (isAboveMe ? 1 : -1);
             float input_Y = Time.deltaTime * AimSpeed * (isToMyRight ? 1 : -1);
+
+            viewEuler += new Vector2(input_X, -input_Y) * lerpPercentage;
+            viewEuler.x = Mathf.Clamp(viewEuler.x, -50, 50);
+
+            verticalTransform.localEulerAngles = Vector3.right * viewEuler.x;
+            horizontalTransform.localEulerAngles = Vector3.forward * viewEuler.y;
+        }
+
+        if (false && dot_Forward < 0.999f)
+        {
+            dot_Horizontal = Mathf.Round(dot_Horizontal * 100) / 100;
+
+            bool isCloseEnough = dot_Forward > 0.999f;
+            bool isToMyRight = dot_Horizontal <= 0;
+            bool isAboveMe = dot_Vertical < 0;
+
+            float horizontalDegrees = 180f - (1f - dot_Horizontal) * 180;
+
+            print(Mathf.Round(horizontalDegrees) + " Degrees");
+
+            float degreesASecond = AimSpeed * Time.deltaTime;
+            float degreesOff = Mathf.Abs(horizontalDegrees);
+
+            float input_X = Time.deltaTime * AimSpeed * (isAboveMe ? 1 : -1);
+            float input_Y = Mathf.Min(degreesASecond, degreesOff) * (isToMyRight ? 1 : -1);
+
+            input_X = 0; // Debug
 
             viewEuler += new Vector2(input_X, -input_Y);
             viewEuler.x = Mathf.Clamp(viewEuler.x, -50, 50);
@@ -131,8 +171,38 @@ public class Controller_Enemy : MonoBehaviour
             horizontalTransform.localEulerAngles = Vector3.forward * viewEuler.y;
         }
 
-        return dot_Forward;
+        return (1f - dot_Forward) * 180;
     }
 
+    Vector3 targetPosition_Previous;
+
+    Vector3 Target_LeadShot(Vector3 targetPosition_Current, float projectileSpeed) // I believe my inconsistent framerate causes some leading issues.
+    {
+        float timeStep = Time.deltaTime;
+
+        Vector3 targetVelocity = targetPosition_Current - targetPosition_Previous;
+        float targetSpeed = targetVelocity.magnitude / timeStep;
+        float targetDistance = Vector3.Distance(targetPosition_Current, transform.position);
+
+        float timeToCrossDistance = targetDistance / projectileSpeed;
+        float oneTickAhead = (1 + timeStep);
+        Vector3 targetPosition_Lead = targetPosition_Current + targetVelocity.normalized * targetSpeed * timeToCrossDistance;
+
+        if (debugMode)
+        {
+            float crossSize = 1f / 2f;
+
+            Vector3 debugPosition = targetPosition_Lead;
+
+            Debug.DrawRay(debugPosition - Vector3.forward * crossSize, Vector3.forward * crossSize * 2, Color.red);
+            Debug.DrawRay(debugPosition - Vector3.right * crossSize, Vector3.right * crossSize * 2, Color.blue);
+            Debug.DrawRay(debugPosition - Vector3.up * crossSize, Vector3.up * crossSize * 2, Color.green);
+        }
+
+        targetPosition_Previous = targetPosition_Current;
+
+        return targetPosition_Lead;
+
+    }
     
 }

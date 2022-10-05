@@ -10,9 +10,10 @@ public class Controller_Character : MonoBehaviour
         None = 0 << 0,
         FreezeCamera_Tick = 1 << 0,
         FreezeMovement_Tick = 1 << 1,
-        DisableCamera_Tick = 1 << 2 | 1 << 0,
+        //DisableCamera_Tick = 1 << 2 | 1 << 0, // Does not play well with the sprite script.
 
-        DrivingMode_Tick = 1 << 0 | 1 << 1 | 1 << 2,
+        FreezeCamera_Set = 1 << 3,
+        FreezeMovement_Set = 1 << 4,
     }
 
     public StatusEffect StatusEffects = StatusEffect.None;
@@ -67,15 +68,21 @@ public class Controller_Character : MonoBehaviour
             ControllCamera(timeStep);
 
             transform.position += velocity * timeStep;
+
+
+
+            StatusEffects &= ~StatusEffect.FreezeCamera_Tick;
+            //StatusEffects &= ~StatusEffect.DisableCamera_Tick;
+            StatusEffects &= ~StatusEffect.FreezeMovement_Tick;
         }
 
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
 
 
-
-        StatusEffects = 0;
     }
+
+
 
     void CompareStatus(StatusEffect mask, StatusEffect status)
     {
@@ -85,9 +92,7 @@ public class Controller_Character : MonoBehaviour
 
     void ControllCamera(float timeStep)
     {
-        bool freezeCamera = (int)StatusEffects >> 0 != 0;
-
-        camera.enabled = !((int)StatusEffects >> 2 != 0);
+        bool freezeCamera = (StatusEffects & StatusEffect.FreezeCamera_Tick) != 0 || (StatusEffects & StatusEffect.FreezeCamera_Set) != 0;
 
         if (freezeCamera)
             return;
@@ -103,7 +108,7 @@ public class Controller_Character : MonoBehaviour
     }
     void ControllMovement(float timeStep)
     {
-        bool freezeMovement = (int)StatusEffects >> 1 != 0;
+        bool freezeMovement = (StatusEffects & StatusEffect.FreezeMovement_Tick) != 0 || (StatusEffects & StatusEffect.FreezeMovement_Set) != 0;
 
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2);

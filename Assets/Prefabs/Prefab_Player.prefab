@@ -4959,7 +4959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb12cd339662a54a9b95ff625e17e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusEffects: 4
+  StatusEffects: 0
   speed: 5
   friction: 10
   sprintSpeedModifier: 2
@@ -4996,22 +4996,18 @@ MonoBehaviour:
     volumeScale: 1
     random: 2
   debugMode: 1
+  isWieldedByPlayer: 1
+  canFire: 1
   WeaponStats:
     damage: 10
     knockback: 10
     fireRate: 2
     PelletCount: 1
-    Deviation: 0.01
-    trigger_doubleTab: 0
+    Deviation: 0
     ProjectileType: 2
     Projectile_Speed: 11
     Projectile_Gravity: 0
-    deleteProjectileOnImpact: 1
-    bounceCount: 0
-    freezeOnImpact: 1
     inheritUserVelocity: 0
-    lingerTimeAtLocation: 0
-    Visuals_UseCustom: 1
     Visuals_Projectile:
       name: Idle
       sprites:
@@ -5022,7 +5018,6 @@ MonoBehaviour:
       DoLoop: 1
       startRandom: 1
     Visuals_ProjectileScale: 0.2
-    isWieldedByPlayer: 1
     characterController: {fileID: 0}
   WeaponStats_Alt:
     damage: 10
@@ -5030,16 +5025,10 @@ MonoBehaviour:
     fireRate: 2
     PelletCount: 1
     Deviation: 0
-    trigger_doubleTab: 0
     ProjectileType: 2
     Projectile_Speed: 10
     Projectile_Gravity: 0
-    deleteProjectileOnImpact: 1
-    bounceCount: 0
-    freezeOnImpact: 1
     inheritUserVelocity: 0
-    lingerTimeAtLocation: 0
-    Visuals_UseCustom: 1
     Visuals_Projectile:
       name: Idle
       sprites:
@@ -5050,7 +5039,6 @@ MonoBehaviour:
       DoLoop: 1
       startRandom: 1
     Visuals_ProjectileScale: 0.2
-    isWieldedByPlayer: 1
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -5059,13 +5047,14 @@ MonoBehaviour:
   chargeOption: 0
   Charge_minimumTime: 0.5
   Charge_maximumTime: 1
-  playerEyes: {fileID: 6332088235026572212}
+  User_POV: {fileID: 0}
   Model_Weapon: {fileID: 5794621778294434877}
   Origin_Barrel: {fileID: 1121983416118808254}
   Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
   gunParticles: {fileID: 3912959059411891414}
   Projectiles: []
   fireRate_GlobalCD: 0
+  frameCounter: 0
 --- !u!82 &8907207702403650227
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5175,7 +5164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthMax: 100
+  healthCurrent: -1
+  knockback_Multiplier: 0
   isDead: 0
+  deathCountdown: 5
+  deathCountdown_SpeedModifier: 2
+  deathCountdown_SpeedDuration: 0.5
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0
