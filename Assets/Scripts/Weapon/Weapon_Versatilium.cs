@@ -140,9 +140,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public bool inheritUserVelocity = true;
 
         [Header("Misc. Settings")]
-        public bool isWieldedByPlayer = true;
         //  public float lingerTimeAtLocation = 0;
-        public bool Visuals_UseCustom;
         public Tools_Animator.CustomAnimation Visuals_Projectile;
         public float Visuals_ProjectileScale = 1f;
 
@@ -156,6 +154,7 @@ public class Weapon_Versatilium : MonoBehaviour
 				#endregion
 
 				public bool debugMode = true;
+    public bool isWieldedByPlayer = true;
 
     public WeaponStatistics WeaponStats;
     public WeaponStatistics WeaponStats_Alt;
@@ -174,7 +173,7 @@ public class Weapon_Versatilium : MonoBehaviour
     private float Charge_current;
 
     [Header("Variables")]
-    public Transform playerEyes;
+    public Transform User_POV;
     public Transform Model_Weapon;
     public Transform Origin_Barrel;
     public GameObject Prefab_Projectile;
@@ -188,10 +187,16 @@ public class Weapon_Versatilium : MonoBehaviour
 
     void Start()
     {
-        if (playerEyes == null)
-            playerEyes = GetComponentInChildren<Camera>().transform;
+        if (User_POV == null)
+            User_POV = GetComponentInChildren<Camera>().transform;
 
         audioSource = GetComponent<AudioSource>();
+
+
+        if (!isWieldedByPlayer)
+        {
+            
+        }            
 
     }
 
@@ -200,7 +205,8 @@ public class Weapon_Versatilium : MonoBehaviour
         float timeStep = Time.deltaTime;
         float projectileMaxLife = 10f;
 
-        OnFire();
+        if(isWieldedByPlayer) // NPCs decide themselves when to run "OnFire()";
+             OnFire();
 
         for (int i = 0; i < Projectiles.Count; i++)
         {
@@ -242,17 +248,27 @@ public class Weapon_Versatilium : MonoBehaviour
 
     #region OnFire
 
-
-    void OnFire()
+    /// Only TriggerType.SemiAutomtaic is supported right now.
+    public void OnFire(TriggerTypes overRide = TriggerTypes.None) 
     {
         WeaponStatistics currentStats = WeaponStats;  // The Default Firemode
 
         fireRate_GlobalCD -= Time.deltaTime;
 
+        bool onKeyDown = Input.GetKeyDown(TriggerPrimary);
+        bool onKeyRelease = Input.GetKeyUp(TriggerPrimary);
+        bool onKeyTrue = Input.GetKey(TriggerPrimary);
+
+        if (overRide != TriggerTypes.None)
+        {
+            onKeyDown = true;
+            onKeyTrue = true;
+        }
+
 
         if (triggerType == TriggerTypes.SemiAutomatic)
         {
-            if (Input.GetKeyDown(TriggerPrimary) && fireRate_GlobalCD < 0) // basic Fire
+            if (onKeyDown && fireRate_GlobalCD < 0) // basic Fire
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
@@ -265,7 +281,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         if (triggerType == TriggerTypes.Automatic)
         {
-            if (Input.GetKey(TriggerPrimary) && fireRate_GlobalCD < 0) // basic Fire
+            if (onKeyTrue && fireRate_GlobalCD < 0) // basic Fire
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
@@ -278,13 +294,13 @@ public class Weapon_Versatilium : MonoBehaviour
         if (triggerType == TriggerTypes.Charge)
         {
 
-            if (Input.GetKeyDown(TriggerPrimary) && fireRate_GlobalCD < 0) // Start Charge
+            if (onKeyDown && fireRate_GlobalCD < 0) // Start Charge
                 Charge_current = 0;
             
-            if (Input.GetKey(TriggerPrimary) && fireRate_GlobalCD < 0) // Charging
+            if (onKeyTrue && fireRate_GlobalCD < 0) // Charging
                 Charge_current += Time.deltaTime;
 
-            if (Input.GetKeyUp(TriggerPrimary) && fireRate_GlobalCD < 0) // Release Charge
+            if (onKeyRelease && fireRate_GlobalCD < 0) // Release Charge
             {
                 if (Charge_current < Charge_minimumTime)
                 {
@@ -318,7 +334,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
     void CreateProjectile(WeaponStatistics currentStats)
     {
-        gunParticles.Play();
+        if(gunParticles != null)
+            gunParticles.Play();
 
         #region Charge Options
         float chargePercentage = (triggerType == TriggerTypes.Charge) ? Charge_current / Charge_maximumTime : 1;
@@ -332,10 +349,10 @@ public class Weapon_Versatilium : MonoBehaviour
 
             for (int i = 0; i < currentStats.PelletCount; i++)
             {
-                Vector3 rayDeviation = playerEyes.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + playerEyes.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
+                Vector3 rayDeviation = User_POV.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + User_POV.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
 
-                Vector3 rayOrigin = playerEyes.position;
-                Vector3 rayDirection = playerEyes.forward + rayDeviation;
+                Vector3 rayOrigin = User_POV.position;
+                Vector3 rayDirection = User_POV.forward + rayDeviation;
 
                 RaycastHit hit;
                 Physics.Raycast(rayOrigin, rayDirection, out hit);
@@ -371,10 +388,10 @@ public class Weapon_Versatilium : MonoBehaviour
 
             for (int i = 0; i < currentStats.PelletCount; i++)
             {
-                Vector3 rayDeviation = playerEyes.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + playerEyes.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
+                Vector3 rayDeviation = User_POV.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + User_POV.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
 
-                Vector3 rayOrigin = playerEyes.position;
-                Vector3 rayDirection = playerEyes.forward + rayDeviation;
+                Vector3 rayOrigin = User_POV.position;
+                Vector3 rayDirection = User_POV.forward + rayDeviation;
 
                 RaycastHit hit;
                 Physics.Raycast(rayOrigin, rayDirection, out hit);
@@ -386,7 +403,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
 
-                if(currentStats.inheritUserVelocity && currentStats.isWieldedByPlayer)
+                if(isWieldedByPlayer && currentStats.inheritUserVelocity)
 																{
                     if (currentStats.characterController == null)
                         currentStats.characterController = transform.GetComponent<Controller_Character>();
@@ -394,7 +411,7 @@ public class Weapon_Versatilium : MonoBehaviour
                     currentProjectile.velocity += currentStats.characterController.velocity;
                 }
 
-                if (currentStats.Visuals_UseCustom)
+                if (Prefab_Projectile != null)
                 {
                     currentProjectile.visualTransform = Instantiate(Prefab_Projectile).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;

@@ -13,7 +13,7 @@ public class Controller_Enemy : MonoBehaviour
     [Header("Attack")]
     public float DetectionRange = 10;
     public float AimSpeed = 100;
-    public Weapon_Versatilium.WeaponStatistics Weapon;
+    public Weapon_Versatilium Weapon;
 
     [Header("Defense")]
     public int HealthMax = 100;
@@ -82,7 +82,14 @@ public class Controller_Enemy : MonoBehaviour
                 {
                     isInvincible = false;
 
-                    LookAt(player.position, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
+                    float degreesOff = (1f - LookAt(player.position, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
+                    bool fire = false;
+
+                    if (Weapon.WeaponStats.Deviation > degreesOff)
+                        fire = true;
+
+                    Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None);
+
 
                 }
                 else
