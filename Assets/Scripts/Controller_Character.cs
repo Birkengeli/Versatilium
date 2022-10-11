@@ -27,6 +27,8 @@ public class Controller_Character : MonoBehaviour
     public Vector3 velocity;
     private float characterHeight;
 
+
+
     [Header("Vertical Attributes")]
 
     public float gravity = 9.81f;
@@ -39,6 +41,7 @@ public class Controller_Character : MonoBehaviour
 
     [Header("Settings")]
     public KeyCode FreeCamera = KeyCode.F1;
+    public Weapon_Versatilium.Sound[] Sounds;
 
     Camera camera;
 

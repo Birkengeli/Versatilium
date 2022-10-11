@@ -23,6 +23,7 @@ public class Controller_Enemy : MonoBehaviour
     public EnemyTypes enemyType;
     public bool isInvincible;
     public Transform player;
+    public Weapon_Versatilium.Sound[] Sounds;
 
     [Header("Turret Behavior")]
     public float ActivationTime = 1f;
@@ -69,9 +70,6 @@ public class Controller_Enemy : MonoBehaviour
                 else
                 {
                     float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
-
-                    print(degreesOffForward);
-
                     if (degreesOffForward < 1)
                     {
                         ActivationTime_Timer -= timeStep;

@@ -68,6 +68,12 @@ public class Component_Health : MonoBehaviour
             if (isPlayer)
             {
                 playerScript.velocity += knockBack * knockback_Multiplier;
+                Weapon_Versatilium.Sound.Play("OnTakingDamage", playerScript.Sounds, GetComponent<AudioSource>());
+            }
+
+            if (!isPlayer)
+            {
+                Weapon_Versatilium.Sound.Play("OnTakingDamage", enemyScript.Sounds, GetComponent<AudioSource>());
             }
 
            
