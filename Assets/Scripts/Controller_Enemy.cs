@@ -33,7 +33,8 @@ public class Controller_Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (enemyType == EnemyTypes.Turret)
+            transform.GetChild(0).localPosition = -Vector3.forward * 0.9f;
     }
 
     // Update is called once per frame

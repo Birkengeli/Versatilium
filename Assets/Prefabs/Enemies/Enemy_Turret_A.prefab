@@ -217,8 +217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 1
-  DetectionRange: 10
-  AimSpeed: 50
+  DetectionRange: 1000
+  AimSpeed: 100
   ConeOfFire: 45
   Weapon: {fileID: 4877620946721651445}
   HealthMax: 100
@@ -249,7 +249,7 @@ MonoBehaviour:
   isWieldedByPlayer: 0
   canFire: 1
   WeaponStats:
-    damage: 10
+    damage: 34
     knockback: 10
     fireRate: 10
     PelletCount: 1
