@@ -745,6 +745,7 @@ MonoBehaviour:
     - {fileID: 2117528876}
     - {fileID: 2037594388}
     delayInSeconds: 3
+    Hurtbox_Damage: 1
     forceDirection: {x: 0.1, y: -0.1, z: 0.11}
     forceToAdd: 2
     optionalSound: 0
@@ -757,6 +758,7 @@ MonoBehaviour:
     - {fileID: 2117528876}
     - {fileID: 2037594388}
     delayInSeconds: 2.9
+    Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
     optionalSound: 1
@@ -768,6 +770,7 @@ MonoBehaviour:
     gameObjects:
     - {fileID: 360453097}
     delayInSeconds: 5
+    Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
     optionalSound: 0
@@ -778,6 +781,7 @@ MonoBehaviour:
   - triggerType: 1
     gameObjects: []
     delayInSeconds: 0
+    Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
     optionalSound: 1

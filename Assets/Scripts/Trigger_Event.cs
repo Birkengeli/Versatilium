@@ -14,6 +14,7 @@ public class Trigger_Event : MonoBehaviour
         ActivateBonusEnemiesForHardmode,
         ActivateRigidbodies,
         CheckPoint,
+        HurtBox,
     }
 
     [System.Serializable]
@@ -25,6 +26,7 @@ public class Trigger_Event : MonoBehaviour
 
         [Header("Options")]
         public float delayInSeconds = 0;
+        public int Hurtbox_Damage = 1;
 
         [Header("Options for RigidBodies")]
         public Vector3 forceDirection;
@@ -213,6 +215,11 @@ public class Trigger_Event : MonoBehaviour
 
 
 
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.HurtBox && player != null)
+            {
+                player.GetComponent<Component_Health>().OnTakingDamage(currentEvent.Hurtbox_Damage, currentEvent.forceDirection.normalized * currentEvent.forceToAdd);
             }
         }
 
