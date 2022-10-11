@@ -141,7 +141,7 @@ public class Controller_Character : MonoBehaviour
     void ControllGravity(float timeStep)
     {
         RaycastHit hit;
-        Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2 + 0.05f);
+        Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2 + 0.05f, ~new LayerMask(), QueryTriggerInteraction.Ignore);
 
         Vector3 verticalVelocity = Vector3.Project(velocity, Vector3.down);
 
