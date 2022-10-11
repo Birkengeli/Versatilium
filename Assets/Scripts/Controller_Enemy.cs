@@ -14,6 +14,7 @@ public class Controller_Enemy : MonoBehaviour
     public float DetectionRange = 10;
     public float AimSpeed = 100;
     public float ConeOfFire = 45;
+    public bool isLeadingTarget = true;
     public Weapon_Versatilium Weapon;
 
     [Header("Defense")]
@@ -86,7 +87,11 @@ public class Controller_Enemy : MonoBehaviour
                 {
                     isInvincible = false;
 
-                    Vector3 targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+
+                    Vector3 targetPostion = player.position;
+
+                    if(isLeadingTarget)
+                        targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
 
                     float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
                     bool fire = false;
