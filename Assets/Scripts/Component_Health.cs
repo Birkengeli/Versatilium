@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Component_Health : MonoBehaviour
@@ -16,10 +17,13 @@ public class Component_Health : MonoBehaviour
 
     [Header("Respawning (Player only)")]
     public float deathCountdown = 5f;
+    private float deathCountdown_Timer = 0;
     public float deathCountdown_SpeedModifier = 2;
     public float deathCountdown_SpeedDuration = 0.5f;
     private float lastSpeedUse;
 
+    [Header("Settings")]
+    public Image POV_Death;
 
     [Header("Components")]
     Controller_Character playerScript;
@@ -31,6 +35,8 @@ public class Component_Health : MonoBehaviour
     {
         if (healthCurrent == -1)
             healthCurrent = HealthMax;
+
+        deathCountdown_Timer = deathCountdown;
 
         enemyScript = GetComponent<Controller_Enemy>();
 
@@ -113,25 +119,40 @@ public class Component_Health : MonoBehaviour
                 int childLength = eyes.childCount;
                 for (int i = 0; i < childLength; i++)
                     eyes.GetChild(i).gameObject.SetActive(false);
+
+                playerScript.velocity += -eyes.forward * 1f;
+
+         
                 #endregion
             }
 
-												#region Spamming buttons make you respawn faster
-												if (deathCountdown >= 0)
+
+
+            if (POV_Death != null)
+            {
+                POV_Death.gameObject.SetActive(true);
+
+                float alpha = 1f - (deathCountdown_Timer / deathCountdown);
+
+                POV_Death.color = new Color(0.8f, 0, 0, alpha);
+            }
+
+            #region Spamming buttons make you respawn faster
+            if (deathCountdown_Timer >= 0)
             {
                 if (Input.anyKeyDown)
                     lastSpeedUse = Time.timeSinceLevelLoad;
 
                 bool useRespawnBoost = Time.timeSinceLevelLoad < lastSpeedUse + deathCountdown_SpeedDuration;
-                deathCountdown -= Time.deltaTime * (useRespawnBoost ? deathCountdown_SpeedModifier : 1f);
+                deathCountdown_Timer -= Time.deltaTime * (useRespawnBoost ? deathCountdown_SpeedModifier : 1f);
             }
 												#endregion
 
-												if (deathCountdown < 0)
+												if (deathCountdown_Timer < 0)
             {
-                if (deathCountdown > -1) // On Time run out
+                if (deathCountdown_Timer > -1) // On Time run out
                 {
-                    deathCountdown = -1;
+                    deathCountdown_Timer = -1;
 
                     Debug.Log("Respawning Player");
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

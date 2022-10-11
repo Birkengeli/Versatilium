@@ -13,6 +13,7 @@ public class Trigger_Event : MonoBehaviour
         ActivateEnemies,
         ActivateBonusEnemiesForHardmode,
         ActivateRigidbodies,
+        CheckPoint,
     }
 
     [System.Serializable]
@@ -41,12 +42,20 @@ public class Trigger_Event : MonoBehaviour
 
     BoxCollider boxCollider;
     bool timerIsActivated;
+    [HideInInspector]
+    public bool hasBeenTriggered = false;
 
-    void Start()
+    void Awake()
     {
+        transform.tag = "Event_Trigger";
+
         boxCollider = GetComponent<BoxCollider>();
         boxCollider.isTrigger = true;
 
+
+    }
+    void Start()
+    {
 
         for (int i = 0; i < Events.Length; i++)
         {
@@ -102,12 +111,13 @@ public class Trigger_Event : MonoBehaviour
 
         print("Trigger entered");
 
-        Events_Trigger(0);
+        Events_Trigger(0, other.transform);
         boxCollider.enabled = false;
     }
 
-    void Events_Trigger(float timeStep)
+    void Events_Trigger(float timeStep, Transform player = null)
     {
+        hasBeenTriggered = true;
         timerIsActivated = false;
 
         for (int i = 0; i < Events.Length; i++)
@@ -169,6 +179,40 @@ public class Trigger_Event : MonoBehaviour
                     if (currentEvent.forceToAdd != 0)
                         currentRigidbody.velocity = currentEvent.forceDirection.normalized * currentEvent.forceToAdd;   
                 }
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.CheckPoint && player != null)
+            {
+                Transform playerEyes = player.GetComponentInChildren<Camera>().transform;
+                Component_Health healthScript = player.GetComponent<Component_Health>();
+
+                Vector3 playerPosition = player.position;
+                Vector2 playerEuler = new Vector2(playerEyes.localEulerAngles.x, player.localEulerAngles.y);
+
+                float playerHealth = Mathf.Max(healthScript.healthCurrent, 1); // You always have 1 hp. Mostly for crossing a checkpoint while dead.
+
+                /// Save Triggered Checkpoints
+                /// Disables them after re-triggering them. Does not play sounds, does not respawn enemies, does not save other checkpoints.
+                /// Triggers them without the timers
+                /// I am realising I must save them on the player. I am not triggering a quadzillion triggers every frame.
+                /// 
+
+
+                GameObject[] triggers = GameObject.FindGameObjectsWithTag("Trigger_Event");
+
+                int triggered_Array_Length = 0;
+
+                for (int ii = 0; ii < triggers.Length; ii++)
+                    triggered_Array_Length += triggers[ii].GetComponent<Trigger_Event>().hasBeenTriggered ? 1 : 0;
+
+                for (int ii = 0; ii < currentEvent.gameObjects.Length; ii++)
+                    currentEvent.gameObjects[ii].SetActive(true);
+
+                /// Saves Weapon Configs
+                /// 
+
+
+
             }
         }
 
