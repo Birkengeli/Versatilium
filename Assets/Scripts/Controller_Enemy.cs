@@ -26,7 +26,8 @@ public class Controller_Enemy : MonoBehaviour
 
     [Header("Turret Behavior")]
     public float ActivationTime = 1f;
-    private float ActivationTime_Timer;
+    public float ActivationTime_Timer;
+    public bool isRetraciting;
 
     public Vector2 viewEuler;
 
@@ -49,12 +50,14 @@ public class Controller_Enemy : MonoBehaviour
             Transform Turret_Hinge = transform.GetChild(0);
             Transform Turret_Turret = Turret_Hinge.GetChild(0);
 
-            Vector3 targetLocation = player.position;
+            RaycastHit hit;
+            Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
 
-            if (distanceToPlayer > DetectionRange)
+            bool hasDetectedPlayer = distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player";
+
+            if (!hasDetectedPlayer)
             {
 
- 
 
                 if (ActivationTime_Timer < 0)
                 {
@@ -65,20 +68,21 @@ public class Controller_Enemy : MonoBehaviour
                 }
                 else
                 {
-                    float forwardDot = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
+                    float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
 
-                    if (forwardDot > 0.90)
+                    print(degreesOffForward);
+
+                    if (degreesOffForward < 1)
                     {
                         ActivationTime_Timer -= timeStep;
 
                         float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
-
                         Turret_Hinge.localPosition = -Vector3.forward * newZ;
                     }
                 }
             }
 
-            if (distanceToPlayer <= DetectionRange)
+            if (hasDetectedPlayer)
             {
                 if (ActivationTime_Timer > ActivationTime)
                 {
