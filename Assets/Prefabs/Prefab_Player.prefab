@@ -4909,8 +4909,8 @@ GameObject:
   - component: {fileID: 6332088234781394695}
   - component: {fileID: 8907207702403650227}
   - component: {fileID: 1427095473}
-  - component: {fileID: 1482843373}
   - component: {fileID: 3693464917665637770}
+  - component: {fileID: 1689314902727988526}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -5201,22 +5201,6 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   POV_Death: {fileID: 0}
---- !u!54 &1482843373
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6332088234781394712}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
 --- !u!114 &3693464917665637770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5229,6 +5213,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b47af5df20a804f9699b16a1007176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &1689314902727988526
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0
