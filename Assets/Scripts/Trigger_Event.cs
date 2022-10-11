@@ -15,6 +15,7 @@ public class Trigger_Event : MonoBehaviour
         ActivateRigidbodies,
         CheckPoint,
         HurtBox,
+        ToggleObjectExistence,
     }
 
     [System.Serializable]
@@ -220,6 +221,14 @@ public class Trigger_Event : MonoBehaviour
             if (currentEvent.triggerType == TriggerTypes.HurtBox && player != null)
             {
                 player.GetComponent<Component_Health>().OnTakingDamage(currentEvent.Hurtbox_Damage, currentEvent.forceDirection.normalized * currentEvent.forceToAdd);
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.ToggleObjectExistence)
+            {
+                for (int ii = 0; ii < currentEvent.gameObjects.Length; ii++)
+                {
+                    currentEvent.gameObjects[ii].SetActive(!currentEvent.gameObjects[ii].activeInHierarchy);
+                }
             }
         }
 
