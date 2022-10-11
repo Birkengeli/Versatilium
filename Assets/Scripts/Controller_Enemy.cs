@@ -6,7 +6,7 @@ public class Controller_Enemy : MonoBehaviour
 {
     public enum EnemyTypes
     {
-        Turret,
+        Turret, Humanoid
     }
     public bool debugMode = true;
 
