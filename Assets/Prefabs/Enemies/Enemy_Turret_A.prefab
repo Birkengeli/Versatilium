@@ -217,15 +217,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 1
-  DetectionRange: 1000
+  DetectionRange: 10
   AimSpeed: 100
   ConeOfFire: 45
+  isLeadingTarget: 1
   Weapon: {fileID: 4877620946721651445}
   HealthMax: 100
   enemyType: 0
   isInvincible: 0
   player: {fileID: 0}
+  Sounds: []
   ActivationTime: 1
+  ActivationTime_Timer: 0
+  isRetraciting: 0
   viewEuler: {x: 0, y: 0}
 --- !u!114 &4877620946721651445
 MonoBehaviour:

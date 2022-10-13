@@ -21,6 +21,7 @@ public class Component_Health : MonoBehaviour
     public float deathCountdown_SpeedModifier = 2;
     public float deathCountdown_SpeedDuration = 0.5f;
     private float lastSpeedUse;
+    public GameObject Prop_Weapon;
 
     [Header("Settings")]
     public Image POV_Death;
@@ -127,7 +128,18 @@ public class Component_Health : MonoBehaviour
                     eyes.GetChild(i).gameObject.SetActive(false);
 
                 playerScript.velocity += -eyes.forward * 1f;
+                playerScript.friction /= 1.5f; // Slide more.
 
+                if (Prop_Weapon != null)
+                {
+                    GameObject weaponProp = Instantiate(Prop_Weapon).gameObject;
+
+                    weaponProp.transform.forward = eyes.forward;
+                    weaponProp.transform.eulerAngles += Vector3.forward * 20; // Add a little roll.
+                    weaponProp.transform.position = eyes.position  + eyes.forward * 0.6f + eyes.right * 0.4f;
+
+                    weaponProp.GetComponent<Rigidbody>().velocity = playerScript.velocity * 0.6f;
+                }
          
                 #endregion
             }

@@ -2439,6 +2439,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289168734}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1300150767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1300150768}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1300150768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300150767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.4, y: -0.010524929, z: 19.400002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1367461226
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,10 +3824,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 687607204}
-    - target: {fileID: 3765674564435915198, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
-      propertyPath: DetectionRange
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 4072156493587378807, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
       propertyPath: m_Name
       value: Enemy_Turret_A
@@ -3894,17 +3921,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1352874224151894492, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5257742221931657015, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
       propertyPath: m_Name
       value: _Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 6707708034815308685, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
