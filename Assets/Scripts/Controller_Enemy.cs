@@ -17,9 +17,6 @@ public class Controller_Enemy : MonoBehaviour
     public bool isLeadingTarget = true;
     public Weapon_Versatilium Weapon;
 
-    [Header("Defense")]
-    public int HealthMax = 100;
-
     [Header("Settings")]
     public EnemyTypes enemyType;
     public bool isInvincible;
@@ -33,11 +30,21 @@ public class Controller_Enemy : MonoBehaviour
 
     public Vector2 viewEuler;
 
+    [Header("Humanoid Behavior")]
+    public float moveSpeed = 2;
+    Vector3 previousPosition;
+    public bool isInCombat;
+
     // Start is called before the first frame update
     void Start()
     {
         if (enemyType == EnemyTypes.Turret)
+        {
             transform.GetChild(0).localPosition = -Vector3.forward * 0.9f;
+            isInvincible = true;
+        }
+
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
@@ -116,6 +123,67 @@ public class Controller_Enemy : MonoBehaviour
             }
         }
         
+        if (enemyType == EnemyTypes.Humanoid)
+        {
+            Vector3 velocity = transform.position - previousPosition;
+            Vector3 direction = velocity.normalized;
+            float distance = velocity.magnitude;
+            previousPosition = transform.position;
+
+            if (debugMode)
+                Debug.DrawRay(transform.position, direction * 100, Color.red);
+
+            #region Animation
+
+            Animator anim = GetComponentInChildren<Animator>();
+
+            anim.SetFloat("Forward", (distance / timeStep) / moveSpeed);
+												#endregion
+
+												#region Movement
+												float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            if (distanceToPlayer < DetectionRange || isInCombat)
+            {
+                if (!isInCombat)
+                {
+                    isInCombat = true;
+                    anim.SetTrigger("onCombat");
+                }
+
+                transform.LookAt(player);
+                Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);
+
+                // Where can I go?
+                float distanceToWall_Right = 0;
+                float distanceToWall_Left = 0;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    RaycastHit hit;
+                    Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
+
+                    if (hit.transform != null)
+                    {
+                        if(i == 0)
+                            distanceToWall_Right = hit.distance;
+                        else
+                            distanceToWall_Left = hit.distance;
+                    }
+
+                }
+
+                
+                    transform.position += (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed * timeStep;
+            }
+												#endregion
+
+
+												{ // End Stuff
+
+																
+            }
+        }
     }
 
 

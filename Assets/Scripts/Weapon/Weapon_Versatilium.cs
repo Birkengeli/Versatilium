@@ -126,6 +126,7 @@ public class Weapon_Versatilium : MonoBehaviour
     public class WeaponStatistics
 				{
         [Header("General")]
+        public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
         public float damage = 10;
         public float knockback = 10;
         public float fireRate = 2;
@@ -190,7 +191,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
     void Start()
     {
-        if (User_POV == null)
+        if (isWieldedByPlayer && User_POV == null)
             User_POV = GetComponentInChildren<Camera>().transform;
 
         audioSource = GetComponent<AudioSource>();
@@ -259,7 +260,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
            
 
-            if (currentProjectile.lifeTime > projectileMaxLife)
+            if (currentProjectile.lifeTime > projectileMaxLife || impacted)
             {
                 if (currentProjectile.visualTransform != null)
                     Destroy(currentProjectile.visualTransform.gameObject); // This should actually be pooled.
@@ -281,6 +282,9 @@ public class Weapon_Versatilium : MonoBehaviour
         bool onKeyDown = Input.GetKeyDown(TriggerPrimary);
         bool onKeyRelease = Input.GetKeyUp(TriggerPrimary);
         bool onKeyTrue = Input.GetKey(TriggerPrimary);
+
+        triggerType = currentStats.triggerType;
+        print("Debug Fix, sorry!");
 
         if (overRide != TriggerTypes.None)
         {
@@ -490,7 +494,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
             {
-                Component_Health.Get(currentHit).OnTakingDamage((int)currentStats.damage, Vector3.up *  currentStats.knockback);
+                int damage = Mathf.RoundToInt(currentStats.damage / currentStats.PelletCount);
+                Component_Health.Get(currentHit).OnTakingDamage(damage, Vector3.up *  currentStats.knockback);
             }
 
 

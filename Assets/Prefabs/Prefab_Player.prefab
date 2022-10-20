@@ -5022,6 +5022,7 @@ GameObject:
   - component: {fileID: 1689314902727988526}
   - component: {fileID: 4031496714777804033}
   - component: {fileID: 475005715410517627}
+  - component: {fileID: 687607205}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -5118,6 +5119,7 @@ MonoBehaviour:
   isWieldedByPlayer: 1
   canFire: 1
   WeaponStats:
+    triggerType: 1
     damage: 10
     knockback: 10
     fireRate: 2
@@ -5139,6 +5141,7 @@ MonoBehaviour:
     Visuals_ProjectileScale: 0.5
     characterController: {fileID: 0}
   WeaponStats_Alt:
+    triggerType: 1
     damage: 10
     knockback: 10
     fireRate: 2
@@ -5179,6 +5182,7 @@ MonoBehaviour:
     gravity: 0
     lifeTime: 0
     projectileStats:
+      triggerType: 1
       damage: 0
       knockback: 0
       fireRate: 0
@@ -5309,6 +5313,7 @@ MonoBehaviour:
   healthCurrent: -1
   knockback_Multiplier: 0
   isDead: 0
+  hasDeathAnimation: 0
   deathCountdown: 5
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
@@ -5372,6 +5377,95 @@ MonoBehaviour:
   fallMultiplier: 2
   smooth: 2
   viewmodel_head: {fileID: 3806352416794090786}
+--- !u!114 &687607205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7eac332bc0b1b419880d08b7f728ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponConfigs:
+  - name: Pistol_Default
+    isUnlocked: 1
+    WeaponSlot: 0
+    statistics:
+      triggerType: 1
+      damage: 20
+      knockback: 0
+      fireRate: 5
+      PelletCount: 1
+      Deviation: 0
+      ProjectileType: 2
+      Projectile_Speed: 200
+      Projectile_Gravity: 0
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: Idle
+        sprites:
+        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        DoLoop: 1
+        startRandom: 1
+      Visuals_ProjectileScale: 0.5
+      characterController: {fileID: 0}
+  - name: Shotgun_Default
+    isUnlocked: 0
+    WeaponSlot: 1
+    statistics:
+      triggerType: 1
+      damage: 100
+      knockback: 1
+      fireRate: 1
+      PelletCount: 9
+      Deviation: 0.05
+      ProjectileType: 2
+      Projectile_Speed: 120
+      Projectile_Gravity: 0
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: Idle
+        sprites:
+        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        DoLoop: 1
+        startRandom: 1
+      Visuals_ProjectileScale: 0.7
+      characterController: {fileID: 0}
+  - name: Rifle_Default
+    isUnlocked: 0
+    WeaponSlot: 2
+    statistics:
+      triggerType: 2
+      damage: 10
+      knockback: 0
+      fireRate: 10
+      PelletCount: 1
+      Deviation: 0
+      ProjectileType: 2
+      Projectile_Speed: 200
+      Projectile_Gravity: 0
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: Idle
+        sprites:
+        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+        DoLoop: 1
+        startRandom: 1
+      Visuals_ProjectileScale: 0.5
+      characterController: {fileID: 0}
+  switchCooldown: 1
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0

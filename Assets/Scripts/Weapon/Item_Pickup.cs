@@ -7,16 +7,15 @@ public class Item_Pickup : MonoBehaviour
 
     public enum Pickup
 				{
-        GiveVersatilium, RemoveVersatilium, PickOneOfTwo
+        GiveVersatilium, RemoveVersatilium, GiveConfig
 				}
 
     public bool debugMode = true;
     float orbitTimer = 0;
 
     [Header("Pickup")]
-    public Pickup pickupType = Pickup.PickOneOfTwo;
-    public Weapon_Versatilium.WeaponStatistics Option_A;
-    public Weapon_Versatilium.WeaponStatistics Option_B;
+    public Pickup pickupType = Pickup.GiveConfig;
+    public string ModuleName = "Pistol_Default";
 
     [Header("Settings")]
     public float distance = 2f;
@@ -59,10 +58,31 @@ public class Item_Pickup : MonoBehaviour
             playerTransform.GetComponent<Weapon_Versatilium>().enabled = pickupType == Pickup.GiveVersatilium;
         }
 
-        if (pickupType == Pickup.PickOneOfTwo)
+        if (pickupType == Pickup.GiveConfig)
         {
             Weapon_Versatilium weapon = playerTransform.GetComponent<Weapon_Versatilium>();
+
+            Weapon_Arsenal arsenal = playerTransform.GetComponent<Weapon_Arsenal>();
+
+            for (int i = 0; i < arsenal.weaponConfigs.Length; i++)
+            {
+                Weapon_Arsenal.WeaponConfiguration currentConfig = arsenal.weaponConfigs[i];
+
+                if (currentConfig.name == ModuleName)
+                {
+                    currentConfig.isUnlocked = true;
+                    arsenal.SwitchWeapon(currentConfig);
+
+                    break;
+                }
+
+                if (i == arsenal.weaponConfigs.Length - 1)
+                    Debug.LogWarning("Could not find a config called '" + ModuleName + "'.");
+
+            }
         }
+
+        Destroy(gameObject);
 
 
 
