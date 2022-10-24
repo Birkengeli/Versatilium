@@ -28,6 +28,7 @@ public class Component_Health : MonoBehaviour
 
     [Header("Settings")]
     public Image POV_Death;
+    public TMPro.TMP_Text Text_Health;
 
     [Header("Components")]
     Controller_Character playerScript;
@@ -113,6 +114,8 @@ public class Component_Health : MonoBehaviour
             WhileDead(true); // On Death
         }
 
+        if (Text_Health != null)
+            Text_Health.text = "" + (healthCurrent < 100 ? " " : "") + healthCurrent + "%";
 
 
     }
@@ -135,6 +138,8 @@ public class Component_Health : MonoBehaviour
         {
             if (onDeath)
             {
+
+                deathCountdown_Timer = 0;
 
                 playerScript.StatusEffects |= Controller_Character.StatusEffect.FreezeCamera_Set;
                 playerScript.StatusEffects |= Controller_Character.StatusEffect.FreezeMovement_Set;
@@ -175,7 +180,7 @@ public class Component_Health : MonoBehaviour
             {
                 POV_Death.gameObject.SetActive(true);
 
-                float alpha = 1f - (deathCountdown_Timer / deathCountdown);
+                float alpha = (deathCountdown_Timer) / (deathCountdown*1.5f);
 
                 POV_Death.color = new Color(0.8f, 0, 0, alpha);
             }
@@ -187,13 +192,13 @@ public class Component_Health : MonoBehaviour
                     lastSpeedUse = Time.timeSinceLevelLoad;
 
                 bool useRespawnBoost = Time.timeSinceLevelLoad < lastSpeedUse + deathCountdown_SpeedDuration;
-                deathCountdown_Timer -= Time.deltaTime * (useRespawnBoost ? deathCountdown_SpeedModifier : 1f);
+                deathCountdown_Timer += Time.deltaTime * (useRespawnBoost ? deathCountdown_SpeedModifier : 1f);
             }
 												#endregion
 
-												if (deathCountdown_Timer < 0)
+												if (deathCountdown_Timer > deathCountdown)
             {
-                if (deathCountdown_Timer > -1) // On Time run out
+                if (deathCountdown_Timer != -1) // On Time run out
                 {
                     deathCountdown_Timer = -1;
 

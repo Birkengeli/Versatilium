@@ -2202,11 +2202,13 @@ MonoBehaviour:
     Hurtbox_Damage: 1
     forceDirection: {x: 0.1, y: -0.1, z: 0.11}
     forceToAdd: 2
-    optionalSound: 0
     audioSource: {fileID: 171817618}
     audioClip: {fileID: 8300000, guid: 809c84f9417be0140ac34fb7d687968c, type: 3}
     volumeScale: 1
     enableLoop: 0
+    text: 
+    color: {r: 1, g: 0, b: 0, a: 1}
+    duration: 0
   - triggerType: 1
     gameObjects:
     - {fileID: 2117528876}
@@ -2215,11 +2217,13 @@ MonoBehaviour:
     Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
-    optionalSound: 1
     audioSource: {fileID: 171817618}
     audioClip: {fileID: 8300000, guid: 809c84f9417be0140ac34fb7d687968c, type: 3}
     volumeScale: 1
     enableLoop: 0
+    text: 
+    color: {r: 1, g: 0, b: 0, a: 1}
+    duration: 0
   - triggerType: 3
     gameObjects:
     - {fileID: 360453097}
@@ -2227,22 +2231,52 @@ MonoBehaviour:
     Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
-    optionalSound: 0
     audioSource: {fileID: 171817618}
     audioClip: {fileID: 8300000, guid: 809c84f9417be0140ac34fb7d687968c, type: 3}
     volumeScale: 1
     enableLoop: 0
+    text: 
+    color: {r: 1, g: 0, b: 0, a: 1}
+    duration: 0
   - triggerType: 1
     gameObjects: []
     delayInSeconds: 0
     Hurtbox_Damage: 1
     forceDirection: {x: 1, y: 0, z: 0.11}
     forceToAdd: 0
-    optionalSound: 1
     audioSource: {fileID: 171817618}
     audioClip: {fileID: 8300000, guid: 97bc8c4f8d4459d4099a2a57bf448242, type: 3}
     volumeScale: 1
     enableLoop: 0
+    text: 
+    color: {r: 1, g: 0, b: 0, a: 1}
+    duration: 0
+  - triggerType: 9
+    gameObjects: []
+    delayInSeconds: 0
+    Hurtbox_Damage: 1
+    forceDirection: {x: 1, y: 0, z: 0.11}
+    forceToAdd: 0
+    audioSource: {fileID: 171817618}
+    audioClip: {fileID: 8300000, guid: 97bc8c4f8d4459d4099a2a57bf448242, type: 3}
+    volumeScale: 1
+    enableLoop: 0
+    text: Open the door, get on the floor
+    color: {r: 1, g: 0.42300895, b: 0, a: 1}
+    duration: 3
+  - triggerType: 9
+    gameObjects: []
+    delayInSeconds: 3
+    Hurtbox_Damage: 1
+    forceDirection: {x: 1, y: 0, z: 0.11}
+    forceToAdd: 0
+    audioSource: {fileID: 171817618}
+    audioClip: {fileID: 8300000, guid: 97bc8c4f8d4459d4099a2a57bf448242, type: 3}
+    volumeScale: 1
+    enableLoop: 0
+    text: Everybody walk the dinosaur
+    color: {r: 1, g: 0, b: 0, a: 1}
+    duration: 3
   hasBeenTriggered: 0
 --- !u!4 &1244804940
 Transform:
@@ -2251,14 +2285,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244804938}
-  m_LocalRotation: {x: -0, y: -0.6767869, z: -0, w: 0.736179}
-  m_LocalPosition: {x: 5.94, y: 0.02, z: 3.87}
-  m_LocalScale: {x: 1, y: 1, z: 14.695001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.28, y: 3.16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1562710073}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -85.186, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1244804941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2270,8 +2304,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9.263369, y: 1, z: 0.9999996}
-  m_Center: {x: 4.131697, y: 0, z: 8.4031004e-11}
+  m_Size: {x: 2, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1273433130
 GameObject:
   m_ObjectHideFlags: 0
@@ -3288,6 +3322,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1921238283 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 476933497668767470, guid: 07e7f023ab488a1488eee520ab040e32, type: 3}
+  m_PrefabInstance: {fileID: 4137428479192012465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2037594388
 GameObject:
   m_ObjectHideFlags: 0
@@ -3954,14 +3999,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-      propertyPath: switchSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
     - target: {fileID: 1427095473, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
       propertyPath: POV_Death
       value: 
       objectReference: {fileID: 1879738221}
+    - target: {fileID: 1427095473, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: Text_Health
+      value: 
+      objectReference: {fileID: 1921238283}
     - target: {fileID: 6332088234781394692, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
       propertyPath: m_RootOrder
       value: 1

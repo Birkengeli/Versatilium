@@ -5319,6 +5319,7 @@ MonoBehaviour:
   deathCountdown_SpeedDuration: 0.5
   Prop_Weapon: {fileID: 260622669335309799, guid: 5600e5e8e46e5bf4294bd873e0f882be, type: 3}
   POV_Death: {fileID: 0}
+  Text_Health: {fileID: 0}
 --- !u!114 &3693464917665637770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5466,6 +5467,7 @@ MonoBehaviour:
       Visuals_ProjectileScale: 0.5
       characterController: {fileID: 0}
   switchCooldown: 1
+  switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ public class Trigger_Event : MonoBehaviour
         CheckPoint,
         HurtBox,
         ToggleObjectExistence,
+        DisplayText,
     }
 
     [System.Serializable]
@@ -29,16 +30,21 @@ public class Trigger_Event : MonoBehaviour
         public float delayInSeconds = 0;
         public int Hurtbox_Damage = 1;
 
+
         [Header("Options for RigidBodies")]
         public Vector3 forceDirection;
         public float forceToAdd = 0;
 
         [Header("Options for Sound")]
-        public bool optionalSound = false;
         public AudioSource audioSource;
         public AudioClip audioClip;
         public float volumeScale = 1;
         public bool enableLoop = false;
+
+        [Header("Options for Text (Leave duration at 0 for automatic duration)")]
+        public string text;
+        public Color color = Color.red;
+        public float duration = 0;
     }
 
     public Event[] Events;
@@ -47,6 +53,8 @@ public class Trigger_Event : MonoBehaviour
     bool timerIsActivated;
     [HideInInspector]
     public bool hasBeenTriggered = false;
+
+    Transform Canvas; // I'd rather avoid looking in real-time
 
     void Awake()
     {
@@ -94,6 +102,18 @@ public class Trigger_Event : MonoBehaviour
                 {
                     Rigidbody currentRigidbody = currentEvent.gameObjects[ii].GetComponent<Rigidbody>();
                     currentRigidbody.isKinematic = true;
+                }
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.DisplayText)
+            {
+                Canvas = GameObject.Find("_Canvas").transform;
+                currentEvent.color += new Color(0, 0, 0, 1); // I am proofing this.
+
+                if (currentEvent.duration == 0)
+                {
+                    float readingDuration = (float)currentEvent.text.Length / 25f;
+                    currentEvent.duration = readingDuration + 3f; // The 3 seconds is the buffer for comfort.
                 }
             }
         }
@@ -144,7 +164,7 @@ public class Trigger_Event : MonoBehaviour
             #endregion
 
 
-            if (currentEvent.optionalSound && currentEvent.triggerType != TriggerTypes.Disabled)
+            if (currentEvent.audioClip != null && currentEvent.triggerType != TriggerTypes.Disabled)
             {
                 if (!currentEvent.enableLoop)
                     currentEvent.audioSource.PlayOneShot(currentEvent.audioClip, currentEvent.volumeScale);
@@ -228,6 +248,27 @@ public class Trigger_Event : MonoBehaviour
                 for (int ii = 0; ii < currentEvent.gameObjects.Length; ii++)
                 {
                     currentEvent.gameObjects[ii].SetActive(!currentEvent.gameObjects[ii].activeInHierarchy);
+                }
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.DisplayText)
+            {
+                TMPro.TMP_Text[] texts = Canvas.GetComponentsInChildren<TMPro.TMP_Text>(true );
+
+                for (int ii = 0; ii < texts.Length; ii++)
+                {
+                    if (texts[ii].name == "TextDisplay_Text")
+                    {
+                        Transform display = texts[ii].transform.parent;
+
+                        texts[ii].text = currentEvent.text;
+                        texts[ii].color = currentEvent.color;
+
+                        display.gameObject.SetActive(true);
+                        display.GetComponent<Component_UI_AutoDisabler>().countDown = currentEvent.duration;
+
+                        break;
+                    }
                 }
             }
         }
