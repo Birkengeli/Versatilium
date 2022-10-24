@@ -22,6 +22,9 @@ public class Controller_Enemy : MonoBehaviour
     public bool isInvincible;
     public Transform player;
     public Weapon_Versatilium.Sound[] Sounds;
+    public float rememberPlayerFor = 3f;
+    private float rememberPlayer_Timer = -1;
+    private bool stillRemembersPlayer { get { return rememberPlayer_Timer > 0; } }
 
     [Header("Turret Behavior")]
     public float ActivationTime = 1f;
@@ -34,6 +37,9 @@ public class Controller_Enemy : MonoBehaviour
     public float moveSpeed = 2;
     Vector3 previousPosition;
     public bool isInCombat;
+
+    private Vector3 player_LastKnownLocation;
+
 
     // Start is called before the first frame update
     void Start()
@@ -62,9 +68,9 @@ public class Controller_Enemy : MonoBehaviour
             RaycastHit hit;
             Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
 
-            bool hasDetectedPlayer = distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player";
+            bool hasDetectedPlayer = (distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player");
 
-            if (!hasDetectedPlayer)
+            if (!hasDetectedPlayer && !stillRemembersPlayer)
             {
 
 
@@ -88,16 +94,24 @@ public class Controller_Enemy : MonoBehaviour
                 }
             }
 
-            if (hasDetectedPlayer)
+            if (hasDetectedPlayer || stillRemembersPlayer)
             {
+                if (hasDetectedPlayer)
+                {
+                    rememberPlayer_Timer = rememberPlayerFor;
+                    player_LastKnownLocation = player.position;
+                }
+
+   
+
                 if (ActivationTime_Timer > ActivationTime)
                 {
                     isInvincible = false;
 
 
-                    Vector3 targetPostion = player.position;
+                    Vector3 targetPostion = hasDetectedPlayer ? player.position : player_LastKnownLocation;
 
-                    if(isLeadingTarget)
+                    if(isLeadingTarget && hasDetectedPlayer)
                         targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
 
                     float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
@@ -121,6 +135,7 @@ public class Controller_Enemy : MonoBehaviour
 
                 }
             }
+            rememberPlayer_Timer -= Time.deltaTime;
         }
         
         if (enemyType == EnemyTypes.Humanoid)
