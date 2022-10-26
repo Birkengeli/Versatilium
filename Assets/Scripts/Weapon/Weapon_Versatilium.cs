@@ -133,6 +133,13 @@ public class Weapon_Versatilium : MonoBehaviour
         public int PelletCount = 1;
         public float Deviation = 0.01f;
 
+        [Header("Burst (Semi Automatic Only)")]
+        public bool firesInBurst = false;
+        public int burstCount = 3;
+        public int burst_fireRate = 4;
+        [HideInInspector] public int burstCounter = 0;
+
+
         [Header("Physics")]
         public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
         public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
@@ -147,6 +154,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public Tools_Animator.CustomAnimation Visuals_Projectile;
         public float Visuals_ProjectileScale = 1f;
 
+ 
 
         [HideInInspector]
         public Controller_Character characterController;
@@ -221,9 +229,6 @@ public class Weapon_Versatilium : MonoBehaviour
             Projectile currentProjectile = Projectiles[i];
             bool impacted = false;
 
-            if (currentProjectile.lifeTime == 0)
-                print("I got fired at '"+ frameCounter + "'.");
-
             {
                 RaycastHit hit;
                 Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
@@ -284,7 +289,6 @@ public class Weapon_Versatilium : MonoBehaviour
         bool onKeyTrue = Input.GetKey(TriggerPrimary);
 
         triggerType = currentStats.triggerType;
-        print("Debug Fix, sorry!");
 
         if (overRide != TriggerTypes.None)
         {
@@ -293,7 +297,9 @@ public class Weapon_Versatilium : MonoBehaviour
         }
 
 
-        if (triggerType == TriggerTypes.SemiAutomatic)
+
+
+        if (triggerType == TriggerTypes.SemiAutomatic && !currentStats.firesInBurst)
         {
             if (onKeyDown && fireRate_GlobalCD < 0) // basic Fire
             {
@@ -303,7 +309,32 @@ public class Weapon_Versatilium : MonoBehaviour
                 CreateProjectile(currentStats);
             }
 
-       }
+        }
+
+
+        if (triggerType == TriggerTypes.SemiAutomatic && currentStats.firesInBurst)
+        {
+            bool remainingBursts = currentStats.burstCounter > 0;
+
+            bool onRegularFire = fireRate_GlobalCD < 0 && onKeyDown && !remainingBursts;
+            bool onBurstFire = remainingBursts && fireRate_GlobalCD < 0;
+
+            if (onRegularFire || onBurstFire) // basic Fire
+            {
+
+                if (onRegularFire)
+                    currentStats.burstCounter = currentStats.burstCount;
+
+                Sound.Play("Fire", Sounds, audioSource);
+                currentStats.burstCounter--;
+
+                fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.fireRate;
+                CreateProjectile(currentStats);
+
+
+            }
+
+        }
 
 
         if (triggerType == TriggerTypes.Automatic)
@@ -456,7 +487,6 @@ public class Weapon_Versatilium : MonoBehaviour
                 }
 
 
-                    print("I got created at '" + frameCounter + "'.");
 
                 Projectiles.Add(currentProjectile);
 
