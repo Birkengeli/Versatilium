@@ -73,8 +73,6 @@ public class Controller_Character : MonoBehaviour
             manuallyCollision(timeStep, velocity);
             //transform.position += velocity * timeStep;
 
-
-
             StatusEffects &= ~StatusEffect.FreezeCamera_Tick;
             //StatusEffects &= ~StatusEffect.DisableCamera_Tick;
             StatusEffects &= ~StatusEffect.FreezeMovement_Tick;

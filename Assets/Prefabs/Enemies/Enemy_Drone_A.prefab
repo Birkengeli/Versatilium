@@ -156,6 +156,7 @@ MonoBehaviour:
   isInvincible: 0
   player: {fileID: 0}
   Sounds: []
+  rememberPlayerFor: 3
   ActivationTime: 1
   ActivationTime_Timer: 0
   isRetraciting: 0
@@ -189,13 +190,13 @@ MonoBehaviour:
     knockback: 10
     fireRate: 2
     PelletCount: 1
-    Deviation: 0.05
+    Deviation: 0
     ProjectileType: 2
     Projectile_Speed: 25
-    Projectile_Gravity: 9.807
+    Projectile_Gravity: 0
     inheritUserVelocity: 1
     Visuals_Projectile:
-      name: 
+      name: Idle
       sprites:
       - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
       - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
@@ -203,7 +204,7 @@ MonoBehaviour:
       - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
       DoLoop: 1
       startRandom: 1
-    Visuals_ProjectileScale: 0.5
+    Visuals_ProjectileScale: 0.1
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
@@ -260,6 +261,7 @@ MonoBehaviour:
   deathCountdown_SpeedDuration: 0.5
   Prop_Weapon: {fileID: 0}
   POV_Death: {fileID: 0}
+  Text_Health: {fileID: 0}
 --- !u!82 &1083325215
 AudioSource:
   m_ObjectHideFlags: 0
@@ -417,6 +419,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11f4c100833e2464d9cf45c89b42b7f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2861826292062753996, guid: 11f4c100833e2464d9cf45c89b42b7f5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 11f4c100833e2464d9cf45c89b42b7f5, type: 3}

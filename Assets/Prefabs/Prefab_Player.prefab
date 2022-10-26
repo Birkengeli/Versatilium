@@ -5361,6 +5361,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   codeIndex: 0
+  Cheats:
+  - name: Kill
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: Doom
+    keyCodes: 
+    keyCodeIndex: 0
 --- !u!114 &475005715410517627
 MonoBehaviour:
   m_ObjectHideFlags: 0

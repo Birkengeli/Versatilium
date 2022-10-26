@@ -166,8 +166,14 @@ public class Controller_Enemy : MonoBehaviour
                     anim.SetTrigger("onCombat");
                 }
 
-                transform.LookAt(player);
+                Vector3 targetPosition = player.position;
+
+                if(isLeadingTarget)
+                    targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+
+                transform.LookAt(targetPosition); // Back to the player.
                 Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);
+    
 
                 // Where can I go?
                 float distanceToWall_Right = 0;

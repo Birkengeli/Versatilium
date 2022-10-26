@@ -221,7 +221,7 @@ public class Trigger_Event : MonoBehaviour
                 /// 
 
 
-                GameObject[] triggers = GameObject.FindGameObjectsWithTag("Trigger_Event");
+                GameObject[] triggers = GameObject.FindGameObjectsWithTag("Event_Trigger");
 
                 int triggered_Array_Length = 0;
 
