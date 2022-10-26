@@ -53,39 +53,59 @@ public class Item_Pickup : MonoBehaviour
 
     void OnPickup()
     {
+
+        Weapon_Versatilium weapon = playerTransform.GetComponent<Weapon_Versatilium>();
+        Weapon_Arsenal arsenal = playerTransform.GetComponent<Weapon_Arsenal>();
+
+
         if (pickupType == Pickup.GiveVersatilium || pickupType == Pickup.RemoveVersatilium)
         {
-            playerTransform.GetComponent<Weapon_Versatilium>().enabled = pickupType == Pickup.GiveVersatilium;
-        }
+            bool giveWeapon = pickupType == Pickup.GiveVersatilium;
 
-        if (pickupType == Pickup.GiveConfig)
-        {
-            Weapon_Versatilium weapon = playerTransform.GetComponent<Weapon_Versatilium>();
+            weapon.enabled = giveWeapon;
 
-            Weapon_Arsenal arsenal = playerTransform.GetComponent<Weapon_Arsenal>();
-
-            for (int i = 0; i < arsenal.weaponConfigs.Length; i++)
+            if (giveWeapon)
             {
-                Weapon_Arsenal.WeaponConfiguration currentConfig = arsenal.weaponConfigs[i];
+                playerTransform.GetComponent<AudioSource>().PlayOneShot(arsenal.switchSound);
+            }                
 
-                if (currentConfig.name == ModuleName)
+
+
+            Transform[] transforms = playerTransform.GetComponentsInChildren<Transform>(true);
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                if (transforms[i].name == "Weapon_Versatilium")
                 {
-                    currentConfig.isUnlocked = true;
-                    arsenal.SwitchWeapon(currentConfig);
+                    transforms[i].parent.gameObject.SetActive(giveWeapon);
+
 
                     break;
                 }
-
-                if (i == arsenal.weaponConfigs.Length - 1)
-                    Debug.LogWarning("Could not find a config called '" + ModuleName + "'.");
-
             }
         }
 
-        Destroy(gameObject);
+            if (pickupType == Pickup.GiveConfig)
+            {
 
 
+                for (int i = 0; i < arsenal.weaponConfigs.Length; i++)
+                {
+                    Weapon_Arsenal.WeaponConfiguration currentConfig = arsenal.weaponConfigs[i];
 
+                    if (currentConfig.name == ModuleName)
+                    {
+                        currentConfig.isUnlocked = true;
+                        arsenal.SwitchWeapon(currentConfig);
 
+                        break;
+                    }
+
+                    if (i == arsenal.weaponConfigs.Length - 1)
+                        Debug.LogWarning("Could not find a config called '" + ModuleName + "'.");
+
+                }
+            }
+
+            Destroy(gameObject);
     }
 }
