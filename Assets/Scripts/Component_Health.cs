@@ -130,7 +130,7 @@ public class Component_Health : MonoBehaviour
         return healthScript;
     }
 
-    void WhileDead(bool onDeath)
+    public void WhileDead(bool onDeath)
     {
         isDead = true;
 

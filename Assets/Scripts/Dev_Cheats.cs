@@ -33,39 +33,6 @@ public class Dev_Cheats : MonoBehaviour
             {
                 RecogniseKey(Cheats[i]);
             }
-
-
-            if (Input.GetKeyDown(KeyCode.D) && (codeIndex == 0 || codeIndex == 1))
-            {
-                codeIndex = 1;
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.O) && (codeIndex == 1 || codeIndex == 2))
-            {
-                codeIndex++;
-                return;
-            }
-            if (Input.GetKeyDown(KeyCode.M) && codeIndex == 3)
-            {
-   
-                // Change scene to secret level.
-                Debug.Log("Cheat Code Activated: 'Doom'.");
-                codeIndex = 0;
-
-                return;
-            }
-
-
-            codeIndex = 0;
-        }
-
-        KeyCode thisKeyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), "O");
-
-        if (Input.GetKeyDown(thisKeyCode))
-        {
-            Debug.Log("Succes");
-
         }
 
     }
@@ -106,9 +73,8 @@ public class Dev_Cheats : MonoBehaviour
 
         if (name == "kill")
         {
- 
+            GameObject.FindGameObjectWithTag("Player").transform.GetComponent<Component_Health>().WhileDead(true);
 
-            player = GameObject.FindGameObjectWithTag("Player").transform;
 
         }
     }
