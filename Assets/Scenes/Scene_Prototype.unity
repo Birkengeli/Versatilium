@@ -4126,6 +4126,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: weaponConfigs.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1427095473, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
       propertyPath: POV_Death
       value: 

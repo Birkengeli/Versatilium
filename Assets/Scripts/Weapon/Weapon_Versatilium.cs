@@ -149,8 +149,15 @@ public class Weapon_Versatilium : MonoBehaviour
 
         [Header("Physics")]
         public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
+
+        [Header("Range")]
+        public float distanceBeforeDamageDrop = 20;
         public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
         public float Projectile_Gravity = 9.807f;
+
+
+
+
         // public bool deleteProjectileOnImpact = true;
         // public int bounceCount = 0;
         //  public bool freezeOnImpact = true;
@@ -218,7 +225,6 @@ public class Weapon_Versatilium : MonoBehaviour
         frameCounter++;
 
         float timeStep = Time.deltaTime;
-        float projectileMaxLife = 10f;
 
         if(isWieldedByPlayer && canFire) // NPCs decide themselves when to run "OnFire()";
              OnFire();
@@ -228,19 +234,30 @@ public class Weapon_Versatilium : MonoBehaviour
             Projectile currentProjectile = Projectiles[i];
             bool impacted = false;
 
+            float distanceModifier = (currentProjectile.velocity.magnitude * currentProjectile.lifeTime) / currentProjectile.projectileStats.distanceBeforeDamageDrop;
+            float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
+
+            if(currentProjectile.visualTransform != null)
+            currentProjectile.visualTransform.localScale = Vector3.one * distanceScale;
+
             {
                 RaycastHit hit;
                 Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
 
                 impacted = hit.transform != null;
 
-               if(impacted)
-                    OnHit(currentProjectile.projectileStats, hit.point);
+              
+
+                if (impacted)
+                {
+
+                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale);
+                }
             }
 
             if (debugMode)
             {
-                float ColorGradeUp = currentProjectile.lifeTime / projectileMaxLife;
+                float ColorGradeUp = distanceModifier;
                 float ColorGradeDown = 1f - ColorGradeUp;
 
                 Color customColor = new Color(ColorGradeDown, 0, ColorGradeUp);
@@ -264,7 +281,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
            
 
-            if (currentProjectile.lifeTime > projectileMaxLife || impacted)
+            if (distanceScale == 0 || impacted)
             {
                 if (currentProjectile.visualTransform != null)
                     Destroy(currentProjectile.visualTransform.gameObject); // This should actually be pooled.
@@ -429,7 +446,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 /// 
 
        
-                OnHit(projectileStats, hit.point);
+                OnHit(projectileStats, hit.point, Mathf.Clamp(2f -( hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1));
 
             }
 
@@ -509,7 +526,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition) // i want to skip this step at some point.
+    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition, float distanceModifier) // i want to skip this step at some point.
     {
 
 
@@ -523,7 +540,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
             {
-                int damage = Mathf.RoundToInt(projectileStats.damage / projectileStats.PelletCount);
+                int damage = Mathf.RoundToInt((projectileStats.damage * distanceModifier) / projectileStats.PelletCount);
                 Component_Health.Get(currentHit).OnTakingDamage(damage, Vector3.up * projectileStats.knockback);
             }
 
