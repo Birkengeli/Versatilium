@@ -5119,53 +5119,86 @@ MonoBehaviour:
   canFire: 1
   WeaponStats:
     triggerType: 1
-    damage: 10
-    knockback: 10
-    fireRate: 2
-    PelletCount: 1
-    Deviation: 0
-    ProjectileType: 2
-    Projectile_Speed: 11
-    Projectile_Gravity: 0
-    inheritUserVelocity: 0
-    Visuals_Projectile:
-      name: Idle
-      sprites:
-      - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-      - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-      - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-      - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-      DoLoop: 1
-      startRandom: 1
-    Visuals_ProjectileScale: 0.5
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 2
+    burstCounter: 0
+    Primary:
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      ProjectileType: 0
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: 
+        sprites: []
+        DoLoop: 0
+        startRandom: 0
+      Visuals_ProjectileScale: 1
+    Secondary:
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      ProjectileType: 0
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: 
+        sprites: []
+        DoLoop: 0
+        startRandom: 0
+      Visuals_ProjectileScale: 1
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
-    damage: 10
-    knockback: 10
-    fireRate: 2
-    PelletCount: 1
-    Deviation: 0
-    ProjectileType: 2
-    Projectile_Speed: 10
-    Projectile_Gravity: 0
-    inheritUserVelocity: 0
-    Visuals_Projectile:
-      name: Idle
-      sprites:
-      - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      DoLoop: 1
-      startRandom: 1
-    Visuals_ProjectileScale: 0.5
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 2
+    burstCounter: 0
+    Primary:
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      ProjectileType: 0
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: 
+        sprites: []
+        DoLoop: 0
+        startRandom: 0
+      Visuals_ProjectileScale: 1
+    Secondary:
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      ProjectileType: 0
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      inheritUserVelocity: 1
+      Visuals_Projectile:
+        name: 
+        sprites: []
+        DoLoop: 0
+        startRandom: 0
+      Visuals_ProjectileScale: 1
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
   triggerType: 3
   triggerType_Secondary: 4
-  chargeOption: 0
   Charge_minimumTime: 0.5
   Charge_maximumTime: 1
   User_POV: {fileID: 0}
@@ -5181,7 +5214,6 @@ MonoBehaviour:
     gravity: 0
     lifeTime: 0
     projectileStats:
-      triggerType: 1
       damage: 0
       knockback: 0
       fireRate: 0
@@ -5197,7 +5229,6 @@ MonoBehaviour:
         DoLoop: 0
         startRandom: 0
       Visuals_ProjectileScale: 0
-      characterController: {fileID: 0}
   fireRate_GlobalCD: 0
   frameCounter: 0
 --- !u!82 &8907207702403650227
@@ -5397,80 +5428,339 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponConfigs:
-  - name: Pistol_Default
+  - name: "Config_01 \u201CSelf Defense System\u201D"
     isUnlocked: 1
     WeaponSlot: 0
     statistics:
       triggerType: 1
-      damage: 20
-      knockback: 0
-      fireRate: 5
-      PelletCount: 1
-      Deviation: 0
-      ProjectileType: 2
-      Projectile_Speed: 200
-      Projectile_Gravity: 0
-      inheritUserVelocity: 1
-      Visuals_Projectile:
-        name: Idle
-        sprites:
-        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        DoLoop: 1
-        startRandom: 1
-      Visuals_ProjectileScale: 0.5
+      firesInBurst: 0
+      burstCount: 3
+      burst_fireRate: 2
+      burstCounter: 0
+      Primary:
+        damage: 10
+        knockback: 1
+        fireRate: 5
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 0
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 10
+        knockback: 10
+        fireRate: 2
+        PelletCount: 1
+        Deviation: 0.01
+        ProjectileType: 0
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: 
+          sprites: []
+          DoLoop: 0
+          startRandom: 0
+        Visuals_ProjectileScale: 1
       characterController: {fileID: 0}
-  - name: Shotgun_Default
+  - name: "Config_01-A \u201CAggressive Defender\u201D"
+    isUnlocked: 1
+    WeaponSlot: 0
+    statistics:
+      triggerType: 1
+      firesInBurst: 1
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 8
+        knockback: 1
+        fireRate: 3
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 0
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 10
+        knockback: 10
+        fireRate: 2
+        PelletCount: 1
+        Deviation: 0.01
+        ProjectileType: 0
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: 
+          sprites: []
+          DoLoop: 0
+          startRandom: 0
+        Visuals_ProjectileScale: 1
+      characterController: {fileID: 0}
+  - name: Config_01-B - Statless
     isUnlocked: 0
+    WeaponSlot: 0
+    statistics:
+      triggerType: 1
+      firesInBurst: 1
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 8
+        knockback: 1
+        fireRate: 3
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 0
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 10
+        knockback: 10
+        fireRate: 2
+        PelletCount: 1
+        Deviation: 0.01
+        ProjectileType: 0
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: 
+          sprites: []
+          DoLoop: 0
+          startRandom: 0
+        Visuals_ProjectileScale: 1
+      characterController: {fileID: 0}
+  - name: "Config_02 \u201CCQC Mode\u201D"
+    isUnlocked: 1
     WeaponSlot: 1
     statistics:
       triggerType: 1
-      damage: 100
-      knockback: 1
-      fireRate: 1
-      PelletCount: 9
-      Deviation: 0.05
-      ProjectileType: 2
-      Projectile_Speed: 120
-      Projectile_Gravity: 0
-      inheritUserVelocity: 1
-      Visuals_Projectile:
-        name: Idle
-        sprites:
-        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        DoLoop: 1
-        startRandom: 1
-      Visuals_ProjectileScale: 0.7
+      firesInBurst: 0
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 40
+        knockback: 5
+        fireRate: 1
+        PelletCount: 9
+        Deviation: 0.1
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 10
+        knockback: 10
+        fireRate: 2
+        PelletCount: 1
+        Deviation: 0.01
+        ProjectileType: 0
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: 
+          sprites: []
+          DoLoop: 0
+          startRandom: 0
+        Visuals_ProjectileScale: 1
       characterController: {fileID: 0}
-  - name: Rifle_Default
+  - name: "Config_02-A \u201CSlugger\u201D"
+    isUnlocked: 1
+    WeaponSlot: 1
+    statistics:
+      triggerType: 3
+      firesInBurst: 0
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 40
+        knockback: 5
+        fireRate: 1
+        PelletCount: 9
+        Deviation: 0.1
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 100
+        knockback: 5
+        fireRate: 1
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      characterController: {fileID: 0}
+  - name: "Config_02-B \u201CHellfire\u201D"
+    isUnlocked: 1
+    WeaponSlot: 1
+    statistics:
+      triggerType: 2
+      firesInBurst: 0
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 20
+        knockback: 5
+        fireRate: 5
+        PelletCount: 6
+        Deviation: 0.15
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 100
+        knockback: 5
+        fireRate: 5
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      characterController: {fileID: 0}
+  - name: "Config_03 \u201CPrecision Mode\u201D"
     isUnlocked: 0
     WeaponSlot: 2
     statistics:
       triggerType: 2
-      damage: 10
-      knockback: 0
-      fireRate: 10
-      PelletCount: 1
-      Deviation: 0
-      ProjectileType: 2
-      Projectile_Speed: 200
-      Projectile_Gravity: 0
-      inheritUserVelocity: 1
-      Visuals_Projectile:
-        name: Idle
-        sprites:
-        - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-        DoLoop: 1
-        startRandom: 1
-      Visuals_ProjectileScale: 0.5
+      firesInBurst: 0
+      burstCount: 3
+      burst_fireRate: 5
+      burstCounter: 0
+      Primary:
+        damage: 20
+        knockback: 5
+        fireRate: 5
+        PelletCount: 6
+        Deviation: 0.15
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 0
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
+      Secondary:
+        damage: 100
+        knockback: 5
+        fireRate: 5
+        PelletCount: 1
+        Deviation: 0
+        ProjectileType: 1
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
+        inheritUserVelocity: 1
+        Visuals_Projectile:
+          name: Idle
+          sprites:
+          - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
+          DoLoop: 1
+          startRandom: 1
+        Visuals_ProjectileScale: 0.5
       characterController: {fileID: 0}
   switchCooldown: 1
   switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}

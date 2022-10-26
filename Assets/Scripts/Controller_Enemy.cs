@@ -112,7 +112,7 @@ public class Controller_Enemy : MonoBehaviour
                     Vector3 targetPostion = hasDetectedPlayer ? player.position : player_LastKnownLocation;
 
                     if(isLeadingTarget && hasDetectedPlayer)
-                        targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+                        targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
 
                     float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
                     bool fire = false;
@@ -169,7 +169,7 @@ public class Controller_Enemy : MonoBehaviour
                 Vector3 targetPosition = player.position;
 
                 if(isLeadingTarget)
-                    targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Projectile_Speed);
+                    targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
 
                 transform.LookAt(targetPosition); // Back to the player.
                 Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);

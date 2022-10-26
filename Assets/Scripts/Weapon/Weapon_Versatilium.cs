@@ -7,12 +7,7 @@ public class Weapon_Versatilium : MonoBehaviour
 				#region Enums
 				public enum ProjectileTypes
     {
-        Hitscan, ProjectilePhysics, ProjectileSimulated
-    }
-
-    public enum ChargeOptions // I want damage and pellets at least.
-    {
-        Nothing, 
+        Hitscan, ProjectileSimulated
     }
 
     public enum TriggerTypes
@@ -119,7 +114,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public float gravity;
         public float lifeTime;
 
-        public WeaponStatistics projectileStats;
+        public ProjectileStatistics projectileStats;
     }
 
     [System.Serializable]
@@ -127,11 +122,6 @@ public class Weapon_Versatilium : MonoBehaviour
 				{
         [Header("General")]
         public TriggerTypes triggerType = TriggerTypes.SemiAutomatic;
-        public float damage = 10;
-        public float knockback = 10;
-        public float fireRate = 2;
-        public int PelletCount = 1;
-        public float Deviation = 0.01f;
 
         [Header("Burst (Semi Automatic Only)")]
         public bool firesInBurst = false;
@@ -140,31 +130,41 @@ public class Weapon_Versatilium : MonoBehaviour
         [HideInInspector] public int burstCounter = 0;
 
 
+        public ProjectileStatistics Primary;
+        public ProjectileStatistics Secondary;
+ 
+        [HideInInspector]
+        public Controller_Character characterController;
+    }
+
+    [System.Serializable]
+    public class ProjectileStatistics
+    {
+        [Header("General")]
+        public float damage = 10;
+        public float knockback = 10;
+        public float fireRate = 2;
+        public int PelletCount = 1;
+        public float Deviation = 0.01f;
+
         [Header("Physics")]
         public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
         public float Projectile_Speed = 25f; // TF2's Grenade Launcher moves at 23m/s
         public float Projectile_Gravity = 9.807f;
-       // public bool deleteProjectileOnImpact = true;
-       // public int bounceCount = 0;
-      //  public bool freezeOnImpact = true;
+        // public bool deleteProjectileOnImpact = true;
+        // public int bounceCount = 0;
+        //  public bool freezeOnImpact = true;
         public bool inheritUserVelocity = true;
 
         [Header("Misc. Settings")]
         //  public float lingerTimeAtLocation = 0;
         public Tools_Animator.CustomAnimation Visuals_Projectile;
         public float Visuals_ProjectileScale = 1f;
-
- 
-
-        [HideInInspector]
-        public Controller_Character characterController;
     }
 
+        #endregion
 
-
-				#endregion
-
-				public bool debugMode = true;
+        public bool debugMode = true;
     public bool isWieldedByPlayer = true;
     public bool canFire = true;
 
@@ -179,7 +179,6 @@ public class Weapon_Versatilium : MonoBehaviour
     public TriggerTypes triggerType_Secondary = TriggerTypes.Sight;
 
     [Header("Trigger Settings: (Charge)")]
-    public ChargeOptions chargeOption = ChargeOptions.Nothing;
     public float Charge_minimumTime = 0.1f;
     public float Charge_maximumTime = 1f;
     private float Charge_current;
@@ -305,8 +304,8 @@ public class Weapon_Versatilium : MonoBehaviour
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
-                fireRate_GlobalCD = 1f / currentStats.fireRate;
-                CreateProjectile(currentStats);
+                fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
+                CreateProjectile(currentStats, currentStats.Primary);
             }
 
         }
@@ -328,8 +327,8 @@ public class Weapon_Versatilium : MonoBehaviour
                 Sound.Play("Fire", Sounds, audioSource);
                 currentStats.burstCounter--;
 
-                fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.fireRate;
-                CreateProjectile(currentStats);
+                fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.Primary.fireRate;
+                CreateProjectile(currentStats, currentStats.Primary);
 
 
             }
@@ -343,8 +342,8 @@ public class Weapon_Versatilium : MonoBehaviour
             {
                 Sound.Play("Fire", Sounds, audioSource);
 
-                fireRate_GlobalCD = 1f / currentStats.fireRate;
-                CreateProjectile(currentStats);
+                fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
+                CreateProjectile(currentStats, currentStats.Primary);
             }
 
         }
@@ -366,8 +365,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     Sound.Play("Fire", Sounds, audioSource);
 
-                    fireRate_GlobalCD = 1f / currentStats.fireRate;
-                    CreateProjectile(currentStats);
+                    fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
+                    CreateProjectile(currentStats, currentStats.Primary);
                 }
                 else
                 {
@@ -375,8 +374,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     Sound.Play("Charged Fire", Sounds, audioSource);
 
-                    fireRate_GlobalCD = 1f / WeaponStats_Alt.fireRate;
-                    CreateProjectile(WeaponStats_Alt);
+                    fireRate_GlobalCD = 1f / currentStats.Secondary.fireRate;
+                    CreateProjectile(WeaponStats_Alt, currentStats.Secondary);
                 }
 
                 Charge_current = 0;
@@ -390,7 +389,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 				#region Projectile
 
-    void CreateProjectile(WeaponStatistics currentStats)
+    void CreateProjectile(WeaponStatistics currentStats, ProjectileStatistics projectileStats)
     {
         if(gunParticles != null)
             gunParticles.Play();
@@ -402,12 +401,12 @@ public class Weapon_Versatilium : MonoBehaviour
 								#endregion
 
 								#region Hitscan
-								if (currentStats.ProjectileType == ProjectileTypes.Hitscan)
+								if (projectileStats.ProjectileType == ProjectileTypes.Hitscan)
         {
 
-            for (int i = 0; i < currentStats.PelletCount; i++)
+            for (int i = 0; i < projectileStats.PelletCount; i++)
             {
-                Vector3 rayDeviation = User_POV.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + User_POV.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
+                Vector3 rayDeviation = User_POV.right * Random.Range(-projectileStats.Deviation, projectileStats.Deviation) + User_POV.up * Random.Range(-projectileStats.Deviation, projectileStats.Deviation);
 
                 Vector3 rayOrigin = User_POV.position;
                 Vector3 rayDirection = User_POV.forward + rayDeviation;
@@ -430,7 +429,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 /// 
 
        
-                OnHit(currentStats, hit.point);
+                OnHit(projectileStats, hit.point);
 
             }
 
@@ -440,13 +439,13 @@ public class Weapon_Versatilium : MonoBehaviour
 
         #region Simulated Projectile
 
-        if (currentStats.ProjectileType == ProjectileTypes.ProjectileSimulated)
+        if (projectileStats.ProjectileType == ProjectileTypes.ProjectileSimulated)
         {
             float timeStep = Time.deltaTime;
 
-            for (int i = 0; i < currentStats.PelletCount; i++)
+            for (int i = 0; i < projectileStats.PelletCount; i++)
             {
-                Vector3 rayDeviation = User_POV.right * Random.Range(-currentStats.Deviation, currentStats.Deviation) + User_POV.up * Random.Range(-currentStats.Deviation, currentStats.Deviation);
+                Vector3 rayDeviation = User_POV.right * Random.Range(-projectileStats.Deviation, projectileStats.Deviation) + User_POV.up * Random.Range(-projectileStats.Deviation, projectileStats.Deviation);
 
                 Vector3 rayOrigin = User_POV.position;
                 Vector3 rayDirection = User_POV.forward + rayDeviation;
@@ -457,12 +456,12 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 Projectile currentProjectile = new Projectile();
 
-                currentProjectile.gravity = currentStats.Projectile_Gravity;
+                currentProjectile.gravity = projectileStats.Projectile_Gravity;
                 currentProjectile.position = Origin_Barrel.position;
-                currentProjectile.velocity = projectileDirection * currentStats.Projectile_Speed;
-                currentProjectile.projectileStats = currentStats;
+                currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
+                currentProjectile.projectileStats = projectileStats;
 
-                if(isWieldedByPlayer && currentStats.inheritUserVelocity)
+                if(isWieldedByPlayer && projectileStats.inheritUserVelocity)
 																{
                     if (currentStats.characterController == null)
                         currentStats.characterController = transform.GetComponent<Controller_Character>();
@@ -474,10 +473,10 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     currentProjectile.visualTransform = Instantiate(Prefab_Projectile).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
-                    currentProjectile.visualTransform.localScale = Vector3.one * currentStats.Visuals_ProjectileScale;
+                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.Visuals_ProjectileScale;
 
                     currentProjectile.anim = currentProjectile.visualTransform.GetComponent<Tools_Animator>();
-                    currentProjectile.anim.Animations[0] = currentStats.Visuals_Projectile;
+                    currentProjectile.anim.Animations[0] = projectileStats.Visuals_Projectile;
 
                     if(true) // This part is what corrects the sprite, but right now I don't want the sprite to start in my face.
                     { 
@@ -494,7 +493,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
 
                     Debug.DrawRay(currentProjectile.position, currentProjectile.velocity * timeStep, Color.red, fireRate_GlobalCD); // The firerate CD is 1f/ firerate in this tic
-                    Debug.DrawLine(Origin_Barrel.position, rayOrigin + rayDirection * currentStats.Projectile_Speed * timeStep, Color.blue, fireRate_GlobalCD); // The firerate CD is 1f/ firerate in this tic
+                    Debug.DrawLine(Origin_Barrel.position, rayOrigin + rayDirection * projectileStats.Projectile_Speed * timeStep, Color.blue, fireRate_GlobalCD); // The firerate CD is 1f/ firerate in this tic
                 }
 
             }
@@ -510,7 +509,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void OnHit(WeaponStatistics currentStats, Vector3 impactPosition) // i want to skip this step at some point.
+    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition) // i want to skip this step at some point.
     {
 
 
@@ -524,8 +523,8 @@ public class Weapon_Versatilium : MonoBehaviour
 
             if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
             {
-                int damage = Mathf.RoundToInt(currentStats.damage / currentStats.PelletCount);
-                Component_Health.Get(currentHit).OnTakingDamage(damage, Vector3.up *  currentStats.knockback);
+                int damage = Mathf.RoundToInt(projectileStats.damage / projectileStats.PelletCount);
+                Component_Health.Get(currentHit).OnTakingDamage(damage, Vector3.up * projectileStats.knockback);
             }
 
 
