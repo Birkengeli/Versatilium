@@ -75,6 +75,90 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &2102309514560715186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3334073194229268314}
+  - component: {fileID: 3982307615583788510}
+  m_Layer: 6
+  m_Name: Hitscan Sprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3334073194229268314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102309514560715186}
+  m_LocalRotation: {x: -0.11420189, y: -0.828687, z: 0.09382124, w: 0.53984565}
+  m_LocalPosition: {x: -0.18614173, y: 0.13390553, z: 0.43780303}
+  m_LocalScale: {x: 1, y: 0.010000001, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1121983416118808254}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &3982307615583788510
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102309514560715186}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 0.8474094, b: 0, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &2517653319026488911
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +221,8 @@ Transform:
   m_LocalPosition: {x: 0.385, y: -0.278, z: 1.0981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3334073194229268314}
   m_Father: {fileID: 3806352416794090786}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5130,15 +5215,17 @@ MonoBehaviour:
       PelletCount: 1
       Deviation: 0.01
       ProjectileType: 0
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      inheritUserVelocity: 1
+      HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+      ProjectileScale: 1
       Visuals_Projectile:
         name: 
         sprites: []
         DoLoop: 0
         startRandom: 0
-      Visuals_ProjectileScale: 1
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
     Secondary:
       damage: 10
       knockback: 10
@@ -5146,15 +5233,17 @@ MonoBehaviour:
       PelletCount: 1
       Deviation: 0.01
       ProjectileType: 0
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      inheritUserVelocity: 1
+      HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+      ProjectileScale: 1
       Visuals_Projectile:
         name: 
         sprites: []
         DoLoop: 0
         startRandom: 0
-      Visuals_ProjectileScale: 1
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
@@ -5169,15 +5258,17 @@ MonoBehaviour:
       PelletCount: 1
       Deviation: 0.01
       ProjectileType: 0
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      inheritUserVelocity: 1
+      HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+      ProjectileScale: 1
       Visuals_Projectile:
         name: 
         sprites: []
         DoLoop: 0
         startRandom: 0
-      Visuals_ProjectileScale: 1
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
     Secondary:
       damage: 10
       knockback: 10
@@ -5185,15 +5276,17 @@ MonoBehaviour:
       PelletCount: 1
       Deviation: 0.01
       ProjectileType: 0
-      Projectile_Speed: 25
-      Projectile_Gravity: 9.807
-      inheritUserVelocity: 1
+      HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+      ProjectileScale: 1
       Visuals_Projectile:
         name: 
         sprites: []
         DoLoop: 0
         startRandom: 0
-      Visuals_ProjectileScale: 1
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -5206,29 +5299,7 @@ MonoBehaviour:
   Origin_Barrel: {fileID: 1121983416118808254}
   Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
   gunParticles: {fileID: 3912959059411891414}
-  Projectiles:
-  - visualTransform: {fileID: 0}
-    anim: {fileID: 0}
-    velocity: {x: 0, y: 0, z: 0}
-    position: {x: 0, y: 0, z: 0}
-    gravity: 0
-    lifeTime: 0
-    projectileStats:
-      damage: 0
-      knockback: 0
-      fireRate: 0
-      PelletCount: 0
-      Deviation: 0
-      ProjectileType: 0
-      Projectile_Speed: 0
-      Projectile_Gravity: 0
-      inheritUserVelocity: 0
-      Visuals_Projectile:
-        name: 
-        sprites: []
-        DoLoop: 0
-        startRandom: 0
-      Visuals_ProjectileScale: 0
+  Projectiles: []
   fireRate_GlobalCD: 0
   frameCounter: 0
 --- !u!82 &8907207702403650227
@@ -5443,10 +5514,9 @@ MonoBehaviour:
         fireRate: 5
         PelletCount: 1
         Deviation: 0
-        ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        ProjectileType: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.01
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5456,7 +5526,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 0
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 0
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 10
         knockback: 10
@@ -5464,15 +5537,17 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0.01
         ProjectileType: 0
-        Projectile_Speed: 25
-        Projectile_Gravity: 9.807
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: 
           sprites: []
           DoLoop: 0
           startRandom: 0
-        Visuals_ProjectileScale: 1
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_01-A \u201CAggressive Defender\u201D"
     isUnlocked: 1
@@ -5490,9 +5565,8 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.5
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5502,7 +5576,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 0
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 0
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 10
         knockback: 10
@@ -5510,15 +5587,17 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0.01
         ProjectileType: 0
-        Projectile_Speed: 25
-        Projectile_Gravity: 9.807
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: 
           sprites: []
           DoLoop: 0
           startRandom: 0
-        Visuals_ProjectileScale: 1
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: Config_01-B - Statless
     isUnlocked: 0
@@ -5536,9 +5615,8 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5548,7 +5626,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 0
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 0
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 10
         knockback: 10
@@ -5556,15 +5637,17 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0.01
         ProjectileType: 0
-        Projectile_Speed: 25
-        Projectile_Gravity: 9.807
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: 
           sprites: []
           DoLoop: 0
           startRandom: 0
-        Visuals_ProjectileScale: 1
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_02 \u201CCQC Mode\u201D"
     isUnlocked: 1
@@ -5582,9 +5665,8 @@ MonoBehaviour:
         PelletCount: 9
         Deviation: 0.1
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.5
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5594,7 +5676,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 1
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 0
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 10
         knockback: 10
@@ -5602,15 +5687,17 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0.01
         ProjectileType: 0
-        Projectile_Speed: 25
-        Projectile_Gravity: 9.807
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: 
           sprites: []
           DoLoop: 0
           startRandom: 0
-        Visuals_ProjectileScale: 1
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_02-A \u201CSlugger\u201D"
     isUnlocked: 1
@@ -5628,9 +5715,8 @@ MonoBehaviour:
         PelletCount: 9
         Deviation: 0.1
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.5
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5640,7 +5726,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 1
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 0
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 100
         knockback: 5
@@ -5648,9 +5737,8 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.5
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5660,7 +5748,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
           DoLoop: 1
           startRandom: 1
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       characterController: {fileID: 0}
   - name: "Config_02-B \u201CHellfire\u201D"
     isUnlocked: 1
@@ -5678,9 +5769,8 @@ MonoBehaviour:
         PelletCount: 6
         Deviation: 0.15
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 0
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 0.5
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5690,57 +5780,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
           DoLoop: 1
           startRandom: 1
-        Visuals_ProjectileScale: 0.5
-      Secondary:
-        damage: 100
-        knockback: 5
-        fireRate: 5
-        PelletCount: 1
-        Deviation: 0
-        ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 1
-        Visuals_Projectile:
-          name: Idle
-          sprites:
-          - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-          - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-          - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-          - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-          DoLoop: 1
-          startRandom: 1
-        Visuals_ProjectileScale: 0.5
-      characterController: {fileID: 0}
-  - name: "Config_03 \u201CPrecision Mode\u201D"
-    isUnlocked: 0
-    WeaponSlot: 2
-    statistics:
-      triggerType: 2
-      firesInBurst: 0
-      burstCount: 3
-      burst_fireRate: 5
-      burstCounter: 0
-      Primary:
-        damage: 20
-        knockback: 5
-        fireRate: 5
-        PelletCount: 6
-        Deviation: 0.15
-        ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
         inheritUserVelocity: 0
-        Visuals_Projectile:
-          name: Idle
-          sprites:
-          - {fileID: -1505310690, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-          - {fileID: 626217037, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-          - {fileID: -2059194699, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-          - {fileID: 1731177982, guid: ee2ce1ff6abe35448be19e23d8403511, type: 3}
-          DoLoop: 1
-          startRandom: 1
-        Visuals_ProjectileScale: 0.5
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       Secondary:
         damage: 100
         knockback: 5
@@ -5748,9 +5791,8 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0
         ProjectileType: 1
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-        inheritUserVelocity: 1
+        HitscanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        ProjectileScale: 1
         Visuals_Projectile:
           name: Idle
           sprites:
@@ -5760,7 +5802,10 @@ MonoBehaviour:
           - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
           DoLoop: 1
           startRandom: 1
-        Visuals_ProjectileScale: 0.5
+        inheritUserVelocity: 1
+        distanceBeforeDamageDrop: 20
+        Projectile_Speed: 25
+        Projectile_Gravity: 0
       characterController: {fileID: 0}
   switchCooldown: 1
   switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}

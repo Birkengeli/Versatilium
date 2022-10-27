@@ -107,6 +107,7 @@ public class Weapon_Versatilium : MonoBehaviour
     [System.Serializable]
     public struct Projectile
     {
+        public ProjectileTypes ProjectileType;
         public Transform visualTransform;
         public Tools_Animator anim;
         public Vector3 velocity;
@@ -147,8 +148,13 @@ public class Weapon_Versatilium : MonoBehaviour
         public int PelletCount = 1;
         public float Deviation = 0.01f;
 
-        [Header("Physics")]
+        [Header("Projectile")]
         public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
+        public Color HitscanColor = Color.yellow;
+        public float ProjectileScale = 0.5f;
+        public Tools_Animator.CustomAnimation Visuals_Projectile;
+
+        public bool inheritUserVelocity = true;
 
         [Header("Range")]
         public float distanceBeforeDamageDrop = 20;
@@ -161,12 +167,8 @@ public class Weapon_Versatilium : MonoBehaviour
         // public bool deleteProjectileOnImpact = true;
         // public int bounceCount = 0;
         //  public bool freezeOnImpact = true;
-        public bool inheritUserVelocity = true;
 
-        [Header("Misc. Settings")]
-        //  public float lingerTimeAtLocation = 0;
-        public Tools_Animator.CustomAnimation Visuals_Projectile;
-        public float Visuals_ProjectileScale = 1f;
+
     }
 
         #endregion
@@ -194,6 +196,7 @@ public class Weapon_Versatilium : MonoBehaviour
     public Transform User_POV;
     public Transform Model_Weapon;
     public Transform Origin_Barrel;
+    private GameObject hitscanSprite;
     public GameObject Prefab_Projectile;
 
     [Header("Components")]
@@ -205,6 +208,12 @@ public class Weapon_Versatilium : MonoBehaviour
 
     void Start()
     {
+        if (isWieldedByPlayer)
+        {
+            hitscanSprite = Origin_Barrel.GetChild(0).gameObject;
+            hitscanSprite.SetActive(false);
+        }
+
         if (isWieldedByPlayer && User_POV == null)
             User_POV = GetComponentInChildren<Camera>().transform;
 
@@ -234,11 +243,37 @@ public class Weapon_Versatilium : MonoBehaviour
             Projectile currentProjectile = Projectiles[i];
             bool impacted = false;
 
+            if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
+            {
+                currentProjectile.lifeTime += timeStep;
+
+                float distance = Vector3.Distance(currentProjectile.position, Origin_Barrel.position);
+
+                Vector3 oldScale = currentProjectile.visualTransform.localScale;
+                oldScale.x = distance * 2;
+                currentProjectile.visualTransform.localScale = oldScale;
+
+                currentProjectile.visualTransform.position = currentProjectile.position;
+
+                currentProjectile.visualTransform.right = (currentProjectile.position - Origin_Barrel.position).normalized;
+
+                Projectiles[i] = currentProjectile;
+
+
+                if (currentProjectile.lifeTime > 0.1f)
+                {
+                    Destroy(currentProjectile.visualTransform.gameObject);
+                    Projectiles.RemoveAt(i);
+                    i--;
+                }
+                continue;
+            }
+
             float distanceModifier = (currentProjectile.velocity.magnitude * currentProjectile.lifeTime) / currentProjectile.projectileStats.distanceBeforeDamageDrop;
             float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
 
             if(currentProjectile.visualTransform != null)
-            currentProjectile.visualTransform.localScale = Vector3.one * distanceScale;
+                currentProjectile.visualTransform.localScale = Vector3.one * distanceScale;
 
             {
                 RaycastHit hit;
@@ -400,6 +435,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         }
 
+
     }
 
 				#endregion
@@ -410,6 +446,8 @@ public class Weapon_Versatilium : MonoBehaviour
     {
         if(gunParticles != null)
             gunParticles.Play();
+
+  
 
         #region Charge Options
         float chargePercentage = (triggerType == TriggerTypes.Charge) ? Charge_current / Charge_maximumTime : 1;
@@ -430,8 +468,31 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 RaycastHit hit;
                 Physics.Raycast(rayOrigin, rayDirection, out hit);
+                bool hitSomething = hit.transform != null;
 
-                if(debugMode)
+
+                if (hitscanSprite != null)
+                {
+                    //hitscanSprite.SetActive(true);
+                    Projectile currentProjectile = new Projectile();
+
+                    currentProjectile.ProjectileType = ProjectileTypes.Hitscan;
+                    currentProjectile.visualTransform = Instantiate(hitscanSprite.transform).transform;
+                    currentProjectile.visualTransform.localScale = new Vector3(1, projectileStats.ProjectileScale, 1);
+                    currentProjectile.visualTransform.GetComponent<SpriteRenderer>().color = projectileStats.HitscanColor;
+                    currentProjectile.visualTransform.gameObject.SetActive(true);
+                    currentProjectile.position = hitSomething ? hit.point : rayOrigin + rayDirection * 1000;
+
+                    //currentProjectile.position = Origin_Barrel.position;
+                    //currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
+                    currentProjectile.projectileStats = projectileStats;
+
+                    Projectiles.Add(currentProjectile);
+                }
+
+
+
+                if (debugMode)
 																{
                     float debugRange = hit.distance + (hit.distance == 0 ? 100 : 0);
 
@@ -473,6 +534,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 Projectile currentProjectile = new Projectile();
 
+                currentProjectile.ProjectileType = ProjectileTypes.ProjectileSimulated;
                 currentProjectile.gravity = projectileStats.Projectile_Gravity;
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
@@ -490,7 +552,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     currentProjectile.visualTransform = Instantiate(Prefab_Projectile).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
-                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.Visuals_ProjectileScale;
+                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.ProjectileScale;
 
                     currentProjectile.anim = currentProjectile.visualTransform.GetComponent<Tools_Animator>();
                     currentProjectile.anim.Animations[0] = projectileStats.Visuals_Projectile;
