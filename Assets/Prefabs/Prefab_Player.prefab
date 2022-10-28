@@ -5066,7 +5066,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 12c0f3e7f2d12754187c896ef9f6ef67, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5098,12 +5098,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6332088234781394692}
   - component: {fileID: 6332088234781394693}
+  - component: {fileID: 1689314902727988526}
   - component: {fileID: 6332088234781394715}
   - component: {fileID: 6332088234781394695}
   - component: {fileID: 8907207702403650227}
   - component: {fileID: 1427095473}
   - component: {fileID: 3693464917665637770}
-  - component: {fileID: 1689314902727988526}
   - component: {fileID: 4031496714777804033}
   - component: {fileID: 475005715410517627}
   - component: {fileID: 687607205}
@@ -5145,6 +5145,22 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1689314902727988526
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &6332088234781394715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5433,22 +5449,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b47af5df20a804f9699b16a1007176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &1689314902727988526
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6332088234781394712}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &4031496714777804033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5958,6 +5958,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5215299815803115452, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 12c0f3e7f2d12754187c896ef9f6ef67, type: 2}
     - target: {fileID: -3661985432938654458, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -5978,6 +5982,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1397318277702805348, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 12c0f3e7f2d12754187c896ef9f6ef67, type: 2}
+    - target: {fileID: 6448678818323749754, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ac588042b25ac94b8e9ae079b2511b3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
 --- !u!4 &8131030645063034513 stripped
