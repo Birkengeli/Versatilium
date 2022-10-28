@@ -1,0 +1,50 @@
+﻿Thanks for purchasing!
+
+● Requirements: 
+
+For this package work properly you have to install URP (Universal Render Pipeline) or HDRP (High Definition Render Pipeline) and use Linear Color Space for a better look.
+
+● How to Set-up: 
+
+	●URP(2019.4.30f1 or Higher):
+	
+	-Go to Window > Package Manager > URP (Universal Render Pipeline) And Install it.
+	-When is done all materials look with magenta color, to solve this you need create a Render Settings. 
+	You can use the settings created for this package or create your own settings.
+	-If you wanna use the settings for this package:
+		go to Sci-fi Pack/Demo/Scene/Settings/UniversalRenderPipelineAsset
+	-If you wanna create your own settings: 
+		go to the project window and right click and Create > Rendering > Universal Render Pipeline > Pipeline Asset
+	-Now you need to put this on Graphics Settings:
+		go to Edit in the Unity window > Project Settings > Graphics and drag the UniversalRenderPipelineAsset in the Scriptable Render Pipeline Settings.
+	
+	●HDRP(2019.4.30f1 or Higher):
+	
+	-First you have to import the package with the optimized HDRP materials, you can find this package in:
+		Sci-fi Pack\Packages\SCI FI Pack HDRP(2019.4.30f1+) and double click it.
+	-Go to Window > Package Manager > High Definition Render Pipeline And Install it.
+	-When is done all materials look with magenta color, to solve this you need to create a Render Settings. 
+	You can use the settings created for this package or create your own settings.
+	-If you wanna use the settings for this package:
+		go to Sci-fi Pack\HDRP\Demo\Scene\Settings\HDRenderPipelineAsset.
+	-If you wanna create your own settings: 
+		go to the project window and right click and Create > Rendering > High Definition Render Pipeline Asset.
+	-Now you need to put this on Graphics Settings:
+		go to Edit in the Unity window > Project Settings > Graphics and drag the HDRenderPipelineAsset in the Scriptable Render Pipeline Settings.
+	-Open the Demo Scene include in Sci-fi Pack\HDRP\Demo\Scene folder and you are ready to go. 
+	-If everything still looks magenta, please reimport HDRP folder right clicking the folder and reimport.
+
+	●Linear Color Space:
+
+	-Is not necessary to do this, but colors looks great with this.
+	-Go to Edit in the Unity window > Project Settings > Player > In the inspector go to Other Settings > Rendering > Color Space and choose Linear.
+
+
+● If you need Help: 
+	-Send an email to: zakhanfx@hotmail.com
+
+
+
+
+
+
