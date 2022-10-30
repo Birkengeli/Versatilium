@@ -10,8 +10,12 @@ public class Dev_Cheats : MonoBehaviour
     public class Cheat
     {
         public string name;
-        public KeyCode[] keyCodes;
-        public int keyCodeIndex = 0;
+        public string descriptionOptional;
+        public bool countAsCheating = false;
+        [Header("Incase a code must quickly be disabled (but not deleted):")]
+        public bool isDisabled = false;
+        [HideInInspector] public KeyCode[] keyCodes;
+        [HideInInspector] public int keyCodeIndex = 0;
     }
 
     public Cheat[] Cheats;
@@ -31,14 +35,17 @@ public class Dev_Cheats : MonoBehaviour
         {
             for (int i = 0; i < Cheats.Length; i++)
             {
-                RecogniseKey(Cheats[i]);
+                RecogniseKey(i);
             }
         }
 
     }
 
-    void RecogniseKey(Cheat currentCheat)
+    void RecogniseKey(int index)
     {
+
+        Cheat currentCheat = Cheats[index];
+
         KeyCode currentKeyCode = currentCheat.keyCodes[currentCheat.keyCodeIndex];
 
         if (Input.GetKeyDown(currentKeyCode))
@@ -50,7 +57,7 @@ public class Dev_Cheats : MonoBehaviour
 
         if (currentCheat.keyCodeIndex == currentCheat.keyCodes.Length)
         {
-            CodeCompleted(currentCheat.name.ToLower());
+            CodeCompleted(index);
             currentCheat.keyCodeIndex = 0;
         }
     }
@@ -67,15 +74,42 @@ public class Dev_Cheats : MonoBehaviour
         return keyCodes;
     }
 
-    public void CodeCompleted(string name)
+    public void CodeCompleted(int index)
     {
-        print("Code Activated: '" + name + "'.");
+        string name = Cheats[index].name.ToLower();
+
+        bool isDisabled = Cheats[index].isDisabled;
+
+
+        print("Code Activated: '" + Cheats[index].name + "'." + (isDisabled ? "This code has however been manually disabled." : ""));
+
+        if (isDisabled)
+        {
+            return;
+        }
+
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
 
         if (name == "kill")
         {
-            GameObject.FindGameObjectWithTag("Player").transform.GetComponent<Component_Health>().WhileDead(true);
+            player.GetComponent<Component_Health>().WhileDead(true);
+        }
 
+        if (name == "unlock")
+        {
+            Weapon_Arsenal arsenal = player.GetComponent<Weapon_Arsenal>();
 
+            for (int i = 0; i < arsenal.weaponConfigs.Length; i++)
+            {
+                arsenal.weaponConfigs[i].isUnlocked = true;
+
+            }
+        }
+
+        if (name == "konami" || name == "wwssadadba")
+        {
+            player.GetComponent<Component_Health>().healthCurrent = 30000;
+            player.GetComponent<Component_Health>().OnTakingDamage(0, Vector3.zero);
         }
     }
 }

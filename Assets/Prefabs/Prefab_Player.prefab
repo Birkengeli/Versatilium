@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1157732176259811711}
   - component: {fileID: 5195995343164740300}
+  - component: {fileID: 1281854921}
   m_Layer: 0
   m_Name: Viewmodel_Camera
   m_TagString: Untagged
@@ -41,7 +42,7 @@ Camera:
   m_GameObject: {fileID: 1541162109776409097}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 3
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -57,7 +58,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 58.477917
+  field of view: 58.715508
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
@@ -75,6 +76,39 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1281854921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541162109776409097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 1
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &2102309514560715186
 GameObject:
   m_ObjectHideFlags: 0
@@ -5464,9 +5498,33 @@ MonoBehaviour:
   codeIndex: 0
   Cheats:
   - name: Kill
+    descriptionOptional: Kills the player
+    countAsCheating: 0
+    isDisabled: 0
     keyCodes: 
     keyCodeIndex: 0
   - name: Doom
+    descriptionOptional: Doesn't do anything
+    countAsCheating: 0
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: Unlock
+    descriptionOptional: Unlocks all weapons in Weapon_Arsenal
+    countAsCheating: 1
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: Konami
+    descriptionOptional: Gives 30.000 health
+    countAsCheating: 1
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: wwssadadba
+    descriptionOptional: Gives 30.000 health (Identical to Konami)
+    countAsCheating: 1
+    isDisabled: 0
     keyCodes: 
     keyCodeIndex: 0
 --- !u!114 &475005715410517627
@@ -5550,7 +5608,7 @@ MonoBehaviour:
         Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_01-A \u201CAggressive Defender\u201D"
-    isUnlocked: 1
+    isUnlocked: 0
     WeaponSlot: 0
     statistics:
       triggerType: 1
@@ -5650,7 +5708,7 @@ MonoBehaviour:
         Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_02 \u201CCQC Mode\u201D"
-    isUnlocked: 1
+    isUnlocked: 0
     WeaponSlot: 1
     statistics:
       triggerType: 1
@@ -5700,7 +5758,7 @@ MonoBehaviour:
         Projectile_Gravity: 9.807
       characterController: {fileID: 0}
   - name: "Config_02-A \u201CSlugger\u201D"
-    isUnlocked: 1
+    isUnlocked: 0
     WeaponSlot: 1
     statistics:
       triggerType: 3
@@ -5754,7 +5812,7 @@ MonoBehaviour:
         Projectile_Gravity: 0
       characterController: {fileID: 0}
   - name: "Config_02-B \u201CHellfire\u201D"
-    isUnlocked: 1
+    isUnlocked: 0
     WeaponSlot: 1
     statistics:
       triggerType: 2
@@ -5820,6 +5878,7 @@ GameObject:
   - component: {fileID: 6332088235026572212}
   - component: {fileID: 6332088235026572214}
   - component: {fileID: 6332088235026572215}
+  - component: {fileID: 2135614550}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -5857,7 +5916,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 1
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -5869,7 +5928,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 58.477917
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -5895,6 +5954,40 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6332088235026572213}
   m_Enabled: 1
+--- !u!114 &2135614550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088235026572213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras:
+  - {fileID: 5195995343164740300}
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1001 &8601171840656818554
 PrefabInstance:
   m_ObjectHideFlags: 0

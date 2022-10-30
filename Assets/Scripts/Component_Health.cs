@@ -52,9 +52,6 @@ public class Component_Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDead && Input.GetKeyDown(KeyCode.X)) // Suicide
-            WhileDead(true);
-
         if (isDead)
             WhileDead(false);
     }
