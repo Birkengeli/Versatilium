@@ -5527,6 +5527,18 @@ MonoBehaviour:
     isDisabled: 0
     keyCodes: 
     keyCodeIndex: 0
+  - name: Teleport
+    descriptionOptional: teleport to where you are looking
+    countAsCheating: 1
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: TP
+    descriptionOptional: teleport to where you are looking (Same as teleport)
+    countAsCheating: 1
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
 --- !u!114 &475005715410517627
 MonoBehaviour:
   m_ObjectHideFlags: 0

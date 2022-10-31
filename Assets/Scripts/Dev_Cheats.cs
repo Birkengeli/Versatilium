@@ -111,5 +111,19 @@ public class Dev_Cheats : MonoBehaviour
             player.GetComponent<Component_Health>().healthCurrent = 30000;
             player.GetComponent<Component_Health>().OnTakingDamage(0, Vector3.zero);
         }
+
+        if (name == "teleport" || name == "tp")
+        {
+            Transform playerEyes = player.GetComponentInChildren<Camera>().transform;
+
+            Physics.Raycast(playerEyes.position, playerEyes.forward, out RaycastHit hit);
+
+            if (hit.transform != null)
+            {
+                Vector3 newLocation = hit.point + Vector3.up + playerEyes.forward * -0.5f;
+
+                player.position = newLocation;
+            }
+        }
     }
 }
