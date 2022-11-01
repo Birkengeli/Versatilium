@@ -37,6 +37,10 @@ public class Controller_Enemy : MonoBehaviour
     public float moveSpeed = 2;
     Vector3 previousPosition;
     public bool isInCombat;
+    Vector3 wanderTarget;
+
+    [Header("Idle Behavior")]
+    public int moveFrequency = 5;
 
     private Vector3 player_LastKnownLocation;
 
@@ -51,6 +55,8 @@ public class Controller_Enemy : MonoBehaviour
         }
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        WanderThowards(transform.position);
     }
 
     // Update is called once per frame
@@ -197,6 +203,23 @@ public class Controller_Enemy : MonoBehaviour
                 
                     transform.position += (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed * timeStep;
             }
+
+            if (!isInCombat && moveFrequency > 0)
+            {
+
+
+                bool onMove = Random.Range(0f, 1f) < (timeStep / moveFrequency);
+
+                if (onMove)
+                {
+                    wanderTarget = WanderThowards(transform.position, moveSpeed * moveFrequency);
+                    transform.LookAt(wanderTarget); 
+                }
+
+                if(Vector3.Distance(wanderTarget, transform.position) > 0.5f)
+                    transform.position += transform.forward * moveSpeed * timeStep;
+            }
+
 												#endregion
 
 
@@ -299,6 +322,24 @@ public class Controller_Enemy : MonoBehaviour
         targetPosition_Previous = targetPosition_Current;
 
         return targetPosition_Lead;
+
+    }
+
+    Vector3 WanderThowards(Vector3 currentPos, float maxDistance = 999)
+    {
+        float randomAngle = Random.Range(0, 360);
+        Vector3 direction = Quaternion.AngleAxis(randomAngle, Vector3.up) * Vector3.forward;
+
+
+        Physics.Raycast(currentPos, direction, out RaycastHit hit);
+
+        float currentDistance = (hit.transform != null && hit.distance < maxDistance) ? (hit.distance - 0.5f) : maxDistance; // I remove a little, to avoid clipping.
+
+        Debug.DrawRay(currentPos, direction, Color.green, 4);
+
+
+        return currentPos + direction * currentDistance;
+
 
     }
     
