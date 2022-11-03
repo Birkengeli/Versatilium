@@ -41,6 +41,8 @@ public class Controller_Enemy : MonoBehaviour
 
     [Header("Idle Behavior")]
     public int moveFrequency = 5;
+    public int wanderMax = 50;
+    Vector3 StartPos;
 
     private Vector3 player_LastKnownLocation;
 
@@ -54,9 +56,10 @@ public class Controller_Enemy : MonoBehaviour
             isInvincible = true;
         }
 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        StartPos = transform.position;
+        wanderTarget = StartPos;
 
-        WanderThowards(transform.position);
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
@@ -337,8 +340,30 @@ public class Controller_Enemy : MonoBehaviour
 
         Debug.DrawRay(currentPos, direction, Color.green, 4);
 
+        Vector3 endPosition = transform.position + (direction * currentDistance);
 
-        return currentPos + direction * currentDistance;
+
+
+        if (false && wanderMax < 100)
+        {
+
+            Vector3 directionToStartPos = (StartPos - endPosition).normalized;
+            float distanceToStartPos = Vector3.Distance(endPosition, StartPos);
+
+            Physics.Raycast(endPosition, directionToStartPos, out RaycastHit hit2, wanderMax);
+
+            Debug.DrawRay(endPosition, directionToStartPos * distanceToStartPos, Color.blue, 4);
+
+            print("" + (hit2.transform != null ? hit2.transform.name : "NULL") + ": " + hit2.distance + ", " + Vector3.Distance(endPosition, StartPos) + ".");
+
+            bool hitValidTarget = hit2.transform != null && hit2.transform != transform;
+
+            if (distanceToStartPos > wanderMax)         // It's not in LoS from start pos
+                endPosition = WanderThowards(currentPos, maxDistance); // Then try again
+        }
+
+
+        return endPosition;
 
 
     }

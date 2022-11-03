@@ -81,7 +81,6 @@ public class Controller_Character : MonoBehaviour
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
 
-
     }
 
 

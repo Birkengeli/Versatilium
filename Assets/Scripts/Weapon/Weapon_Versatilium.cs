@@ -7,7 +7,12 @@ public class Weapon_Versatilium : MonoBehaviour
 				#region Enums
 				public enum ProjectileTypes
     {
-        Hitscan, ProjectileSimulated
+        Hitscan, Projectile
+    }
+
+    public enum Visual_Type
+    {
+       None, Projectile, Laser
     }
 
     public enum TriggerTypes
@@ -114,6 +119,12 @@ public class Weapon_Versatilium : MonoBehaviour
         public Vector3 position;
         public float gravity;
         public float lifeTime;
+        public int remainingBounces;
+
+        [HideInInspector]
+        public bool toBeDestroyed;
+        [HideInInspector]
+        public bool sciFi_detachTrail;
 
         public ProjectileStatistics projectileStats;
     }
@@ -142,6 +153,7 @@ public class Weapon_Versatilium : MonoBehaviour
     public class ProjectileStatistics
     {
         [Header("General")]
+        public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
         public float damage = 10;
         public float knockback = 10;
         public float fireRate = 2;
@@ -149,11 +161,12 @@ public class Weapon_Versatilium : MonoBehaviour
         public float Deviation = 0.01f;
 
         [Header("Projectile")]
-        public ProjectileTypes ProjectileType = ProjectileTypes.Hitscan;
-        public Color HitscanColor = Color.yellow;
-        public float ProjectileScale = 0.5f;
-        public Tools_Animator.CustomAnimation Visuals_Projectile;
+        public Visual_Type useScifipackProjectiles;
+        public GameObject sciFiProjectile_prefab;
+        public bool sciFi_DetachTrail = true;
 
+        public float ProjectileScale = 0.5f;
+       
         public bool inheritUserVelocity = true;
 
         [Header("Range")]
@@ -165,7 +178,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
         // public bool deleteProjectileOnImpact = true;
-        // public int bounceCount = 0;
+        public int bounceCount = 0;
         //  public bool freezeOnImpact = true;
 
 
@@ -173,7 +186,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         #endregion
 
-        public bool debugMode = true;
+    public bool debugMode = true;
     public bool isWieldedByPlayer = true;
     public bool canFire = true;
 
@@ -196,8 +209,6 @@ public class Weapon_Versatilium : MonoBehaviour
     public Transform User_POV;
     public Transform Model_Weapon;
     public Transform Origin_Barrel;
-    private GameObject hitscanSprite;
-    public GameObject Prefab_Projectile;
 
     [Header("Components")]
     public ParticleSystem gunParticles;
@@ -208,11 +219,6 @@ public class Weapon_Versatilium : MonoBehaviour
 
     void Start()
     {
-        if (isWieldedByPlayer)
-        {
-            hitscanSprite = Origin_Barrel.GetChild(0).gameObject;
-            hitscanSprite.SetActive(false);
-        }
 
         if (isWieldedByPlayer && User_POV == null)
             User_POV = GetComponentInChildren<Camera>().transform;
@@ -239,91 +245,8 @@ public class Weapon_Versatilium : MonoBehaviour
              OnFire();
 
         for (int i = 0; i < Projectiles.Count; i++)
-        {
-            Projectile currentProjectile = Projectiles[i];
-            bool impacted = false;
-
-            if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
-            {
-                currentProjectile.lifeTime += timeStep;
-
-                float distance = Vector3.Distance(currentProjectile.position, Origin_Barrel.position);
-
-                Vector3 oldScale = currentProjectile.visualTransform.localScale;
-                oldScale.x = distance * 2;
-                currentProjectile.visualTransform.localScale = oldScale;
-
-                currentProjectile.visualTransform.position = currentProjectile.position;
-
-                currentProjectile.visualTransform.right = (currentProjectile.position - Origin_Barrel.position).normalized;
-
-                Projectiles[i] = currentProjectile;
-
-
-                if (currentProjectile.lifeTime > 0.1f)
-                {
-                    Destroy(currentProjectile.visualTransform.gameObject);
-                    Projectiles.RemoveAt(i);
-                    i--;
-                }
-                continue;
-            }
-
-            float distanceModifier = (currentProjectile.velocity.magnitude * currentProjectile.lifeTime) / currentProjectile.projectileStats.distanceBeforeDamageDrop;
-            float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
-
-            if(currentProjectile.visualTransform != null)
-                currentProjectile.visualTransform.localScale = Vector3.one * distanceScale;
-
-            {
-                RaycastHit hit;
-                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
-
-                impacted = hit.transform != null;
-
-              
-
-                if (impacted)
-                {
-
-                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale);
-                }
-            }
-
-            if (debugMode)
-            {
-                float ColorGradeUp = distanceModifier;
-                float ColorGradeDown = 1f - ColorGradeUp;
-
-                Color customColor = new Color(ColorGradeDown, 0, ColorGradeUp);
-
-                Debug.DrawRay(currentProjectile.position, currentProjectile.velocity * timeStep, customColor, 1f);
-            }
-
-            currentProjectile.lifeTime += timeStep;
-            currentProjectile.position += currentProjectile.velocity * timeStep;
-            currentProjectile.velocity += Vector3.down * currentProjectile.gravity * timeStep;
-
-
-            if (currentProjectile.visualTransform != null)
-            {
-                currentProjectile.visualTransform.position = currentProjectile.position;
-                currentProjectile.anim.Play("Idle");
-            }
-
-           Projectiles[i] = currentProjectile;
-
-
-           
-
-            if (distanceScale == 0 || impacted)
-            {
-                if (currentProjectile.visualTransform != null)
-                    Destroy(currentProjectile.visualTransform.gameObject); // This should actually be pooled.
-                Projectiles.RemoveAt(i);
-                i--;
-            }
-        }
+            ManageProjectile(Projectiles, i, timeStep);
+        
     }
 
     #region OnFire
@@ -471,19 +394,22 @@ public class Weapon_Versatilium : MonoBehaviour
                 bool hitSomething = hit.transform != null;
 
 
-                if (hitscanSprite != null)
+                if (projectileStats.useScifipackProjectiles == Visual_Type.Laser)
                 {
-                    //hitscanSprite.SetActive(true);
+                    Vector3 laserPoint  = hitSomething ? hit.point : rayOrigin + rayDirection * 1000; 
+                    float laserLength = hitSomething ? hit.distance : 1000;
+
                     Projectile currentProjectile = new Projectile();
 
                     currentProjectile.ProjectileType = ProjectileTypes.Hitscan;
-                    currentProjectile.visualTransform = Instantiate(hitscanSprite.transform).transform;
-                    currentProjectile.visualTransform.localScale = new Vector3(1, projectileStats.ProjectileScale, 1);
-                    currentProjectile.visualTransform.GetComponent<SpriteRenderer>().color = projectileStats.HitscanColor;
-                    currentProjectile.visualTransform.gameObject.SetActive(true);
-                    currentProjectile.position = hitSomething ? hit.point : rayOrigin + rayDirection * 1000;
+                    currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
+                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.ProjectileScale;
+        
+                    currentProjectile.position = laserPoint;
+                    currentProjectile.visualTransform.LookAt(currentProjectile.position);
 
-                    //currentProjectile.position = Origin_Barrel.position;
+                    currentProjectile.visualTransform.position = Origin_Barrel.position;
+                    currentProjectile.visualTransform.parent = Origin_Barrel;
                     //currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
                     currentProjectile.projectileStats = projectileStats;
 
@@ -507,7 +433,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 /// 
 
        
-                OnHit(projectileStats, hit.point, Mathf.Clamp(2f -( hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1));
+                OnHit(projectileStats, hit.point, Mathf.Clamp(2f -( hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward);
 
             }
 
@@ -517,7 +443,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         #region Simulated Projectile
 
-        if (projectileStats.ProjectileType == ProjectileTypes.ProjectileSimulated)
+        if (projectileStats.ProjectileType == ProjectileTypes.Projectile)
         {
             float timeStep = Time.deltaTime;
 
@@ -534,34 +460,33 @@ public class Weapon_Versatilium : MonoBehaviour
 
                 Projectile currentProjectile = new Projectile();
 
-                currentProjectile.ProjectileType = ProjectileTypes.ProjectileSimulated;
+                currentProjectile.ProjectileType = ProjectileTypes.Projectile;
                 currentProjectile.gravity = projectileStats.Projectile_Gravity;
                 currentProjectile.position = Origin_Barrel.position;
                 currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
                 currentProjectile.projectileStats = projectileStats;
+                currentProjectile.remainingBounces = projectileStats.bounceCount;
 
-                if(isWieldedByPlayer && projectileStats.inheritUserVelocity)
+                if(projectileStats.inheritUserVelocity)
 																{
-                    if (currentStats.characterController == null)
-                        currentStats.characterController = transform.GetComponent<Controller_Character>();
+                    if (isWieldedByPlayer)
+                    {
+                        if (currentStats.characterController == null)
+                            currentStats.characterController = transform.GetComponent<Controller_Character>();
 
-                    currentProjectile.velocity += currentStats.characterController.velocity;
+                        currentProjectile.velocity += currentStats.characterController.velocity;
+                    }
                 }
 
-                if (Prefab_Projectile != null)
+
+
+                if (projectileStats.useScifipackProjectiles == Visual_Type.Projectile)
                 {
-                    currentProjectile.visualTransform = Instantiate(Prefab_Projectile).transform;
+                    currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
                     currentProjectile.visualTransform.position = currentProjectile.position;
                     currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.ProjectileScale;
 
-                    currentProjectile.anim = currentProjectile.visualTransform.GetComponent<Tools_Animator>();
-                    currentProjectile.anim.Animations[0] = projectileStats.Visuals_Projectile;
-
-                    if(true) // This part is what corrects the sprite, but right now I don't want the sprite to start in my face.
-                    { 
-                        currentProjectile.anim.Play("Idle", true);
-                        currentProjectile.anim.OnTick();
-                    }
+                    currentProjectile.sciFi_detachTrail = projectileStats.sciFi_DetachTrail;
                 }
 
 
@@ -588,7 +513,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition, float distanceModifier) // i want to skip this step at some point.
+    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition, float distanceModifier, Vector3 knockBack) // i want to skip this step at some point.
     {
 
 
@@ -603,7 +528,8 @@ public class Weapon_Versatilium : MonoBehaviour
             if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
             {
                 int damage = Mathf.RoundToInt((projectileStats.damage * distanceModifier) / projectileStats.PelletCount);
-                Component_Health.Get(currentHit).OnTakingDamage(damage, Vector3.up * projectileStats.knockback);
+
+                Component_Health.Get(currentHit).OnTakingDamage(damage, knockBack * projectileStats.knockback * distanceModifier);
             }
 
 
@@ -619,4 +545,128 @@ public class Weapon_Versatilium : MonoBehaviour
     {
         Debug.Log(testValue + " + " + 99999 + " actual damage.");
     }
+
+    public void ManageProjectile(List<Projectile> projectileArray, int index, float timeStep)
+    {
+        Projectile currentProjectile = projectileArray[index];
+
+        bool hasImpacted = false;
+
+								#region Hitscan
+								if (currentProjectile.ProjectileType == ProjectileTypes.Hitscan)
+        {
+            float laserLifeTime = 0.1f;
+
+            float distanceModifier = currentProjectile.lifeTime / laserLifeTime;
+            float distanceScale = Mathf.Clamp(1 - distanceModifier, 0, 1);
+
+            currentProjectile.lifeTime += timeStep;
+
+            float distance = Vector3.Distance(currentProjectile.position, Origin_Barrel.position);
+            float oldScale = currentProjectile.projectileStats.ProjectileScale;
+
+            currentProjectile.visualTransform.LookAt(currentProjectile.position);
+            currentProjectile.visualTransform.localScale = Vector3.one;
+
+            currentProjectile.toBeDestroyed = currentProjectile.lifeTime > laserLifeTime;
+        }
+
+        #endregion
+
+      
+        #region Projectile
+
+        if (currentProjectile.ProjectileType == ProjectileTypes.Projectile)
+        {
+
+            float distanceModifier = (currentProjectile.velocity.magnitude * currentProjectile.lifeTime) / currentProjectile.projectileStats.distanceBeforeDamageDrop;
+            float distanceScale = Mathf.Clamp(2 - distanceModifier, 0, 1);
+
+            if (currentProjectile.visualTransform != null)
+                currentProjectile.visualTransform.localScale = Vector3.one * currentProjectile.projectileStats.ProjectileScale * distanceScale;
+
+            {
+                RaycastHit hit;
+                Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
+
+                hasImpacted = hit.transform != null;
+
+
+
+                if (hasImpacted)
+                {
+                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized);
+
+                    if (currentProjectile.remainingBounces > 0)
+                    {
+                        currentProjectile.remainingBounces--;
+                        hasImpacted = false;
+
+                        currentProjectile.position = hit.point; // Reset from the wall where it bounced;
+
+                        Vector3 reflectedVelocity = Vector3.Reflect(currentProjectile.velocity, hit.normal);
+
+                        currentProjectile.velocity = reflectedVelocity;
+
+
+                    }
+
+                    else
+                    {
+                        GameObject Explosion = currentProjectile.visualTransform.GetChild(0).gameObject;
+
+                        float TimerEXP = 0.5f;
+
+                        if (currentProjectile.sciFi_detachTrail)
+                        {
+                            foreach (Transform child in currentProjectile.visualTransform)
+                            {
+                                Destroy(child.gameObject, 1f);
+                                child.parent = null;
+                            }
+                        }
+                        GameObject E = Instantiate(Explosion, currentProjectile.visualTransform.position, Explosion.transform.rotation);
+                        Destroy(E, TimerEXP);
+                    }
+                }
+            }
+
+            if (debugMode)
+            {
+                float ColorGradeUp = distanceModifier;
+                float ColorGradeDown = 1f - ColorGradeUp;
+
+                Color customColor = new Color(ColorGradeDown, 0, ColorGradeUp);
+
+                Debug.DrawRay(currentProjectile.position, currentProjectile.velocity * timeStep, customColor, 1f);
+            }
+
+            currentProjectile.lifeTime += timeStep;
+            currentProjectile.position += currentProjectile.velocity * timeStep;
+            currentProjectile.velocity += Vector3.down * currentProjectile.gravity * timeStep;
+
+            currentProjectile.visualTransform.position = currentProjectile.position;
+
+            currentProjectile.toBeDestroyed = distanceScale == 0 || hasImpacted;
+        }
+        #endregion
+
+        projectileArray[index] = currentProjectile;
+
+								#region Destruction
+								if (currentProjectile.toBeDestroyed)
+        {
+            foreach (Transform child in currentProjectile.visualTransform)
+            {
+                Destroy(child.gameObject, 0); // This should actually be pooled.
+                child.parent = null;
+            }
+
+            Destroy(currentProjectile.visualTransform.gameObject);
+
+            Projectiles.RemoveAt(index);
+            index--; // purely cermonial. This does nothing.
+        }
+								#endregion
+				}
 }
