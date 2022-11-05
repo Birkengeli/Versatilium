@@ -403,17 +403,52 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     currentProjectile.ProjectileType = ProjectileTypes.Hitscan;
                     currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
-                    currentProjectile.visualTransform.localScale = Vector3.one * projectileStats.ProjectileScale;
         
-                    currentProjectile.position = laserPoint;
-                    currentProjectile.visualTransform.LookAt(currentProjectile.position);
+                    currentProjectile.velocity = laserPoint;
+   
+                    currentProjectile.position = Origin_Barrel.position;
+                    currentProjectile.visualTransform.position = currentProjectile.position;
+                    currentProjectile.visualTransform.LookAt(currentProjectile.velocity);
 
-                    currentProjectile.visualTransform.position = Origin_Barrel.position;
+                    BeamStretcher(currentProjectile.visualTransform.GetComponent<LineRenderer>(), laserLength);
+                    currentProjectile.visualTransform.GetChild(2).transform.position = currentProjectile.velocity;
+
                     currentProjectile.visualTransform.parent = Origin_Barrel;
-                    //currentProjectile.velocity = projectileDirection * projectileStats.Projectile_Speed;
+
                     currentProjectile.projectileStats = projectileStats;
 
                     Projectiles.Add(currentProjectile);
+
+                    OnHit(projectileStats, hit.point, Mathf.Clamp(2f - (hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward);
+
+                    Vector3 bounceOrigin = laserPoint;
+                    Vector3 bounceDirection = Vector3.Reflect(rayDirection, hit.normal);
+                    float maxBounceDistance = (projectileStats.distanceBeforeDamageDrop - laserLength) / projectileStats.bounceCount;
+
+                    for (int i2 = 1; i2 < projectileStats.bounceCount + 1 && hitSomething; i2++)
+                    {
+                        Physics.Raycast(bounceOrigin, bounceDirection, out hit, maxBounceDistance);
+
+                        hitSomething = hit.transform != null;
+                        laserPoint = hitSomething ? hit.point : currentProjectile.position + bounceDirection * maxBounceDistance;
+
+                        currentProjectile.position = bounceOrigin; // Bouncing is done from the old laserpoint
+                        currentProjectile.velocity = laserPoint; // The new laserpoint
+
+                        currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
+                        currentProjectile.visualTransform.position = currentProjectile.position;
+                        currentProjectile.visualTransform.LookAt(currentProjectile.velocity);
+
+                        BeamStretcher(currentProjectile.visualTransform.GetComponent<LineRenderer>(), laserLength);
+                        currentProjectile.visualTransform.GetChild(2).transform.position = currentProjectile.velocity;
+
+                        Projectiles.Add(currentProjectile);
+
+                        bounceDirection = Vector3.Reflect(bounceDirection, hit.normal);
+                        bounceOrigin = laserPoint;
+
+
+                    }
                 }
 
 
@@ -433,7 +468,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 /// 
 
        
-                OnHit(projectileStats, hit.point, Mathf.Clamp(2f -( hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward);
+
 
             }
 
@@ -558,14 +593,13 @@ public class Weapon_Versatilium : MonoBehaviour
             float laserLifeTime = 0.1f;
 
             float distanceModifier = currentProjectile.lifeTime / laserLifeTime;
-            float distanceScale = Mathf.Clamp(1 - distanceModifier, 0, 1);
 
             currentProjectile.lifeTime += timeStep;
 
-            float distance = Vector3.Distance(currentProjectile.position, Origin_Barrel.position);
+            float distance = Vector3.Distance(currentProjectile.position, currentProjectile.velocity);
             float oldScale = currentProjectile.projectileStats.ProjectileScale;
 
-            currentProjectile.visualTransform.LookAt(currentProjectile.position);
+            currentProjectile.visualTransform.LookAt(currentProjectile.velocity);
             currentProjectile.visualTransform.localScale = Vector3.one;
 
             currentProjectile.toBeDestroyed = currentProjectile.lifeTime > laserLifeTime;
@@ -611,7 +645,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     }
 
-                    else
+                    else if(currentProjectile.remainingBounces == 0 && currentProjectile.sciFi_detachTrail)
                     {
                         GameObject Explosion = currentProjectile.visualTransform.GetChild(0).gameObject;
 
@@ -669,4 +703,18 @@ public class Weapon_Versatilium : MonoBehaviour
         }
 								#endregion
 				}
+
+    public void BeamStretcher (LineRenderer line, float distance)
+    {
+             line.SetPosition(0, line.transform.InverseTransformPoint(line.transform.position));
+             line.SetPosition(1, line.transform.InverseTransformPoint(line.transform.position + line.transform.forward * distance));
+    }
+
+    GameObject Projectile_Prefab_Prep(GameObject projectilePrefab)
+    {
+        Destroy(projectilePrefab.GetComponent<Rigidbody>());
+        Destroy(projectilePrefab.GetComponent<Collider>());
+
+        return projectilePrefab;
+    }
 }

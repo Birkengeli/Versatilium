@@ -5188,6 +5188,7 @@ MonoBehaviour:
       distanceBeforeDamageDrop: 20
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
+      bounceCount: 0
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -5203,6 +5204,7 @@ MonoBehaviour:
       distanceBeforeDamageDrop: 20
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
+      bounceCount: 0
     characterController: {fileID: 0}
   WeaponStats_Alt:
     triggerType: 1
@@ -5225,6 +5227,7 @@ MonoBehaviour:
       distanceBeforeDamageDrop: 20
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
+      bounceCount: 0
     Secondary:
       ProjectileType: 0
       damage: 10
@@ -5240,6 +5243,7 @@ MonoBehaviour:
       distanceBeforeDamageDrop: 20
       Projectile_Speed: 25
       Projectile_Gravity: 9.807
+      bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 323
   TriggerSecondary: 324
@@ -5250,7 +5254,6 @@ MonoBehaviour:
   User_POV: {fileID: 0}
   Model_Weapon: {fileID: 0}
   Origin_Barrel: {fileID: 1121983416118808254}
-  Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
   gunParticles: {fileID: 3912959059411891414}
   Projectiles: []
   fireRate_GlobalCD: 0
@@ -5488,14 +5491,15 @@ MonoBehaviour:
         fireRate: 5
         PelletCount: 1
         Deviation: 0
-        useScifipackProjectiles: 0
-        sciFiProjectile_prefab: {fileID: 0}
+        useScifipackProjectiles: 2
+        sciFiProjectile_prefab: {fileID: 8593982582101886334, guid: 90c5a5b6a600fa149876355a6f2003c1, type: 3}
         sciFi_DetachTrail: 1
-        ProjectileScale: 0.01
+        ProjectileScale: 1
         inheritUserVelocity: 0
-        distanceBeforeDamageDrop: 20
+        distanceBeforeDamageDrop: 200
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       Secondary:
         ProjectileType: 0
         damage: 10
@@ -5511,6 +5515,7 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 9.807
+        bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_01-A \u201CAggressive Defender\u201D"
     isUnlocked: 1
@@ -5529,13 +5534,14 @@ MonoBehaviour:
         PelletCount: 1
         Deviation: 0
         useScifipackProjectiles: 1
-        sciFiProjectile_prefab: {fileID: 8546591505651860602, guid: 5a6529a3e9f00d049a66f37986fed166, type: 3}
+        sciFiProjectile_prefab: {fileID: 3871811987597805383, guid: ec759d6639d172547bc9e41ef2cd6c32, type: 3}
         sciFi_DetachTrail: 1
-        ProjectileScale: 0.5
+        ProjectileScale: 10
         inheritUserVelocity: 0
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       Secondary:
         ProjectileType: 0
         damage: 10
@@ -5551,46 +5557,7 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 9.807
-      characterController: {fileID: 0}
-  - name: Config_01-B - Statless
-    isUnlocked: 0
-    WeaponSlot: 0
-    statistics:
-      triggerType: 1
-      firesInBurst: 1
-      burstCount: 3
-      burst_fireRate: 5
-      burstCounter: 0
-      Primary:
-        ProjectileType: 1
-        damage: 8
-        knockback: 1
-        fireRate: 3
-        PelletCount: 1
-        Deviation: 0
-        useScifipackProjectiles: 0
-        sciFiProjectile_prefab: {fileID: 0}
-        sciFi_DetachTrail: 1
-        ProjectileScale: 1
-        inheritUserVelocity: 0
-        distanceBeforeDamageDrop: 20
-        Projectile_Speed: 25
-        Projectile_Gravity: 0
-      Secondary:
-        ProjectileType: 0
-        damage: 10
-        knockback: 10
-        fireRate: 2
-        PelletCount: 1
-        Deviation: 0.01
-        useScifipackProjectiles: 0
-        sciFiProjectile_prefab: {fileID: 0}
-        sciFi_DetachTrail: 1
-        ProjectileScale: 1
-        inheritUserVelocity: 1
-        distanceBeforeDamageDrop: 20
-        Projectile_Speed: 25
-        Projectile_Gravity: 9.807
+        bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02 \u201CCQC Mode\u201D"
     isUnlocked: 0
@@ -5616,6 +5583,7 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       Secondary:
         ProjectileType: 0
         damage: 10
@@ -5631,9 +5599,10 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 9.807
+        bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02-A \u201CSlugger\u201D"
-    isUnlocked: 0
+    isUnlocked: 1
     WeaponSlot: 1
     statistics:
       triggerType: 3
@@ -5648,14 +5617,15 @@ MonoBehaviour:
         fireRate: 1
         PelletCount: 9
         Deviation: 0.1
-        useScifipackProjectiles: 0
-        sciFiProjectile_prefab: {fileID: 0}
+        useScifipackProjectiles: 1
+        sciFiProjectile_prefab: {fileID: 2580913533069623465, guid: 08fe2d6024ae60a469c82b0411904f93, type: 3}
         sciFi_DetachTrail: 1
-        ProjectileScale: 0.5
+        ProjectileScale: 10
         inheritUserVelocity: 0
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       Secondary:
         ProjectileType: 1
         damage: 100
@@ -5663,14 +5633,15 @@ MonoBehaviour:
         fireRate: 1
         PelletCount: 1
         Deviation: 0
-        useScifipackProjectiles: 0
-        sciFiProjectile_prefab: {fileID: 0}
+        useScifipackProjectiles: 1
+        sciFiProjectile_prefab: {fileID: 2222516795193044067, guid: 3fded490b90c97e48b72a6236a029d5b, type: 3}
         sciFi_DetachTrail: 1
-        ProjectileScale: 0.5
+        ProjectileScale: 3
         inheritUserVelocity: 1
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02-B \u201CHellfire\u201D"
     isUnlocked: 0
@@ -5696,6 +5667,7 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       Secondary:
         ProjectileType: 1
         damage: 100
@@ -5711,6 +5683,7 @@ MonoBehaviour:
         distanceBeforeDamageDrop: 20
         Projectile_Speed: 25
         Projectile_Gravity: 0
+        bounceCount: 0
       characterController: {fileID: 0}
   switchCooldown: 1
   switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
@@ -5773,7 +5746,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 90
   orthographic: 0

@@ -167,7 +167,10 @@ public class Component_Health : MonoBehaviour
 
                     weaponProp.GetComponent<Rigidbody>().velocity = playerScript.velocity * 0.6f;
                 }
-         
+
+                transform.GetChild(1).gameObject.SetActive(false);
+                
+
                 #endregion
             }
 
