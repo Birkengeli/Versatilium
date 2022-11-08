@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Trigger_Event : MonoBehaviour
@@ -17,6 +18,7 @@ public class Trigger_Event : MonoBehaviour
         HurtBox,
         ToggleObjectExistence,
         DisplayText,
+        ReturnToMainMenu,
     }
 
     [System.Serializable]
@@ -270,6 +272,11 @@ public class Trigger_Event : MonoBehaviour
                         break;
                     }
                 }
+            }
+
+            if (currentEvent.triggerType == TriggerTypes.ReturnToMainMenu)
+            {
+                SceneManager.LoadScene(-1);
             }
         }
 
