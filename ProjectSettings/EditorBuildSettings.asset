@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene_StartMenu.unity
     guid: 2939ab003f77e4d4a8d70b0008cf9303
   - enabled: 1
-    path: Assets/Scenes/Scene_City_Graybox.unity
-    guid: 96ae204e380444f4d9375a7f754ff6ac
+    path: Assets/Scenes/Scene_City_Prototype.unity
+    guid: a30fe07a8f55f0946af7870f91c426b3
   m_configObjects: {}
