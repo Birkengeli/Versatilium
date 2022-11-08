@@ -276,7 +276,7 @@ public class Trigger_Event : MonoBehaviour
 
             if (currentEvent.triggerType == TriggerTypes.ReturnToMainMenu)
             {
-                SceneManager.LoadScene(-1);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
             }
         }
 

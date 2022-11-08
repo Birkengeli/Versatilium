@@ -222,15 +222,29 @@ MonoBehaviour:
   ConeOfFire: 45
   isLeadingTarget: 1
   Weapon: {fileID: 4877620946721651445}
-  HealthMax: 100
   enemyType: 0
   isInvincible: 0
   player: {fileID: 0}
-  Sounds: []
+  Sounds:
+  - name: OnTakingDamage
+    audioClips:
+    - {fileID: 8300000, guid: fb47977fa16f56f468ee023290a93015, type: 3}
+    volumeScale: 1
+    random: 0
+  - name: OnTakingDamage_Invincible
+    audioClips:
+    - {fileID: 8300000, guid: b14afc46d85166040b5884240df0d386, type: 3}
+    volumeScale: 1
+    random: 0
+  rememberPlayerFor: 3
   ActivationTime: 1
   ActivationTime_Timer: 0
   isRetraciting: 0
   viewEuler: {x: 0, y: 0}
+  moveSpeed: 2
+  isInCombat: 0
+  moveFrequency: 5
+  wanderMax: 50
 --- !u!114 &4877620946721651445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,54 +267,92 @@ MonoBehaviour:
   isWieldedByPlayer: 0
   canFire: 1
   WeaponStats:
-    damage: 34
-    knockback: 10
-    fireRate: 10
-    PelletCount: 1
-    Deviation: 0.1
-    ProjectileType: 2
-    Projectile_Speed: 10
-    Projectile_Gravity: 0
-    inheritUserVelocity: 1
-    Visuals_Projectile:
-      name: Idle
-      sprites:
-      - {fileID: -1505310690, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: 626217037, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: -2059194699, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      - {fileID: 1731177982, guid: 8f655683f83382c4291ecb69ce39ccda, type: 3}
-      DoLoop: 1
-      startRandom: 1
-    Visuals_ProjectileScale: 0.4
+    triggerType: 1
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 4
+    burstCounter: 0
+    Primary:
+      ProjectileType: 1
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      useScifipackProjectiles: 1
+      sciFiProjectile_prefab: {fileID: 4974367610149320718, guid: 151375af1d7c7084da869a934447904f, type: 3}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 1
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 0
+      bounceCount: 0
+    Secondary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
     characterController: {fileID: 0}
   WeaponStats_Alt:
-    damage: 10
-    knockback: 10
-    fireRate: 2
-    PelletCount: 1
-    Deviation: 0.01
-    ProjectileType: 0
-    Projectile_Speed: 25
-    Projectile_Gravity: 9.807
-    inheritUserVelocity: 1
-    Visuals_Projectile:
-      name: 
-      sprites: []
-      DoLoop: 0
-      startRandom: 0
-    Visuals_ProjectileScale: 1
+    triggerType: 1
+    firesInBurst: 0
+    burstCount: 3
+    burst_fireRate: 4
+    burstCounter: 0
+    Primary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
+    Secondary:
+      ProjectileType: 0
+      damage: 10
+      knockback: 10
+      fireRate: 2
+      PelletCount: 1
+      Deviation: 0.01
+      useScifipackProjectiles: 0
+      sciFiProjectile_prefab: {fileID: 0}
+      sciFi_DetachTrail: 1
+      ProjectileScale: 0.5
+      inheritUserVelocity: 1
+      distanceBeforeDamageDrop: 20
+      Projectile_Speed: 25
+      Projectile_Gravity: 9.807
+      bounceCount: 0
     characterController: {fileID: 0}
   TriggerPrimary: 0
   TriggerSecondary: 0
   triggerType: 1
   triggerType_Secondary: 4
-  chargeOption: 0
   Charge_minimumTime: 0.1
   Charge_maximumTime: 1
   User_POV: {fileID: 607442534154879469}
   Model_Weapon: {fileID: 0}
   Origin_Barrel: {fileID: 607442534154879469}
-  Prefab_Projectile: {fileID: 2509491810658591779, guid: f27b0b32806da5f49b76d758a266695e, type: 3}
   gunParticles: {fileID: 0}
   Projectiles: []
   fireRate_GlobalCD: 0
@@ -430,10 +482,13 @@ MonoBehaviour:
   healthCurrent: -1
   knockback_Multiplier: 0
   isDead: 0
+  hasDeathAnimation: 0
   deathCountdown: 5
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
+  Prop_Weapon: {fileID: 0}
   POV_Death: {fileID: 0}
+  Text_Health: {fileID: 0}
 --- !u!1 &5139203246875817703
 GameObject:
   m_ObjectHideFlags: 0
