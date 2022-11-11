@@ -138,8 +138,8 @@ public class Component_Health : MonoBehaviour
 
                 deathCountdown_Timer = 0;
 
-                playerScript.StatusEffects |= Controller_Character.StatusEffect.FreezeCamera_Set;
-                playerScript.StatusEffects |= Controller_Character.StatusEffect.FreezeMovement_Set;
+                playerScript.ApplyStatusEffect(Controller_Character.StatusEffect.FreezeCamera);
+                playerScript.ApplyStatusEffect(Controller_Character.StatusEffect.FreezeMovement);
                 GetComponent<Weapon_Versatilium>().canFire = false;
 
                 #region Visuals

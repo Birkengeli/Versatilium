@@ -187,7 +187,7 @@ public class Weapon_Versatilium : MonoBehaviour
         #endregion
 
     public bool debugMode = true;
-    public bool isWieldedByPlayer = true;
+    public bool isWieldedByPlayer { get { return playerScript != null; } }
     public bool canFire = true;
 
     public WeaponStatistics WeaponStats;
@@ -217,8 +217,11 @@ public class Weapon_Versatilium : MonoBehaviour
     public List<Projectile> Projectiles;
     public float fireRate_GlobalCD;
 
+    Controller_Character playerScript;
+
     void Start()
     {
+        playerScript = GetComponent<Controller_Character>();
 
         if (isWieldedByPlayer && User_POV == null)
             User_POV = GetComponentInChildren<Camera>().transform;
@@ -258,9 +261,11 @@ public class Weapon_Versatilium : MonoBehaviour
 
         fireRate_GlobalCD -= Time.deltaTime;
 
-        bool onKeyDown = Input.GetKeyDown(TriggerPrimary);
-        bool onKeyRelease = Input.GetKeyUp(TriggerPrimary);
-        bool onKeyTrue = Input.GetKey(TriggerPrimary);
+        bool preventedFromShooting = isWieldedByPlayer && playerScript.HasStatusEffect(Controller_Character.StatusEffect.DisableShooting);
+
+        bool onKeyDown = Input.GetKeyDown(TriggerPrimary) && !preventedFromShooting;
+        bool onKeyRelease = Input.GetKeyUp(TriggerPrimary) && !preventedFromShooting;
+        bool onKeyTrue = Input.GetKey(TriggerPrimary) && !preventedFromShooting;
 
         triggerType = currentStats.triggerType;
 

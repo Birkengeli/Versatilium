@@ -8,12 +8,11 @@ public class Controller_Character : MonoBehaviour
     public enum StatusEffect
     {
         None = 0 << 0,
-        FreezeCamera_Tick = 1 << 0,
-        FreezeMovement_Tick = 1 << 1,
         //DisableCamera_Tick = 1 << 2 | 1 << 0, // Does not play well with the sprite script.
+        FreezeCamera = 1 << 1,
+        FreezeMovement = 1 << 2,
 
-        FreezeCamera_Set = 1 << 3,
-        FreezeMovement_Set = 1 << 4,
+        DisableShooting = 1 << 3,
     }
 
     public StatusEffect StatusEffects = StatusEffect.None;
@@ -65,35 +64,38 @@ public class Controller_Character : MonoBehaviour
 
         ControllGravity(timeStep);
 
-        if (!Cursor.visible)
-        {
-            ControllMovement(timeStep);
-            ControllCamera(timeStep);
+        ControllMovement(timeStep);
+        ControllCamera(timeStep);
 
-            manuallyCollision(timeStep, velocity);
-            //transform.position += velocity * timeStep;
-
-            StatusEffects &= ~StatusEffect.FreezeCamera_Tick;
-            //StatusEffects &= ~StatusEffect.DisableCamera_Tick;
-            StatusEffects &= ~StatusEffect.FreezeMovement_Tick;
-        }
+        manuallyCollision(timeStep, velocity);
+        //transform.position += velocity * timeStep;
 
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
 
     }
 
-
-
-    void CompareStatus(StatusEffect mask, StatusEffect status)
+    public void ApplyStatusEffect(StatusEffect effect, bool removeEffectInstead = false)
     {
+        if (!removeEffectInstead)
+        {
+            StatusEffects |= effect;
+        }
+        else
+        {
+            StatusEffects &= ~effect;
+        }
 
+    }
 
+    public bool HasStatusEffect(StatusEffect effect)
+    {
+        return (StatusEffects & effect) != 0;
     }
 
     void ControllCamera(float timeStep)
     {
-        bool freezeCamera = (StatusEffects & StatusEffect.FreezeCamera_Tick) != 0 || (StatusEffects & StatusEffect.FreezeCamera_Set) != 0;
+        bool freezeCamera = HasStatusEffect(StatusEffect.FreezeCamera);
 
         if (freezeCamera)
             return;
@@ -109,7 +111,7 @@ public class Controller_Character : MonoBehaviour
     }
     void ControllMovement(float timeStep)
     {
-        bool freezeMovement = (StatusEffects & StatusEffect.FreezeMovement_Tick) != 0 || (StatusEffects & StatusEffect.FreezeMovement_Set) != 0;
+        bool freezeMovement = HasStatusEffect(StatusEffect.FreezeMovement);
 
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.up, out hit, characterHeight / 2);
