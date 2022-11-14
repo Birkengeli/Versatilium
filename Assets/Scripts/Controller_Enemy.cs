@@ -21,7 +21,7 @@ public class Controller_Enemy : MonoBehaviour
     public EnemyTypes enemyType;
     public bool isInvincible;
     public Transform player;
-    public Weapon_Versatilium.Sound[] Sounds;
+    public Sound[] Sounds;
     public float rememberPlayerFor = 3f;
     private float rememberPlayer_Timer = -1;
     private bool stillRemembersPlayer { get { return rememberPlayer_Timer > 0; } }

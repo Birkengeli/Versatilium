@@ -125,5 +125,10 @@ public class Dev_Cheats : MonoBehaviour
                 player.position = newLocation;
             }
         }
+
+        if (name == "pain")
+        {
+            Component_Health.Get(player).OnTakingDamage(Random.Range(10, 99), Vector3.zero);
+        }
     }
 }

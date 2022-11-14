@@ -9,7 +9,7 @@ public class Component_Health : MonoBehaviour
 
     [Header("Settings")]
     public int HealthMax = 100;
-    public int healthCurrent = -1;
+    public float healthCurrent = -1;
     public float knockback_Multiplier = 1;
 
     [Header("Variables")]
@@ -26,9 +26,8 @@ public class Component_Health : MonoBehaviour
     private float lastSpeedUse;
     public GameObject Prop_Weapon;
 
-    [Header("Settings")]
-    public Image POV_Death;
-    public TMPro.TMP_Text Text_Health;
+    private Image POV_Death;
+    private Image UI_Healthbar_Fill;
 
     [Header("Components")]
     Controller_Character playerScript;
@@ -45,8 +44,19 @@ public class Component_Health : MonoBehaviour
 
         enemyScript = GetComponent<Controller_Enemy>();
 
-        if(isPlayer)
+        if (isPlayer)
+        {
             playerScript = GetComponent<Controller_Character>();
+
+            GameObject canvas = GameObject.Find("_Canvas");
+
+            if (canvas == null)
+                Debug.Log("Error, could not find the '_Canvas'.");
+
+            UI_Healthbar_Fill = Weapon_Switching.GetChildByName("UI_Healthbar_Fill", canvas.transform).GetComponent<Image>();
+
+            POV_Death = Weapon_Switching.GetChildByName("POV_Death", canvas.transform).GetComponent<Image>();
+        }
     }
 
     // Update is called once per frame
@@ -54,14 +64,29 @@ public class Component_Health : MonoBehaviour
     {
         if (isDead)
             WhileDead(false);
+
+        
+        if(false)
+        { // Healthreg
+
+
+            float healingPercentage = 0.49f;
+            float healingModifier = healingPercentage * (1 + 0.50f*3 + 1);
+
+            if (healthCurrent < HealthMax)
+                healthCurrent += HealthMax * healingPercentage * 2 * healingModifier * Time.deltaTime / 100;
+
+            UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
+
+        }
     }
 
     public void OnTakingDamage(int damage, Vector3 knockBack)
     {
 
-
-
        
+
+
 
         if (!isDead)
         {
@@ -69,7 +94,9 @@ public class Component_Health : MonoBehaviour
             if (isPlayer)
             {
                 playerScript.velocity = knockBack;
-                Weapon_Versatilium.Sound.Play("OnTakingDamage", playerScript.Sounds, GetComponent<AudioSource>());
+                Sound.Play(Sound.SoundTypes.OnTakingDamage, playerScript.Sounds, GetComponent<AudioSource>());
+                    
+
             }
 
             if (!isPlayer)
@@ -77,11 +104,11 @@ public class Component_Health : MonoBehaviour
 
                 if (enemyScript.isInvincible)
                 {
-                    Weapon_Versatilium.Sound.Play("OnTakingDamage_Invincible", enemyScript.Sounds, GetComponent<AudioSource>());
+                    Sound.Play(Sound.SoundTypes.OnTakingDamageWhileInvincible, enemyScript.Sounds, GetComponent<AudioSource>());
                     return;
                 }
 
-                Weapon_Versatilium.Sound.Play("OnTakingDamage", enemyScript.Sounds, GetComponent<AudioSource>());
+                Sound.Play(Sound.SoundTypes.OnTakingDamage, enemyScript.Sounds, GetComponent<AudioSource>());
 
                 if (enemyScript.enemyType == Controller_Enemy.EnemyTypes.Humanoid)
                 {
@@ -103,17 +130,15 @@ public class Component_Health : MonoBehaviour
 
         }
 
-        if (!isDead && healthCurrent <= 0)
-        {
-            healthCurrent = 0;
-            isDead = true;
 
-            WhileDead(true); // On Death
+        if (isPlayer)
+        {
+            UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
         }
 
-        if (Text_Health != null)
-            Text_Health.text = "" + (healthCurrent < 100 ? " " : "") + healthCurrent + "%";
-
+        if (!isDead && healthCurrent <= 0)
+            WhileDead(true); // On Death
+        
 
     }
 
@@ -135,7 +160,7 @@ public class Component_Health : MonoBehaviour
         {
             if (onDeath)
             {
-
+                healthCurrent = 0;
                 deathCountdown_Timer = 0;
 
                 playerScript.ApplyStatusEffect(Controller_Character.StatusEffect.FreezeCamera);
@@ -169,6 +194,8 @@ public class Component_Health : MonoBehaviour
                 }
 
                 transform.GetChild(1).gameObject.SetActive(false);
+
+                UI_Healthbar_Fill.transform.parent.gameObject.SetActive(false);
                 
 
                 #endregion

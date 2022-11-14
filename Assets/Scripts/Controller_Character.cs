@@ -40,7 +40,7 @@ public class Controller_Character : MonoBehaviour
 
     [Header("Settings")]
     public KeyCode FreeCamera = KeyCode.F1;
-    public Weapon_Versatilium.Sound[] Sounds;
+    public Sound[] Sounds;
 
     Camera camera;
 

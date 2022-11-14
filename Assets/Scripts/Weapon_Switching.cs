@@ -43,14 +43,7 @@ public class Weapon_Switching : MonoBehaviour
         if (canvas == null)
             Debug.LogWarning("Could not find the '_Canvas' prefab");
 
-        Transform[] UI_Elements = canvas.GetComponentsInChildren<Transform>(true);
-        for (int i = 0; i < UI_Elements.Length; i++)
-        {
-            Transform currentElement = UI_Elements[i];
-
-            if(currentElement.name == "UI_Tint")
-                tint = currentElement.GetComponent<Image>();
-        }
+        tint = GetChildByName("UI_Tint", canvas.transform).GetComponent<Image>();
 
         tintColor.a = tintAlphaOverride;
         Color tintClear = tintColor;
@@ -105,5 +98,20 @@ public class Weapon_Switching : MonoBehaviour
                 tint.CrossFadeColor(tintClear, tintFadeTime, true, true);
             }
         }
+    }
+
+    public static Transform GetChildByName(string name, Transform parent)
+    {
+        Transform[] transforms = parent.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < transforms.Length; i++)
+        {
+            Transform currentTransform = transforms[i];
+
+            if (currentTransform.name == name)
+                return currentTransform;
+        }
+        Debug.LogWarning("Error, could not find '" + name + "'.");
+
+        return null;
     }
 }

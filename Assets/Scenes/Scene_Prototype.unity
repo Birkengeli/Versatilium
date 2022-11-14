@@ -1975,7 +1975,7 @@ PrefabInstance:
       objectReference: {fileID: 2135614549}
     - target: {fileID: 3765674564435915198, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4072156493587378807, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
       propertyPath: m_Name
@@ -1983,7 +1983,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: Charge_minimumTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.fireRate
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.Deviation
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.ProjectileScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.Projectile_Speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.Projectile_Gravity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.sciFiProjectile_prefab
+      value: 
+      objectReference: {fileID: 8546591505651860602, guid: 5a6529a3e9f00d049a66f37986fed166, type: 3}
+    - target: {fileID: 4877620946721651445, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
+      propertyPath: WeaponStats.Primary.useScifipackProjectiles
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51b7c6bfa6d01f64ea9f9de55b64d409, type: 3}
@@ -4653,6 +4689,22 @@ PrefabInstance:
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: WeaponStats.Primary.ProjectileType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: WeaponStats.Primary.Projectile_Gravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: WeaponStats.Primary.sciFiProjectile_prefab
+      value: 
+      objectReference: {fileID: 2580913533069623465, guid: 08fe2d6024ae60a469c82b0411904f93, type: 3}
+    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: WeaponStats.Primary.useScifipackProjectiles
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -4671,7 +4723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.067538194
+      value: -0.99799407
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalRotation.x
@@ -4679,7 +4731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9977167
+      value: -0.06330868
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalRotation.z
@@ -4691,7 +4743,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 172.255
+      value: 367.259
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

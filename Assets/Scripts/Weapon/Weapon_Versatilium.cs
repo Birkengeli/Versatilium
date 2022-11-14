@@ -33,80 +33,6 @@ public class Weapon_Versatilium : MonoBehaviour
 				#endregion
 
 				#region Classes & Structs
-				[System.Serializable]
-    public class Sound
-    {
-        public string name = "No Name";
-        public AudioClip[] audioClips;
-        [Header("Settings")]
-        public float volumeScale = 1;
-        public randomTypes random = randomTypes.NeverTwice;
-
-        private int lastIndex = 999;
-
-        public static void Play(string name, Sound[] sounds, AudioSource audioSource, bool ignoreMissing = false)
-        {
-            for (int i = 0; i < sounds.Length; i++)
-            {
-                if (sounds[i].name == name)
-                {
-                    Play(sounds[i], audioSource);
-                    return;
-                }
-            }
-
-            if(!ignoreMissing)
-                Debug.LogWarning("Could Not find the Sound called '" + name + "'.");
-        }
-
-        public static void Play(Sound sound, AudioSource audioSource)
-        {
-            AudioClip clip = sound.audioClips[0];
-
-            if (sound.audioClips.Length < 2) // If it's set to never twice and it's 1 or zero files, it will never find it.
-                sound.random = randomTypes.Random;
-
-												#region Random Order
-												if (sound.random == randomTypes.Random)
-                clip = sound.audioClips[Random.Range(0, sound.audioClips.Length)];
-
-            if (sound.random == randomTypes.NeverTwice)
-            {
-                int randomIndex = -1;
-                while (true)
-                {
-                    randomIndex = Random.Range(0, sound.audioClips.Length);
-
-                    if (randomIndex != sound.lastIndex)
-                    {
-                        sound.lastIndex = randomIndex;
-                        clip = sound.audioClips[randomIndex];
-
-                        break;
-                    }
-                }
-            }
-
-            if (sound.random == randomTypes.Sequential)
-            {
-                int clipCount = sound.audioClips.Length;
-
-                if (sound.lastIndex >= clipCount)
-                    sound.lastIndex = 0;
-
-                clip = sound.audioClips[sound.lastIndex];
-                sound.lastIndex++;
-            }
-
-												#endregion
-
-												audioSource.PlayOneShot(clip, sound.volumeScale);
-        }
-
-        public enum randomTypes
-        {Sequential, NeverTwice, Random }
-    }
-
     public Sound[] Sounds;
 
     [System.Serializable]
@@ -282,7 +208,7 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (onKeyDown && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play("Fire", Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -304,7 +230,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 if (onRegularFire)
                     currentStats.burstCounter = currentStats.burstCount;
 
-                Sound.Play("Fire", Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
                 currentStats.burstCounter--;
 
                 fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.Primary.fireRate;
@@ -320,7 +246,7 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (onKeyTrue && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play("Fire", Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -343,7 +269,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     // On Tap fire
 
-                    Sound.Play("Fire", Sounds, audioSource);
+                    Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
 
                     fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                     CreateProjectile(currentStats, currentStats.Primary);
@@ -352,7 +278,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     // On Charged shot
 
-                    Sound.Play("Charged Fire", Sounds, audioSource);
+                    Sound.Play(Sound.SoundTypes.OnFire_Charged, Sounds, audioSource);
 
                     fireRate_GlobalCD = 1f / currentStats.Secondary.fireRate;
                     CreateProjectile(WeaponStats_Alt, currentStats.Secondary);
