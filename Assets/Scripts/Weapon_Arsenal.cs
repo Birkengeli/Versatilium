@@ -10,6 +10,7 @@ public class Weapon_Arsenal : MonoBehaviour
         Pistol = 0,
         Shotgun = 1,
         Rifle = 2,
+        Plasma = 3,
 
     }
 
@@ -18,6 +19,7 @@ public class Weapon_Arsenal : MonoBehaviour
     {
         public string name;
         public bool isUnlocked;
+        public int weaponWheelIndex = -1;
 
         public SlotType WeaponSlot;
 
@@ -28,6 +30,7 @@ public class Weapon_Arsenal : MonoBehaviour
 
 
     [Header("Settings")]
+    public bool useMouseWheel = false;
     public float switchCooldown = 1;
     private float switchCooldown_Timer;
     public AudioClip switchSound;
@@ -49,7 +52,7 @@ public class Weapon_Arsenal : MonoBehaviour
     {
         int scrollDirection = Input.GetAxis("Mouse ScrollWheel") > 0 ? 1 : 0 + Input.GetAxis("Mouse ScrollWheel") < 0 ? -1 : 0;
 
-        if (scrollDirection != 0 && switchCooldown_Timer == -1)
+        if (useMouseWheel && scrollDirection != 0 && switchCooldown_Timer == -1)
         {
 
             while (true)
@@ -95,5 +98,18 @@ public class Weapon_Arsenal : MonoBehaviour
 
 
         GetComponent<AudioSource>().PlayOneShot(switchSound);
+    }
+
+    public void SwitchWeaponUsingWheel(int index)
+    {
+
+        for (int i = 0; i < weaponConfigs.Length; i++)
+        {
+            if (weaponConfigs[i].weaponWheelIndex == index)
+            {
+                SwitchWeapon(weaponConfigs[i]);
+                return;
+            }
+        }
     }
 }

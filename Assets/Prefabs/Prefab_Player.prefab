@@ -5056,6 +5056,7 @@ GameObject:
   - component: {fileID: 4031496714777804033}
   - component: {fileID: 475005715410517627}
   - component: {fileID: 687607205}
+  - component: {fileID: 2027906084}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -5148,24 +5149,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sounds:
-  - name: Fire
-    audioClips:
-    - {fileID: 8300000, guid: ec1cd9653fffef2439ff23de84d33819, type: 3}
-    - {fileID: 8300000, guid: 2032bd4ce8ce8904d8acc21ac3987761, type: 3}
-    volumeScale: 1
-    random: 1
-  - name: Charged Fire
-    audioClips:
-    - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
-    volumeScale: 1
-    random: 2
-  - name: New Sound
-    audioClips:
-    - {fileID: 8300000, guid: 2370124b55259d34ca34c1803bf2ff64, type: 3}
-    volumeScale: 1
-    random: 2
+  - soundType: 0
+    audioClips: []
+    random: 0
   debugMode: 1
-  isWieldedByPlayer: 1
   canFire: 1
   WeaponStats:
     triggerType: 1
@@ -5375,8 +5362,6 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   Prop_Weapon: {fileID: 260622669335309799, guid: 5600e5e8e46e5bf4294bd873e0f882be, type: 3}
-  POV_Death: {fileID: 0}
-  Text_Health: {fileID: 0}
 --- !u!114 &3693464917665637770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5442,6 +5427,12 @@ MonoBehaviour:
   - name: TP
     descriptionOptional: teleport to where you are looking (Same as teleport)
     countAsCheating: 1
+    isDisabled: 0
+    keyCodes: 
+    keyCodeIndex: 0
+  - name: Pain
+    descriptionOptional: Deals a random amount of damage
+    countAsCheating: 0
     isDisabled: 0
     keyCodes: 
     keyCodeIndex: 0
@@ -5687,6 +5678,27 @@ MonoBehaviour:
       characterController: {fileID: 0}
   switchCooldown: 1
   switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
+--- !u!114 &2027906084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088234781394712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb1eead27ab9c24c9abd89525e23650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weapons: 01000000000000000300000002000000
+  WeaponBuildingMode: 0
+  InventoryKey: 9
+  SlowTimeBy: 10
+  tintColor: {r: 0, g: 0, b: 1, a: 1}
+  tintAlphaOverride: 0.5
+  selectColor: {r: 0, g: 0, b: 0, a: 0.62352943}
+  tintFadeTime: 1
+  deadZone: 0.15
 --- !u!1 &6332088235026572213
 GameObject:
   m_ObjectHideFlags: 0

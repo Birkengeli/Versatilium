@@ -4453,21 +4453,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4031496714777804033, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-      propertyPath: Cheats.Array.size
-      value: 8
+    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: weaponConfigs.Array.data[0].weaponWheelIndex
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4031496714777804033, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-      propertyPath: Cheats.Array.data[7].name
-      value: Pain
+    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: weaponConfigs.Array.data[1].weaponWheelIndex
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4031496714777804033, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-      propertyPath: Cheats.Array.data[7].countAsCheating
+    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: weaponConfigs.Array.data[2].weaponWheelIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 687607205, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: weaponConfigs.Array.data[3].weaponWheelIndex
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4031496714777804033, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-      propertyPath: Cheats.Array.data[7].descriptionOptional
-      value: Deals a random amount of damage
       objectReference: {fileID: 0}
     - target: {fileID: 6332088234781394692, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
       propertyPath: m_RootOrder
@@ -20014,11 +20014,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1721044833555412752, guid: 2b4b97b8cfc117048bf1d8d982e87e3c, type: 3}
   m_PrefabInstance: {fileID: 801673488}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &802523061 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6332088234781394712, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
-  m_PrefabInstance: {fileID: 175894660}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &803283667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26656,6 +26651,103 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1721044833555412752, guid: 2b4b97b8cfc117048bf1d8d982e87e3c, type: 3}
   m_PrefabInstance: {fileID: 27286754}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1043672765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1043672769}
+  - component: {fileID: 1043672768}
+  - component: {fileID: 1043672767}
+  - component: {fileID: 1043672766}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1043672766
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043672765}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1043672767
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043672765}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1043672768
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043672765}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1043672769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043672765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1045275784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39170,6 +39262,10 @@ PrefabInstance:
       propertyPath: wanderMax
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1632962557, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: Sounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -49252,24 +49348,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b4b97b8cfc117048bf1d8d982e87e3c, type: 3}
---- !u!114 &2027906084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 802523061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebb1eead27ab9c24c9abd89525e23650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponBuildingMode: 0
-  InventoryKey: 9
-  SlowTimeBy: 10
-  tintColor: {r: 0, g: 0, b: 1, a: 1}
-  tintAlphaOverride: 0.5
-  tintFadeTime: 1
 --- !u!1001 &2028122998
 PrefabInstance:
   m_ObjectHideFlags: 0
