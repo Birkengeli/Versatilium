@@ -100,8 +100,6 @@ public class Weapon_Arsenal : MonoBehaviour
             switchCooldown_Timer = -1;
 
 
-        if(Input.GetKeyDown(KeyCode.F))
-            ShowCards(new WeaponConfiguration[2] {weaponConfigs[3], weaponConfigs[4]});
     }
 
 
