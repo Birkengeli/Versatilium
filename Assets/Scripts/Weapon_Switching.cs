@@ -14,6 +14,8 @@ public class Weapon_Switching : MonoBehaviour
 
     #endregion
 
+
+
     Controller_Character playerScript;
 				Weapon_Versatilium weaponScript;
     Weapon_Arsenal arsenalScript;
@@ -24,11 +26,9 @@ public class Weapon_Switching : MonoBehaviour
     Image weaponWheel_Hover;
 
     [Header("Settings")]
-    public Weapon_Arsenal.SlotType[] Weapons = new Weapon_Arsenal.SlotType[3] { Weapon_Arsenal.SlotType.Shotgun, Weapon_Arsenal.SlotType.Rifle, Weapon_Arsenal.SlotType.Pistol };
-
-    [Header("Settings")]
     public WeaponBuildingModes WeaponBuildingMode = WeaponBuildingModes.Premade;
     public KeyCode InventoryKey = KeyCode.Tab;
+    public Sound[] sounds;
 
     [Header("Settings - Visuals")]
     public int SlowTimeBy = 10;
@@ -83,7 +83,7 @@ public class Weapon_Switching : MonoBehaviour
     {
         if (WeaponBuildingMode == WeaponBuildingModes.Premade)
         {
-            if (keyState == 1)
+            if (keyState == 1) // On Opening
             {
                 Controller_Spectator.LockCursor(false);
                 Time.timeScale = (1f / SlowTimeBy);
@@ -100,6 +100,31 @@ public class Weapon_Switching : MonoBehaviour
 
                 weaponWheel.transform.parent.gameObject.SetActive(true);
 
+                int iconCount = CountVisibleWeapons();
+
+                int iconIndex = 0;
+                for (int i = 0; i < arsenalScript.weaponConfigs.Length; i++)
+                {
+                    if (!arsenalScript.weaponConfigs[i].isUnlocked)
+                        continue;
+
+                    GameObject baseIcon = weaponWheel.transform.parent.GetChild(1).gameObject;
+                    baseIcon.SetActive(false);
+
+                    GameObject newIcon = Instantiate(baseIcon, weaponWheel.transform.parent);
+                    newIcon.SetActive(true);
+
+                    newIcon.GetComponent<Image>().sprite = arsenalScript.weaponConfigs[i].icon;
+                    newIcon.GetComponent<Image>().color = Color.white * (arsenalScript.weaponConfigs[i].isUnlocked ? 1 : 0.5f);
+
+                    float itemAngle = (360f / iconCount) * iconIndex + (180 / iconCount); // "180 / iconCount" should ensure icons stay in the middle.
+                    Vector2 IconPos = Quaternion.AngleAxis(itemAngle, Vector3.forward) * Vector3.right;
+                    newIcon.transform.localPosition = IconPos * 100;
+
+                    iconIndex++;
+                }
+
+
             }
 
             if (keyState == 0)
@@ -109,7 +134,31 @@ public class Weapon_Switching : MonoBehaviour
 
             if (keyState == 2)
             {
-                arsenalScript.SwitchWeaponUsingWheel(InventoryUI());
+                for (int i = 3; i < weaponWheel.transform.parent.childCount; i++)
+                    Destroy(weaponWheel.transform.parent.GetChild(i).gameObject); // Destroy old Icons
+
+
+
+                int weaponWheelIndex = InventoryUI();
+
+																#region Turn Wheel Index into Arsenal Index
+																for (int i = 0; i < arsenalScript.weaponConfigs.Length; i++)
+                {
+                    bool isUnlocked = arsenalScript.weaponConfigs[i].isUnlocked;
+
+
+                    if (isUnlocked && weaponWheelIndex == 0)
+                    {
+                        weaponWheelIndex = i;
+                        break;
+                    }
+
+                    if (isUnlocked)
+                        weaponWheelIndex--;
+                }
+																#endregion
+
+																arsenalScript.SwitchWeapon(arsenalScript.weaponConfigs[weaponWheelIndex]);
 
 
                 Controller_Spectator.LockCursor(true);
@@ -129,36 +178,26 @@ public class Weapon_Switching : MonoBehaviour
         }
     }
 
-    void SetupWheel()
+    int CountVisibleWeapons()
     {
-        Image baseWheel = weaponWheel;
 
-        for (int i = 0; i < Weapons.Length; i++)
+        int counter = 0;
+        int iconCount = arsenalScript.weaponConfigs.Length;
+
+        for (int i = 0; i < iconCount; i++)
         {
-
-            Image newWheel = Instantiate(baseWheel);
-            newWheel.transform.parent = weaponWheel.transform;
-            newWheel.transform.localPosition = Vector3.zero;
-            newWheel.transform.localScale = Vector3.one;
-            baseWheel = newWheel;
-
-            newWheel.fillAmount = 1f / Weapons.Length;
-            newWheel.transform.eulerAngles = Vector3.forward * (360f / Weapons.Length) * i;
-
+            if(arsenalScript.weaponConfigs[i].isUnlocked)
+                counter++;
         }
 
 
-        
-
-        weaponWheel.enabled = false;
-
-        
-
-
+        return counter;
     }
 
     int InventoryUI()
     {
+        int iconCount = CountVisibleWeapons();
+
         Vector2 cursorPosition = Input.mousePosition;
         Vector2 screenCenter = new Vector2(Screen.width, Screen.height) / 2;
         Vector2 offsetFromCenter = (cursorPosition - screenCenter);
@@ -169,13 +208,12 @@ public class Weapon_Switching : MonoBehaviour
         if (angle < 0)
             angle += 360;
 
-        float sectionSize = 360f / Weapons.Length;
+        float sectionSize = 360f / iconCount;
         int sectionIndex = Mathf.FloorToInt(angle / sectionSize);
 
         if (distanceFromCenter > deadZone) // Deadzone
         {
-
-            weaponWheel_Hover.fillAmount = 1f / Weapons.Length;
+            weaponWheel_Hover.fillAmount = 1f / iconCount;
             weaponWheel_Hover.transform.eulerAngles = Vector3.forward * sectionSize * sectionIndex;
         }
 

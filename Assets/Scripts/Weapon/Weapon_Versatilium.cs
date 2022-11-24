@@ -208,7 +208,7 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (onKeyDown && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -230,7 +230,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 if (onRegularFire)
                     currentStats.burstCounter = currentStats.burstCount;
 
-                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
                 currentStats.burstCounter--;
 
                 fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.Primary.fireRate;
@@ -246,7 +246,7 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (onKeyTrue && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
+                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -269,7 +269,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     // On Tap fire
 
-                    Sound.Play(Sound.SoundTypes.OnFire, Sounds, audioSource);
+                    Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
 
                     fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                     CreateProjectile(currentStats, currentStats.Primary);
@@ -278,7 +278,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 {
                     // On Charged shot
 
-                    Sound.Play(Sound.SoundTypes.OnFire_Charged, Sounds, audioSource);
+                    Sound.Play(Sound.SoundTypes_Weapon.OnFire_Charged, Sounds, audioSource);
 
                     fireRate_GlobalCD = 1f / currentStats.Secondary.fireRate;
                     CreateProjectile(WeaponStats_Alt, currentStats.Secondary);

@@ -5135,7 +5135,18 @@ MonoBehaviour:
   fallingInformatiom: '[Read Only]'
   turnSpeed: 2
   FreeCamera: 282
-  Sounds: []
+  FootstepFrequency: 0.5
+  Sounds:
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 3
+    UI: 0
+    audioClips:
+    - {fileID: 8300000, guid: efb30c21aefc2854baf237a8d235f448, type: 3}
+    - {fileID: 8300000, guid: efb30c21aefc2854baf237a8d235f448, type: 3}
+    - {fileID: 8300000, guid: efb30c21aefc2854baf237a8d235f448, type: 3}
+    random: 1
+    volumeSlider: 0.25
 --- !u!114 &6332088234781394695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5149,9 +5160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sounds:
-  - soundType: 0
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 0
+    UI: 0
     audioClips: []
     random: 0
+    volumeSlider: 1
   debugMode: 1
   canFire: 1
   WeaponStats:
@@ -5467,6 +5482,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponConfigs:
   - name: "Config_01 \u201CSelf Defense System\u201D"
+    Description:
+    - This is the first line
+    - This is the second line
+    icon: {fileID: 1442573890, guid: dc9856d29f73abf499b8b2df46068d8f, type: 3}
     isUnlocked: 1
     WeaponSlot: 0
     statistics:
@@ -5509,7 +5528,11 @@ MonoBehaviour:
         bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_01-A \u201CAggressive Defender\u201D"
-    isUnlocked: 1
+    Description:
+    - This is the first line
+    - This is the second line
+    icon: {fileID: 1442573890, guid: dc9856d29f73abf499b8b2df46068d8f, type: 3}
+    isUnlocked: 0
     WeaponSlot: 0
     statistics:
       triggerType: 1
@@ -5551,6 +5574,10 @@ MonoBehaviour:
         bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02 \u201CCQC Mode\u201D"
+    Description:
+    - This is the first line
+    - This is the second line
+    icon: {fileID: -1796823753, guid: dc9856d29f73abf499b8b2df46068d8f, type: 3}
     isUnlocked: 0
     WeaponSlot: 1
     statistics:
@@ -5593,7 +5620,12 @@ MonoBehaviour:
         bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02-A \u201CSlugger\u201D"
-    isUnlocked: 1
+    Description:
+    - This weapon config sports a dynamic Choke.
+    - Simply hold down the Trigger to charge up a powerful Slug like projectile.
+    - 'Warning: The range is still limited.'
+    icon: {fileID: -1796823753, guid: dc9856d29f73abf499b8b2df46068d8f, type: 3}
+    isUnlocked: 0
     WeaponSlot: 1
     statistics:
       triggerType: 3
@@ -5635,6 +5667,11 @@ MonoBehaviour:
         bounceCount: 0
       characterController: {fileID: 0}
   - name: "Config_02-B \u201CHellfire\u201D"
+    Description:
+    - This weapon config sports a far greater Capcitor
+    - Simply, the gun can draw power from its main powersource far faster
+    - Which means it shoots faster.
+    icon: {fileID: -1796823753, guid: dc9856d29f73abf499b8b2df46068d8f, type: 3}
     isUnlocked: 0
     WeaponSlot: 1
     statistics:
@@ -5676,8 +5713,12 @@ MonoBehaviour:
         Projectile_Gravity: 0
         bounceCount: 0
       characterController: {fileID: 0}
+  SlowTimeBy: 10
+  useMouseWheel: 0
   switchCooldown: 1
   switchSound: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
+  CardTiltMax: 30
+  CardDistance: 200
 --- !u!114 &2027906084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5690,9 +5731,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb1eead27ab9c24c9abd89525e23650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapons: 01000000000000000300000002000000
   WeaponBuildingMode: 0
   InventoryKey: 9
+  sounds:
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 0
+    UI: 2
+    audioClips:
+    - {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
+    random: 0
+    volumeSlider: 0
   SlowTimeBy: 10
   tintColor: {r: 0, g: 0, b: 1, a: 1}
   tintAlphaOverride: 0.5

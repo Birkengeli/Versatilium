@@ -6,16 +6,16 @@ public class Item_Pickup : MonoBehaviour
 {
 
     public enum Pickup
-				{
+    {
         GiveVersatilium, RemoveVersatilium, GiveConfig
-				}
+    }
 
     public bool debugMode = true;
     float orbitTimer = 0;
 
     [Header("Pickup")]
     public Pickup pickupType = Pickup.GiveConfig;
-    public string ModuleName = "Pistol_Default";
+    public string[] ModuleNames = new string[2] { "Option A", "Option B" };
 
     [Header("Settings")]
     public float distance = 2f;
@@ -84,27 +84,39 @@ public class Item_Pickup : MonoBehaviour
             }
         }
 
-            if (pickupType == Pickup.GiveConfig)
+        if (pickupType == Pickup.GiveConfig)
+        {
+            int optionLength = ModuleNames.Length;
+
+            Weapon_Arsenal.WeaponConfiguration[] configs = new Weapon_Arsenal.WeaponConfiguration[optionLength];
+
+
+            for (int i = 0; i < optionLength; i++)
             {
 
-
-                for (int i = 0; i < arsenal.weaponConfigs.Length; i++)
+                for (int j = 0; j < arsenal.weaponConfigs.Length; j++)
                 {
-                    Weapon_Arsenal.WeaponConfiguration currentConfig = arsenal.weaponConfigs[i];
+                    Weapon_Arsenal.WeaponConfiguration currentConfig = arsenal.weaponConfigs[j];
 
-                    if (currentConfig.name == ModuleName)
+                    if (currentConfig.name.ToLower() == ModuleNames[i].ToLower())
                     {
-                        currentConfig.isUnlocked = true;
-                        arsenal.SwitchWeapon(currentConfig);
+                        configs[i] = currentConfig;
 
                         break;
                     }
 
-                    if (i == arsenal.weaponConfigs.Length - 1)
-                        Debug.LogWarning("Could not find a config called '" + ModuleName + "'.");
-
+                    if (j == arsenal.weaponConfigs.Length - 1)
+                    {
+                        Debug.LogWarning("Could not find a config called '" + ModuleNames[j] + "'.");
+                        return;
+                    }
                 }
             }
+
+            arsenal.ShowCards(configs);
+
+
+        }
 
             Destroy(gameObject);
     }

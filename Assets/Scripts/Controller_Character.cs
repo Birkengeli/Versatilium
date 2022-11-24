@@ -13,6 +13,7 @@ public class Controller_Character : MonoBehaviour
         FreezeMovement = 1 << 2,
 
         DisableShooting = 1 << 3,
+        PlayerIsInMenu = 1 << 1 | 1 << 2 | 1 << 3,
     }
 
     public StatusEffect StatusEffects = StatusEffect.None;
@@ -40,6 +41,7 @@ public class Controller_Character : MonoBehaviour
 
     [Header("Settings")]
     public KeyCode FreeCamera = KeyCode.F1;
+    public float FootstepFrequency = 1;
     public Sound[] Sounds;
 
     Camera camera;
@@ -69,6 +71,8 @@ public class Controller_Character : MonoBehaviour
 
         manuallyCollision(timeStep, velocity);
         //transform.position += velocity * timeStep;
+
+        Footsteps();
 
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
@@ -263,4 +267,23 @@ public class Controller_Character : MonoBehaviour
             }
         }
     }
+
+
+    float footstepCooldown = 1; // If I keep it at 1, I won't make a step instantly after spawning
+    void Footsteps()
+    {
+        float currentSpeed = velocity.magnitude;
+        bool isGrounded = Mathf.Round(velocity.y) == 0;
+
+        if (footstepCooldown > 0)
+            footstepCooldown -= Time.deltaTime * currentSpeed / speed;
+
+        if (footstepCooldown <= 0 && isGrounded)
+        {
+            Sound.Play(Sound.SoundTypes_Environmental.Footsteps_Generic, Sounds, GetComponent<AudioSource>(), true);
+
+            footstepCooldown += FootstepFrequency;
+        }
+    }
+
 }

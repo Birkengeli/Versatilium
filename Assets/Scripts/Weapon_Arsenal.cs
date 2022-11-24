@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon_Arsenal : MonoBehaviour
 {
@@ -18,8 +19,9 @@ public class Weapon_Arsenal : MonoBehaviour
     public class WeaponConfiguration
     {
         public string name;
+        public string[] Description = new string[2] { "This is the first line", "This is the second line" };
+        public Sprite icon;
         public bool isUnlocked;
-        public int weaponWheelIndex = -1;
 
         public SlotType WeaponSlot;
 
@@ -30,21 +32,33 @@ public class Weapon_Arsenal : MonoBehaviour
 
 
     [Header("Settings")]
+    public int SlowTimeBy = 10;
     public bool useMouseWheel = false;
     public float switchCooldown = 1;
     private float switchCooldown_Timer;
     public AudioClip switchSound;
 
+    [Header("Settings - UI")]
+    public float CardTiltMax = 10;
+    public float CardDistance = 150;
+
     private int weaponCurrentIndex = 0;
 
     Weapon_Versatilium Versatilium;
+    Controller_Character playerScript;
 
     void Start()
     {
         Versatilium = GetComponent<Weapon_Versatilium>();
+        playerScript = GetComponent<Controller_Character>();
 
         Versatilium.WeaponStats = weaponConfigs[weaponCurrentIndex].statistics;
         switchCooldown_Timer = switchCooldown;
+
+        Transform baseScreen = Weapon_Switching.GetChildByName("UI_Upgrade", GameObject.Find("_Canvas").transform);
+        Transform baseCard = baseScreen.GetChild(0);
+
+        baseCard.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -84,13 +98,107 @@ public class Weapon_Arsenal : MonoBehaviour
             switchCooldown_Timer -= Time.deltaTime;
         else
             switchCooldown_Timer = -1;
+
+
+        if(Input.GetKeyDown(KeyCode.F))
+            ShowCards(new WeaponConfiguration[2] {weaponConfigs[3], weaponConfigs[4]});
     }
 
-    public void SwitchWeapon(WeaponConfiguration switchToConfig)
+
+    public void ShowCards(WeaponConfiguration[] Options)
     {
+        Transform baseScreen = Weapon_Switching.GetChildByName("UI_Upgrade", GameObject.Find("_Canvas").transform);
+        Transform baseCard = baseScreen.GetChild(0);
+        int upgradeCount = Options.Length;
+
+        playerScript.ApplyStatusEffect(Controller_Character.StatusEffect.PlayerIsInMenu);
+        Controller_Spectator.LockCursor(false);
+
+        Time.timeScale = 1f / SlowTimeBy;
+
+        for (int i = 1; i < baseScreen.childCount; i++)
+        {
+            GameObject currentCard = baseScreen.GetChild(i).gameObject;
+            currentCard.transform.SetParent(null);
+            Destroy(currentCard);
+            currentCard.SetActive(false);
+        }
+
+        for (int i = 0; i < upgradeCount; i++)
+        {
+            GameObject currentCard = Instantiate(baseCard, baseScreen).gameObject;
+            currentCard.gameObject.SetActive(true);
+
+            int buttonIndex = i;
+            currentCard.GetComponent<Button>().onClick.AddListener(delegate { OnClickButton(buttonIndex, Options); });
+
+            TMPro.TMP_Text currentCard_Text = currentCard.GetComponentInChildren<TMPro.TMP_Text>();
+
+            string cardDescription = "";
+            foreach (string description in Options[i].Description)
+            {
+                cardDescription += description + " \n";
+            }
+
+            currentCard_Text.text = cardDescription;
+
+            float distanceFromCenter = -(upgradeCount / 2 - 0.5f) + i;
+
+            currentCard.transform.localPosition = Vector3.zero + Vector3.right * distanceFromCenter * CardDistance;
+            currentCard.transform.localEulerAngles = Vector3.forward * distanceFromCenter * -(CardTiltMax / upgradeCount);
+        }
+    }
+
+    public void OnClickButton(int index, WeaponConfiguration[] Options)
+    {
+        Transform baseScreen = Weapon_Switching.GetChildByName("UI_Upgrade", GameObject.Find("_Canvas").transform);
+        Transform baseCard = baseScreen.GetChild(0);
+
+        playerScript.ApplyStatusEffect(Controller_Character.StatusEffect.PlayerIsInMenu, true);
+        Controller_Spectator.LockCursor(true);
+
+        Time.timeScale = 1;
+
+        int originalAmountOfCards = baseScreen.childCount; // This keeps shrinking, and that is annoying.
+
+        for (int i = 1; i < originalAmountOfCards; i++)
+        {
+            GameObject currentCard = baseScreen.GetChild(1).gameObject; // It's always 0 index
+            currentCard.transform.SetParent(null);
+            Destroy(currentCard);
+        }
+
+
+        Debug.LogWarning("I selected '" + Options[index].name + "' as my Upgrade.");
+
+        SwitchWeapon(Options[index], true);
+    }
+
+
+  
+
+    public void SwitchWeapon(WeaponConfiguration switchToConfig, bool unlockWeapon = false)
+    {
+        if (unlockWeapon)
+        {
+            // I Unlock all other versions of this weapon.
+            for (int i = 1; i < weaponConfigs.Length; i++) // I start at 1, because I never intend to lock the pistol
+            {
+                bool isTheSameSlot = weaponConfigs[i].WeaponSlot == switchToConfig.WeaponSlot;
+                bool isUnlocked = weaponConfigs[i].isUnlocked == true;
+
+                if (isTheSameSlot && isUnlocked)
+                    weaponConfigs[i].isUnlocked = false;
+            }
+
+            switchToConfig.isUnlocked = true;
+        }
+
 
         if (Versatilium.WeaponStats == switchToConfig.statistics)
             return;
+
+        Versatilium.fireRate_GlobalCD = 0.5f;
 
 
         Versatilium.WeaponStats = switchToConfig.statistics;
@@ -100,16 +208,4 @@ public class Weapon_Arsenal : MonoBehaviour
         GetComponent<AudioSource>().PlayOneShot(switchSound);
     }
 
-    public void SwitchWeaponUsingWheel(int index)
-    {
-
-        for (int i = 0; i < weaponConfigs.Length; i++)
-        {
-            if (weaponConfigs[i].weaponWheelIndex == index)
-            {
-                SwitchWeapon(weaponConfigs[i]);
-                return;
-            }
-        }
-    }
 }
