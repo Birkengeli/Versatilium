@@ -81,12 +81,29 @@ public class Component_Health : MonoBehaviour
         }
     }
 
-    public void OnTakingDamage(int damage, Vector3 knockBack)
+    public void OnHealing(int healing)
     {
 
-       
+        if (!isDead)
+        {
+
+            float missingHealth = HealthMax - healthCurrent;
+
+            healthCurrent += Mathf.Min(healing, missingHealth);
 
 
+            if (isPlayer)
+            {
+                UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
+            }
+        }
+
+
+
+    }
+
+    public void OnTakingDamage(int damage, Vector3 knockBack)
+    {
 
         if (!isDead)
         {

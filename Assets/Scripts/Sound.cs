@@ -20,6 +20,8 @@ public class Sound
 
         OnTakingDamage,
         OnTakingDamageWhileInvincible,
+
+        OnPickupHealth,
     }
 
     public enum SoundTypes_Environmental
@@ -39,6 +41,7 @@ public class Sound
         OnPressButton,
         OnWeaponSelect,
         OnWeaponSelectLocked,
+
     }
 
     [Header("You usually only pick one of these")]
