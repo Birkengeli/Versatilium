@@ -254,15 +254,20 @@ public class Component_Health : MonoBehaviour
 
         if (!isPlayer)
         {
-            enemyScript.enabled = false;
-            GetComponent<Collider>().enabled = false;
-
-            if (!hasDeathAnimation)
-                transform.GetChild(0).position += Vector3.down * 100;
-            else
+            if (onDeath)
             {
-                Animator anim = GetComponentInChildren<Animator>();
-                anim.SetBool("isDead", true);
+                enemyScript.enabled = false;
+                GetComponent<Collider>().enabled = false;
+
+                enemyScript.onDeath();
+
+                if (!hasDeathAnimation)
+                    transform.GetChild(0).position += Vector3.down * 100;
+                else
+                {
+                    Animator anim = GetComponentInChildren<Animator>();
+                    anim.SetBool("isDead", true);
+                }
             }
         }
     }

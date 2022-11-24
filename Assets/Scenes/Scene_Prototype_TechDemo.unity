@@ -4453,6 +4453,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2027906084, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: sounds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2027906084, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: sounds.Array.data[1].UI
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2027906084, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: sounds.Array.data[1].audioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2027906084, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
+      propertyPath: sounds.Array.data[1].audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 992bb78b34bb3b34fbc858de94882301, type: 3}
     - target: {fileID: 6332088234781394692, guid: 011853b88cab59042acf2e230a62cb7d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -29730,6 +29746,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b4b97b8cfc117048bf1d8d982e87e3c, type: 3}
+--- !u!1001 &1182231199
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1632962557, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: drops.Array.data[0].dropRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5150931
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.9999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981156383613107571, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
+      propertyPath: m_Name
+      value: Enemy_Drone_A_Burst
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
 --- !u!1001 &1182564607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39245,28 +39322,8 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 277913170}
     m_Modifications:
-    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: WeaponStats.firesInBurst
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: WeaponStats.Primary.damage
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: WeaponStats.burst_fireRate
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1632962556, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: WeaponStats.Primary.fireRate
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1632962557, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: wanderMax
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1632962557, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: Sounds.Array.size
+      propertyPath: drops.Array.data[0].dropRate
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
@@ -39283,7 +39340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.009
+      value: 3.9999998
       objectReference: {fileID: 0}
     - target: {fileID: 5981156383613107569, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -39316,10 +39373,6 @@ PrefabInstance:
     - target: {fileID: 5981156383613107571, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
       propertyPath: m_Name
       value: Enemy_Drone_A_Burst
-      objectReference: {fileID: 0}
-    - target: {fileID: 5981156383613107571, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda5eab3ed2afe444bc8b483590d1fb4, type: 3}

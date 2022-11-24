@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class Controller_Enemy : MonoBehaviour
 {
+
+    [System.Serializable]
+    public class Drop
+    {
+        [Header("The name is just to find it easily in the list, it has no effect.")]
+        public string name = "Medkit";
+        public GameObject prefab;
+        [Range(0f, 1.0f)]
+        public float dropRate = 0.20f;
+    }
+
+
+
     public enum EnemyTypes
     {
         Turret, Humanoid
@@ -18,6 +31,7 @@ public class Controller_Enemy : MonoBehaviour
     public Weapon_Versatilium Weapon;
 
     [Header("Settings")]
+    public Drop[] drops;
     public EnemyTypes enemyType;
     public bool isInvincible;
     public Transform player;
@@ -365,6 +379,23 @@ public class Controller_Enemy : MonoBehaviour
 
         return endPosition;
 
+
+    }
+
+    public void onDeath()
+    {
+
+        foreach (Drop drop in drops)
+        {
+            float randomNumber = Random.Range(0f, 1f);
+
+            if (randomNumber <= drop.dropRate)
+            {
+                GameObject dropObject = Instantiate(drop.prefab);
+                dropObject.transform.position = transform.position + Vector3.up * 0.1f;
+                
+            }
+        }
 
     }
     
