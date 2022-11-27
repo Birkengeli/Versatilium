@@ -49,9 +49,11 @@ public class Controller_Enemy : MonoBehaviour
 
     [Header("Humanoid Behavior")]
     public float moveSpeed = 2;
+    public float friction = 10;
     Vector3 previousPosition;
     public bool isInCombat;
     Vector3 wanderTarget;
+    public bool hasAirControl = true;
 
     [Header("Idle Behavior")]
     public int moveFrequency = 5;
@@ -59,7 +61,7 @@ public class Controller_Enemy : MonoBehaviour
     Vector3 StartPos;
 
     private Vector3 player_LastKnownLocation;
-
+    Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -74,6 +76,8 @@ public class Controller_Enemy : MonoBehaviour
         wanderTarget = StartPos;
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -82,173 +86,15 @@ public class Controller_Enemy : MonoBehaviour
         float timeStep = Time.deltaTime;
 
         if (enemyType == EnemyTypes.Turret)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            Transform Turret_Hinge = transform.GetChild(0);
-            Transform Turret_Turret = Turret_Hinge.GetChild(0);
-
-            RaycastHit hit;
-            Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
-
-            bool hasDetectedPlayer = (distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player");
-
-            if (!hasDetectedPlayer && !stillRemembersPlayer)
-            {
-
-
-                if (ActivationTime_Timer < 0)
-                {
-                    isInvincible = true;
-
-
-
-                }
-                else
-                {
-                    float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
-                    if (degreesOffForward < 1)
-                    {
-                        ActivationTime_Timer -= timeStep;
-
-                        float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
-                        Turret_Hinge.localPosition = -Vector3.forward * newZ;
-                    }
-                }
-            }
-
-            if (hasDetectedPlayer || stillRemembersPlayer)
-            {
-                if (hasDetectedPlayer)
-                {
-                    rememberPlayer_Timer = rememberPlayerFor;
-                    player_LastKnownLocation = player.position;
-                }
-
-   
-
-                if (ActivationTime_Timer > ActivationTime)
-                {
-                    isInvincible = false;
-
-
-                    Vector3 targetPostion = hasDetectedPlayer ? player.position : player_LastKnownLocation;
-
-                    if(isLeadingTarget && hasDetectedPlayer)
-                        targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
-
-                    float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
-                    bool fire = false;
-
-                    if(degreesOff > ConeOfFire)
-                        fire = true;
-
-                    Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None);
-
-                    
-
-                }
-                else
-                {
-                    ActivationTime_Timer += timeStep;
-
-                    float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
-
-                    Turret_Hinge.localPosition = -Vector3.forward * newZ;
-
-                }
-            }
-            rememberPlayer_Timer -= Time.deltaTime;
-        }
+            TurretBehavior(timeStep);
         
         if (enemyType == EnemyTypes.Humanoid)
-        {
-            Vector3 velocity = transform.position - previousPosition;
-            Vector3 direction = velocity.normalized;
-            float distance = velocity.magnitude;
-            previousPosition = transform.position;
-
-            if (debugMode)
-                Debug.DrawRay(transform.position, direction * 100, Color.red);
-
-            #region Animation
-
-            Animator anim = GetComponentInChildren<Animator>();
-
-            anim.SetFloat("Forward", (distance / timeStep) / moveSpeed);
-												#endregion
-
-												#region Movement
-												float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            if (distanceToPlayer < DetectionRange || isInCombat)
-            {
-                if (!isInCombat)
-                {
-                    isInCombat = true;
-                    anim.SetTrigger("onCombat");
-                }
-
-                Vector3 targetPosition = player.position;
-
-                if(isLeadingTarget)
-                    targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
-
-                transform.LookAt(targetPosition); // Back to the player.
-                Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);
-    
-
-                // Where can I go?
-                float distanceToWall_Right = 0;
-                float distanceToWall_Left = 0;
-
-                for (int i = 0; i < 2; i++)
-                {
-                    RaycastHit hit;
-                    Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
-
-                    if (hit.transform != null)
-                    {
-                        if(i == 0)
-                            distanceToWall_Right = hit.distance;
-                        else
-                            distanceToWall_Left = hit.distance;
-                    }
-
-                }
-
-                
-                    transform.position += (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed * timeStep;
-            }
-
-            if (!isInCombat && moveFrequency > 0)
-            {
-
-
-                bool onMove = Random.Range(0f, 1f) < (timeStep / moveFrequency);
-
-                if (onMove)
-                {
-                    wanderTarget = WanderThowards(transform.position, moveSpeed * moveFrequency);
-                    transform.LookAt(wanderTarget); 
-                }
-
-                if(Vector3.Distance(wanderTarget, transform.position) > 0.5f)
-                    transform.position += transform.forward * moveSpeed * timeStep;
-            }
-
-												#endregion
-
-
-												{ // End Stuff
-
-																
-            }
-        }
+            HumanoidBehavior(timeStep);
     }
 
+				#region Look At
 
-    float LookAt(Vector3 targetPosition, Vector3 currentForward, Transform horizontalTransform, Transform verticalTransform)
+				float LookAt(Vector3 targetPosition, Vector3 currentForward, Transform horizontalTransform, Transform verticalTransform)
     {
         /// I think it is possible to get the vertical need from a static point, so it doens't turn awkwardly and excessibvely while rotating
 
@@ -311,7 +157,10 @@ public class Controller_Enemy : MonoBehaviour
         return (1f - dot_Forward) * 180;
     }
 
-    Vector3 targetPosition_Previous;
+				#endregion
+
+				#region Lead Shots
+				Vector3 targetPosition_Previous;
 
     Vector3 Target_LeadShot(Vector3 targetPosition_Current, float projectileSpeed) // I believe my inconsistent framerate causes some leading issues.
     {
@@ -341,6 +190,309 @@ public class Controller_Enemy : MonoBehaviour
         return targetPosition_Lead;
 
     }
+
+    #endregion
+
+    Controller_Character.StatusEffect StatusEffects = Controller_Character.StatusEffect.None;
+
+    [HideInInspector]
+    public Vector3 velocity;
+
+    public void ApplyStatusEffect(Controller_Character.StatusEffect effect, bool removeEffectInstead = false)
+    {
+        if (!removeEffectInstead)
+        {
+            StatusEffects |= effect;
+        }
+        else
+        {
+            StatusEffects &= ~effect;
+        }
+
+    }
+
+    #region Turret
+    void TurretBehavior(float timeStep)
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        Transform Turret_Hinge = transform.GetChild(0);
+        Transform Turret_Turret = Turret_Hinge.GetChild(0);
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
+
+        bool hasDetectedPlayer = (distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player");
+
+        if (!hasDetectedPlayer && !stillRemembersPlayer)
+        {
+
+
+            if (ActivationTime_Timer < 0)
+            {
+                isInvincible = true;
+
+
+
+            }
+            else
+            {
+                float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
+                if (degreesOffForward < 1)
+                {
+                    ActivationTime_Timer -= timeStep;
+
+                    float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
+                    Turret_Hinge.localPosition = -Vector3.forward * newZ;
+                }
+            }
+        }
+
+        if (hasDetectedPlayer || stillRemembersPlayer)
+        {
+            if (hasDetectedPlayer)
+            {
+                rememberPlayer_Timer = rememberPlayerFor;
+                player_LastKnownLocation = player.position;
+            }
+
+
+
+            if (ActivationTime_Timer > ActivationTime)
+            {
+                isInvincible = false;
+
+
+                Vector3 targetPostion = hasDetectedPlayer ? player.position : player_LastKnownLocation;
+
+                if (isLeadingTarget && hasDetectedPlayer)
+                    targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
+
+                float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
+                bool fire = false;
+
+                if (degreesOff > ConeOfFire)
+                    fire = true;
+
+                Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None);
+
+
+
+            }
+            else
+            {
+                ActivationTime_Timer += timeStep;
+
+                float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
+
+                Turret_Hinge.localPosition = -Vector3.forward * newZ;
+
+            }
+        }
+        rememberPlayer_Timer -= Time.deltaTime;
+    }
+
+				#endregion
+
+				void HumanoidBehavior(float timeStep)
+    {
+        Vector3 direction = velocity.normalized;
+        previousPosition = transform.position;
+
+        Vector3 moveToThisLocation = transform.position;
+
+        if (debugMode)
+            Debug.DrawRay(transform.position, direction * 100, Color.red);
+
+        #region Animation
+        {
+            float currentSpeed = velocity.magnitude / timeStep;
+            float percentageMaxSpeeed = currentSpeed / moveSpeed;
+
+            anim.SetFloat("Forward", percentageMaxSpeeed);
+        }
+        #endregion
+
+        #region Movement
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        bool playerIsInDetectionRange = distanceToPlayer < DetectionRange;
+
+        if (playerIsInDetectionRange || isInCombat)
+        {
+            if (!isInCombat)
+            {
+                isInCombat = true;
+                anim.SetTrigger("onCombat");
+            }
+
+            Vector3 targetPosition = player.position;
+
+												#region Aiming
+												if (isLeadingTarget)
+                targetPosition = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
+
+
+            transform.LookAt(targetPosition); // Back to the player.
+            Weapon.OnFire(Weapon_Versatilium.TriggerTypes.SemiAutomatic);
+
+            targetPosition.y = transform.position.y; // Stop it from mvoing down (Can still shoot down)
+
+            #endregion
+
+            #region Walking
+            // Where can I go?
+            float distanceToWall_Right = 0;
+            float distanceToWall_Left = 0;
+
+            for (int i = 0; i < 2; i++)
+            {
+                RaycastHit hit;
+                Physics.Raycast(transform.position, transform.right * (i == 0 ? 1 : -1), out hit);
+
+                if (hit.transform != null)
+                {
+                    if (i == 0)
+                        distanceToWall_Right = hit.distance;
+                    else
+                        distanceToWall_Left = hit.distance;
+                }
+
+            }
+
+         
+
+												#endregion
+
+
+            moveToThisLocation = transform.position + (transform.forward + transform.right * (distanceToWall_Right > 1 ? 1 : 0)).normalized * moveSpeed;
+            moveToThisLocation = targetPosition;
+        }
+
+        if (!isInCombat && moveFrequency != 0)
+        {
+            bool onRandomMove = Random.Range(0f, 1f) < (timeStep / moveFrequency);
+
+            if (onRandomMove)
+            {
+                wanderTarget = WanderThowards(transform.position, moveSpeed * moveFrequency);
+                transform.LookAt(wanderTarget);
+            }
+
+            moveToThisLocation = wanderTarget;
+        }
+
+        #endregion
+
+        Movement(timeStep, moveToThisLocation);
+        manuallyCollision(timeStep, velocity);
+    }
+
+
+    public bool HasStatusEffect(Controller_Character.StatusEffect effect)
+    {
+        return (StatusEffects & effect) != 0;
+    }
+				#region Movement
+
+				void Movement(float timeStep, Vector3 targetLocation)
+    {
+        bool freezeMovement = HasStatusEffect(Controller_Character.StatusEffect.FreezeMovement);
+        float characterHeight = 2;
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, -Vector3.up, out hit, characterHeight / 2);
+        bool isGrounded = hit.transform != null;
+    
+        Vector3 locationToDirection = (targetLocation - transform.position).normalized;
+
+        Vector3 verticalVelocity = Vector3.Project(velocity, Vector3.down);
+        Vector3 horizontalVelocity = velocity - verticalVelocity;
+
+        bool isAscending = Vector3.Dot(Vector3.up, verticalVelocity) > 0;
+
+        if (!isGrounded)
+            velocity += Physics.gravity * timeStep;
+
+        if (hasAirControl || isGrounded)
+        {
+            velocity -= horizontalVelocity * friction * timeStep;
+
+            if(isGrounded && !isAscending)
+                velocity -= verticalVelocity; // If grounded, stop falling
+
+            if (!freezeMovement)
+                velocity += locationToDirection * moveSpeed * friction * timeStep;
+        }
+
+        if (verticalVelocity.magnitude > 100) // If the bot falls out of the map.
+        {
+            GetComponent<Component_Health>().OnTakingDamage(9999, Vector3.zero);
+            Destroy(gameObject);
+        }
+    }
+
+    void manuallyCollision(float timeStep, Vector3 currentVelocity)
+    {
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+
+        bool isGrounded = true;
+
+        float DistanceTimesSize = (currentVelocity.magnitude * timeStep) / (capsule.radius / 2); // The radius is divided by two to make it more accurate
+
+        //		if(DistanceTimesSize > 1)
+        //			Debug.LogWarning ("A player is moving at a speed of " +  Tools.RoundWithinReason(DistanceTimesSize, 2) * 50 + "% of their hitbox radius. (" + currentVelocity.magnitude * TimeStep + " u/tick)");
+
+
+        int totalMoveCount = (int)Mathf.Ceil(DistanceTimesSize);
+        if (totalMoveCount == 0)
+            totalMoveCount = 1;
+        int remainingMoveCount = totalMoveCount;
+
+        while (remainingMoveCount > 0) // As long as it's not moving more than the radius of the collider.
+        {
+            if (remainingMoveCount > 10)
+            {
+                Debug.LogWarning("WARNING: The Player is moving at an extreme speed. Skipping " + remainingMoveCount + " physics frames for object.");
+
+                remainingMoveCount = 0;
+                totalMoveCount = 1;
+            }
+
+            // Movement
+            remainingMoveCount -= 1;
+            transform.position += (currentVelocity * timeStep) / totalMoveCount;
+
+            // Collisions
+            Collider[] overlaps = new Collider[4];
+            LayerMask IgnoreLayer = ~new LayerMask();
+            Vector3 End = transform.position + transform.up * (capsule.height / 2 - capsule.radius);
+
+            int lenght = Physics.OverlapSphereNonAlloc(End, capsule.radius * 1.5f, overlaps, IgnoreLayer, QueryTriggerInteraction.Ignore);
+
+            for (int i = 0; i < lenght; i++)
+            {
+                Transform t = overlaps[i].transform;
+
+                if (t == transform)
+                    continue;
+
+                Vector3 dir;
+                float distance;
+
+                if (Physics.ComputePenetration(capsule, transform.position + transform.up * capsule.radius, transform.rotation, overlaps[i], t.position, t.rotation, out dir, out distance))
+                {
+                    dir = dir - Vector3.Project(dir, transform.up); // This is relative horizontal, not relative to gravity.
+
+                    transform.position = transform.position + dir * distance;
+
+                    velocity -= Vector3.Project(currentVelocity, dir); // Removes the velocity once impacting with a wall.
+                }
+            }
+        }
+    }
+
+
+    #endregion
 
     Vector3 WanderThowards(Vector3 currentPos, float maxDistance = 999)
     {

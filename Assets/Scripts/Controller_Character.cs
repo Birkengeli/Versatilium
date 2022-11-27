@@ -286,4 +286,15 @@ public class Controller_Character : MonoBehaviour
         }
     }
 
+    bool groundCheck()
+    {
+        float distanceToGround = characterHeight / 2 + 0.05f;
+        bool isAscending = velocity.y > 0.05f;
+        Vector3 verticalVelocity = Vector3.Project(velocity, Vector3.down);
+
+        Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, distanceToGround, ~new LayerMask(), QueryTriggerInteraction.Ignore);
+
+        return hit.transform != null && !isAscending;
+    }
+
 }

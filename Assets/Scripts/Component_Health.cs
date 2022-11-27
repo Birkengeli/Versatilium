@@ -76,7 +76,7 @@ public class Component_Health : MonoBehaviour
             if (healthCurrent < HealthMax)
                 healthCurrent += HealthMax * healingPercentage * 2 * healingModifier * Time.deltaTime / 100;
 
-            UI_Healthbar_Fill.fillAmount = (float)healthCurrent / HealthMax;
+            UI_Healthbar_Fill.fillAmount = healthCurrent / HealthMax;
 
         }
     }
@@ -129,7 +129,7 @@ public class Component_Health : MonoBehaviour
 
                 if (enemyScript.enemyType == Controller_Enemy.EnemyTypes.Humanoid)
                 {
-                    enemyScript.transform.position += knockBack * knockback_Multiplier;
+                    enemyScript.velocity += knockBack * knockback_Multiplier;
 
                     if (!enemyScript.isInCombat)
                     {
