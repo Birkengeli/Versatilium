@@ -77,6 +77,13 @@ public class Controller_Character : MonoBehaviour
         if (Input.GetKeyDown(FreeCamera))
             Controller_Spectator.LockCursor(false, true);
 
+
+        if (Input.GetKeyDown(KeyCode.X))
+            Time.timeScale = 1f / 10;
+
+        if (Input.GetKeyUp(KeyCode.X))
+            Time.timeScale = 1f;
+
     }
 
     public void ApplyStatusEffect(StatusEffect effect, bool removeEffectInstead = false)
@@ -199,8 +206,6 @@ public class Controller_Character : MonoBehaviour
     {
         CapsuleCollider capsule = GetComponent<CapsuleCollider>();
 
-        bool isGrounded = true;
-
         float DistanceTimesSize = (currentVelocity.magnitude * timeStep) / (capsule.radius / 2); // The radius is divided by two to make it more accurate
 
         //		if(DistanceTimesSize > 1)
@@ -258,7 +263,10 @@ public class Controller_Character : MonoBehaviour
 
                 if (Physics.ComputePenetration(capsule, transform.position + transform.up * capsule.radius, transform.rotation, overlaps[i], t.position, t.rotation, out dir, out distance))
                 {
-                    dir = dir - Vector3.Project(dir, transform.up); // This is relative horizontal, not relative to gravity.
+                    //Vector3 dir_Vertical = Vector3.Project(dir, transform.up);
+                    //dir = dir - dir_Vertical; // This is relative horizontal, not relative to gravity.
+
+                    // So removing vertical velocity cause you to jump through walls. This solution works, but has other weird glithces
 
                     transform.position = transform.position + dir * distance;
 
