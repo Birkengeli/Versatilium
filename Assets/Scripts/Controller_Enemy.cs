@@ -250,10 +250,13 @@ public class Controller_Enemy : MonoBehaviour
 
         if (hasDetectedPlayer || stillRemembersPlayer)
         {
+
+            Vector3 playerPosition = player.position + Vector3.down * 0.5f * transform.localScale.y; // Shot at the camera
+
             if (hasDetectedPlayer)
             {
                 rememberPlayer_Timer = rememberPlayerFor;
-                player_LastKnownLocation = player.position;
+                player_LastKnownLocation = playerPosition;
             }
 
 
@@ -263,10 +266,10 @@ public class Controller_Enemy : MonoBehaviour
                 isInvincible = false;
 
 
-                Vector3 targetPostion = hasDetectedPlayer ? player.position : player_LastKnownLocation;
+                Vector3 targetPostion = hasDetectedPlayer ? playerPosition : player_LastKnownLocation;
 
                 if (isLeadingTarget && hasDetectedPlayer)
-                    targetPostion = Target_LeadShot(player.position, Weapon.WeaponStats.Primary.Projectile_Speed);
+                    targetPostion = Target_LeadShot(targetPostion, Weapon.WeaponStats.Primary.Projectile_Speed);
 
                 float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
                 bool fire = false;

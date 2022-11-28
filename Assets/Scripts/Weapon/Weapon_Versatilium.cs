@@ -51,6 +51,8 @@ public class Weapon_Versatilium : MonoBehaviour
         public bool toBeDestroyed;
         [HideInInspector]
         public bool sciFi_detachTrail;
+        [HideInInspector]
+        public Transform userTransform;
 
         public ProjectileStatistics projectileStats;
     }
@@ -85,6 +87,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public float fireRate = 2;
         public int PelletCount = 1;
         public float Deviation = 0.01f;
+        public float knockback_self = 0;
 
         [Header("Projectile")]
         public Visual_Type useScifipackProjectiles;
@@ -301,6 +304,10 @@ public class Weapon_Versatilium : MonoBehaviour
         if(gunParticles != null)
             gunParticles.Play();
 
+        if (isWieldedByPlayer)
+        {
+            playerScript.velocity += User_POV.forward * projectileStats.knockback_self;
+        }
   
 
         #region Charge Options
@@ -331,6 +338,7 @@ public class Weapon_Versatilium : MonoBehaviour
                     float laserLength = hitSomething ? hit.distance : 1000;
 
                     Projectile currentProjectile = new Projectile();
+                    currentProjectile.userTransform = transform;
 
                     currentProjectile.ProjectileType = ProjectileTypes.Hitscan;
                     currentProjectile.visualTransform = Instantiate(projectileStats.sciFiProjectile_prefab).transform;
@@ -350,7 +358,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
                     Projectiles.Add(currentProjectile);
 
-                    OnHit(projectileStats, hit.point, Mathf.Clamp(2f - (hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward);
+                    OnHit(projectileStats, hit.point, Mathf.Clamp(2f - (hit.distance / projectileStats.distanceBeforeDamageDrop), 0, 1), User_POV.forward, false, transform);
 
                     Vector3 bounceOrigin = laserPoint;
                     Vector3 bounceDirection = Vector3.Reflect(rayDirection, hit.normal);
@@ -425,6 +433,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 Vector3 projectileDirection = hit.transform != null ? ( hit.point - Origin_Barrel.position).normalized : (rayDirection);
 
                 Projectile currentProjectile = new Projectile();
+                currentProjectile.userTransform = transform;
 
                 currentProjectile.ProjectileType = ProjectileTypes.Projectile;
                 currentProjectile.gravity = projectileStats.Projectile_Gravity;
@@ -479,7 +488,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region Delivery
 
 
-    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition, float distanceModifier, Vector3 knockBack) // i want to skip this step at some point.
+    void OnHit(ProjectileStatistics projectileStats, Vector3 impactPosition, float distanceModifier, Vector3 knockBack, bool canHitMyself, Transform myself) // i want to skip this step at some point.
     {
 
 
@@ -489,9 +498,14 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             Transform currentHit = hits[i].transform;
 
-            
+            bool hitPlayer = currentHit.CompareTag("Player");
+            bool hitEnemy = currentHit.CompareTag("Enemy");
+            bool hitMyself = currentHit == myself;
 
-            if (currentHit.CompareTag("Player") || currentHit.CompareTag("Enemy"))
+            if (hitMyself && !canHitMyself)
+                continue;
+
+            if (hitPlayer || hitEnemy)
             {
                 int damage = Mathf.RoundToInt((projectileStats.damage * distanceModifier) / projectileStats.PelletCount);
 
@@ -554,13 +568,19 @@ public class Weapon_Versatilium : MonoBehaviour
                 RaycastHit hit;
                 Physics.Raycast(currentProjectile.position, currentProjectile.velocity.normalized, out hit, currentProjectile.velocity.magnitude * timeStep);
 
-                hasImpacted = hit.transform != null;
+                bool hitSomething = hit.transform != null;
+                bool hitMyself = hit.transform == currentProjectile.userTransform;
+                bool hasGoneFar = currentProjectile.lifeTime * currentProjectile.velocity.magnitude > 2; // the projectile has traveled more than 2 meters.
+
+
+                if (hitSomething && (!hitMyself || hasGoneFar)) // If it hit something AND it didn't hitmyself OR it has goen far enough
+                    hasImpacted = true;
 
 
 
                 if (hasImpacted)
                 {
-                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized);
+                    OnHit(currentProjectile.projectileStats, hit.point, distanceScale, currentProjectile.velocity.normalized, hasGoneFar, transform);
 
                     if (currentProjectile.remainingBounces > 0)
                     {
@@ -610,7 +630,8 @@ public class Weapon_Versatilium : MonoBehaviour
             currentProjectile.position += currentProjectile.velocity * timeStep;
             currentProjectile.velocity += Vector3.down * currentProjectile.gravity * timeStep;
 
-            currentProjectile.visualTransform.position = currentProjectile.position;
+            if(currentProjectile.visualTransform != null)
+                currentProjectile.visualTransform.position = currentProjectile.position;
 
             currentProjectile.toBeDestroyed = distanceScale == 0 || hasImpacted;
         }
