@@ -212,5 +212,5 @@ MonoBehaviour:
   debugMode: 1
   pickupType: 2
   ModuleNames:
-  - Config_02 CQC
+  - "Config_02 \u201CCQC Mode\u201D"
   distance: 2
