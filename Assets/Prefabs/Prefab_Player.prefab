@@ -138,7 +138,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1121983416118808254}
-  - {fileID: 8131030645063034513}
   m_Father: {fileID: 6332088235026572212}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5182,6 +5181,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -5198,6 +5198,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -5221,6 +5222,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -5237,6 +5239,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -5501,6 +5504,7 @@ MonoBehaviour:
         fireRate: 5
         PelletCount: 1
         Deviation: 0
+        knockback_self: 0
         useScifipackProjectiles: 2
         sciFiProjectile_prefab: {fileID: 8593982582101886334, guid: 90c5a5b6a600fa149876355a6f2003c1, type: 3}
         sciFi_DetachTrail: 1
@@ -5517,6 +5521,7 @@ MonoBehaviour:
         fireRate: 2
         PelletCount: 1
         Deviation: 0.01
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5547,6 +5552,7 @@ MonoBehaviour:
         fireRate: 3
         PelletCount: 1
         Deviation: 0
+        knockback_self: 0
         useScifipackProjectiles: 1
         sciFiProjectile_prefab: {fileID: 3871811987597805383, guid: ec759d6639d172547bc9e41ef2cd6c32, type: 3}
         sciFi_DetachTrail: 1
@@ -5563,6 +5569,7 @@ MonoBehaviour:
         fireRate: 2
         PelletCount: 1
         Deviation: 0.01
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5593,6 +5600,7 @@ MonoBehaviour:
         fireRate: 1
         PelletCount: 9
         Deviation: 0.1
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5609,6 +5617,7 @@ MonoBehaviour:
         fireRate: 2
         PelletCount: 1
         Deviation: 0.01
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5640,6 +5649,7 @@ MonoBehaviour:
         fireRate: 1
         PelletCount: 9
         Deviation: 0.1
+        knockback_self: 0
         useScifipackProjectiles: 1
         sciFiProjectile_prefab: {fileID: 2580913533069623465, guid: 08fe2d6024ae60a469c82b0411904f93, type: 3}
         sciFi_DetachTrail: 1
@@ -5656,6 +5666,7 @@ MonoBehaviour:
         fireRate: 1
         PelletCount: 1
         Deviation: 0
+        knockback_self: 0
         useScifipackProjectiles: 1
         sciFiProjectile_prefab: {fileID: 2222516795193044067, guid: 3fded490b90c97e48b72a6236a029d5b, type: 3}
         sciFi_DetachTrail: 1
@@ -5687,6 +5698,7 @@ MonoBehaviour:
         fireRate: 5
         PelletCount: 6
         Deviation: 0.15
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5703,6 +5715,7 @@ MonoBehaviour:
         fireRate: 5
         PelletCount: 1
         Deviation: 0
+        knockback_self: 0
         useScifipackProjectiles: 0
         sciFiProjectile_prefab: {fileID: 0}
         sciFi_DetachTrail: 1
@@ -5760,6 +5773,7 @@ GameObject:
   - component: {fileID: 6332088235026572214}
   - component: {fileID: 6332088235026572215}
   - component: {fileID: 2135614550}
+  - component: {fileID: 5834574493358316512}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -5869,105 +5883,16 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!1001 &8601171840656818554
-PrefabInstance:
+--- !u!114 &5834574493358316512
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 3806352416794090786}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.393
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.302
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.655
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -5215299815803115452, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 12c0f3e7f2d12754187c896ef9f6ef67, type: 2}
-    - target: {fileID: -3661985432938654458, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: -2861826292062753996, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Name
-      value: Weapon_Versatilium
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1214824004972775095, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1397318277702805348, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 12c0f3e7f2d12754187c896ef9f6ef67, type: 2}
-    - target: {fileID: 6448678818323749754, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 2ac588042b25ac94b8e9ae079b2511b3, type: 2}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
---- !u!4 &8131030645063034513 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1460338fb88d88f4692482415cbb101f, type: 3}
-  m_PrefabInstance: {fileID: 8601171840656818554}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6332088235026572213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
