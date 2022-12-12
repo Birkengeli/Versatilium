@@ -37,7 +37,6 @@ public class Pickup_Powerup : MonoBehaviour
 
     void OnPickup()
     {
-        Sound.Play(Sound.SoundTypes_Combat.OnPickupHealth, sounds, GetComponent<AudioSource>());
 
         Component_Health healthScipt = playerTransform.GetComponent<Component_Health>();
         healthScipt.OnHealing(HealAmount);

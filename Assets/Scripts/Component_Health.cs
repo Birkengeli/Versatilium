@@ -111,7 +111,7 @@ public class Component_Health : MonoBehaviour
             if (isPlayer)
             {
                 playerScript.velocity = knockBack;
-                Sound.Play(Sound.SoundTypes_Combat.OnTakingDamage, playerScript.Sounds, GetComponent<AudioSource>());
+      
                     
 
             }
@@ -121,11 +121,11 @@ public class Component_Health : MonoBehaviour
 
                 if (enemyScript.isInvincible)
                 {
-                    Sound.Play(Sound.SoundTypes_Combat.OnTakingDamageWhileInvincible, enemyScript.Sounds, GetComponent<AudioSource>());
+                 
                     return;
                 }
 
-                Sound.Play(Sound.SoundTypes_Combat.OnTakingDamage, enemyScript.Sounds, GetComponent<AudioSource>());
+
 
                 if (enemyScript.enemyType == Controller_Enemy.EnemyTypes.Humanoid)
                 {
@@ -256,6 +256,7 @@ public class Component_Health : MonoBehaviour
         {
             if (onDeath)
             {
+
                 enemyScript.enabled = false;
                 GetComponent<Collider>().enabled = false;
 

@@ -16,6 +16,17 @@ public class Controller_Enemy : MonoBehaviour
     }
 
 
+    public enum TurretStates
+    {
+        Sleeping,
+        Erecting,
+        Ready,
+        Searching,
+        Detracting,
+    }
+
+
+
     public Manager_Audio[] Audio;
 
 
@@ -46,6 +57,7 @@ public class Controller_Enemy : MonoBehaviour
     public float ActivationTime = 1f;
     public float ActivationTime_Timer;
     public bool isRetraciting;
+    public TurretStates TurretState;
 
     public Vector2 viewEuler;
 
@@ -214,7 +226,6 @@ public class Controller_Enemy : MonoBehaviour
     }
 
 
-    #region Turret
     void TurretBehavior(float timeStep)
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -225,85 +236,120 @@ public class Controller_Enemy : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
 
-        bool hasDetectedPlayer = (distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player");
+        bool canSeePlayer = hit.transform != null && hit.transform.tag == "Player";
+        bool hasDetectedPlayer = distanceToPlayer <= DetectionRange;
 
+        bool onDeploy = TurretState == TurretStates.Sleeping && hasDetectedPlayer && canSeePlayer;
+        bool whileErecting = TurretState == TurretStates.Erecting;
+        bool onReady = TurretState == TurretStates.Erecting && ActivationTime_Timer >= ActivationTime;
+        bool whileReady = TurretState == TurretStates.Ready;
+        bool whileSearching = TurretState == TurretStates.Searching;
+        bool onRetracting = TurretState == TurretStates.Searching && rememberPlayer_Timer < 0;
+        bool whileRetracting = TurretState == TurretStates.Detracting;
+        bool onSleep = TurretState == TurretStates.Detracting && ActivationTime_Timer < 0;
 
-        if (hasDetectedPlayer && !stillRemembersPlayer)
-            Manager_Audio.Play(Audio, Sounds_Turret.OnActivate);
-
-
-        if (!hasDetectedPlayer && !stillRemembersPlayer)
+        #region Deploy & Erecting
+        if (onDeploy)
         {
+            TurretState = TurretStates.Erecting;
 
-
-            if (ActivationTime_Timer < 0)
-            {
-                isInvincible = true;
-
-
-
-            }
-            else
-            {
-                float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
-                if (degreesOffForward < 1)
-                {
-                    ActivationTime_Timer -= timeStep;
-
-                    float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
-                    Turret_Hinge.localPosition = -Vector3.forward * newZ;
-                }
-            }
+            isInvincible = false;
+            ActivationTime_Timer = 0;
+            Manager_Audio.Play(Audio, Sounds_Turret.OnActivate);
         }
 
-        if (hasDetectedPlayer || stillRemembersPlayer)
+								if (whileErecting)
         {
+            ActivationTime_Timer += timeStep;
+
+            float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
+            Turret_Hinge.localPosition = -Vector3.forward * newZ;
+        }
+								#endregion
+
+								#region Ready
+								if (onReady || whileReady)
+        {
+            if(onReady)
+												{
+                TurretState = TurretStates.Ready;
+                ActivationTime_Timer = ActivationTime;
+            }
 
             Vector3 playerPosition = player.position + Vector3.down * 0.5f * transform.localScale.y; // Shot at the camera
 
-            if (hasDetectedPlayer)
+            player_LastKnownLocation = playerPosition;
+            rememberPlayer_Timer = rememberPlayerFor;
+
+            if (isLeadingTarget)
+                playerPosition = Target_LeadShot(playerPosition, Weapon.WeaponStats.Primary.Projectile_Speed);
+
+            float degreesOff = (1f - LookAt(playerPosition, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
+            bool fire = false;
+
+            if (degreesOff > ConeOfFire)
+                fire = true;
+
+            Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None, Manager_Audio.Find(Audio, Sounds_Turret.OnFire));
+
+            if (!canSeePlayer && !hasDetectedPlayer)
             {
+                TurretState = TurretStates.Searching;
                 rememberPlayer_Timer = rememberPlayerFor;
                 player_LastKnownLocation = playerPosition;
             }
 
+        }
+        #endregion
+
+        #region Searching
+        if (whileSearching)
+        {
+            rememberPlayer_Timer -= timeStep;
 
 
-            if (ActivationTime_Timer > ActivationTime)
+            // If it loses sight of the player, it will keep on shooting until it gives up.
+        
+            float degreesOff = (1f - LookAt(player_LastKnownLocation, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
+            bool fire = false;
+
+            if (degreesOff > ConeOfFire)
+                fire = true;
+
+            Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None, Manager_Audio.Find(Audio, Sounds_Turret.OnFire));
+
+        }
+        #endregion
+
+        #region Retract and Sleep
+        if (onRetracting || whileRetracting)
+        {
+            if (onRetracting)
             {
-                isInvincible = false;
-
-
-                Vector3 targetPostion = hasDetectedPlayer ? playerPosition : player_LastKnownLocation;
-
-                if (isLeadingTarget && hasDetectedPlayer)
-                    targetPostion = Target_LeadShot(targetPostion, Weapon.WeaponStats.Primary.Projectile_Speed);
-
-                float degreesOff = (1f - LookAt(targetPostion, Turret_Turret.forward, Turret_Hinge, Turret_Turret)) * 180;
-                bool fire = false;
-
-                if (degreesOff > ConeOfFire)
-                    fire = true;
-
-                Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None);
-
-
-
+                TurretState = TurretStates.Detracting;
+                Manager_Audio.Play(Audio, Sounds_Turret.OnRetract);
             }
-            else
+
+            float degreesOffForward = LookAt(Turret_Hinge.position + -transform.up, Turret_Turret.forward, Turret_Hinge, Turret_Turret);
+            if (degreesOffForward < 1)
             {
-                ActivationTime_Timer += timeStep;
+                ActivationTime_Timer -= timeStep;
 
                 float newZ = (1f - (ActivationTime_Timer / ActivationTime)) * 0.9f;
-
                 Turret_Hinge.localPosition = -Vector3.forward * newZ;
-
             }
         }
-        rememberPlayer_Timer -= Time.deltaTime;
-    }
 
-				#endregion
+        if (onSleep)
+        {
+            isInvincible = true;
+            ActivationTime_Timer = 0;
+            TurretState = TurretStates.Sleeping;
+        }
+        #endregion
+				}
+
+
 
 				void HumanoidBehavior(float timeStep)
     {
@@ -547,6 +593,7 @@ public class Controller_Enemy : MonoBehaviour
 
     public void onDeath()
     {
+        Manager_Audio.Play(Audio, Sounds_Turret.OnDeath);
 
         foreach (Drop drop in drops)
         {

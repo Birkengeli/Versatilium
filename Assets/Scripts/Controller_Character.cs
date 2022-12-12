@@ -42,7 +42,8 @@ public class Controller_Character : MonoBehaviour
     [Header("Settings")]
     public KeyCode FreeCamera = KeyCode.F1;
     public float FootstepFrequency = 1;
-    public Sound[] Sounds;
+
+    Manager_Audio[] Sounds;
 
     Camera camera;
 
@@ -288,7 +289,7 @@ public class Controller_Character : MonoBehaviour
 
         if (footstepCooldown <= 0 && isGrounded)
         {
-            Sound.Play(Sound.SoundTypes_Environmental.Footsteps_Generic, Sounds, GetComponent<AudioSource>(), true);
+            Manager_Audio.Play(Sounds, Sounds_Generic.Footsteps, true);
 
             footstepCooldown += FootstepFrequency;
         }

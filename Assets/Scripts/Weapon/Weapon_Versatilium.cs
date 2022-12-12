@@ -33,7 +33,7 @@ public class Weapon_Versatilium : MonoBehaviour
 				#endregion
 
 				#region Classes & Structs
-    public Sound[] Sounds;
+    public Manager_Audio[] Sounds;
 
     [System.Serializable]
     public struct Projectile
@@ -184,7 +184,7 @@ public class Weapon_Versatilium : MonoBehaviour
     #region OnFire
 
     /// Only TriggerType.SemiAutomtaic is supported right now.
-    public void OnFire(TriggerTypes overRide = TriggerTypes.None) 
+    public float OnFire(TriggerTypes overRide = TriggerTypes.None, Manager_Audio overRideSound = null) 
     {
         WeaponStatistics currentStats = WeaponStats;  // The Default Firemode
 
@@ -205,13 +205,15 @@ public class Weapon_Versatilium : MonoBehaviour
         }
 
 
+        if (overRideSound == null)
+            overRideSound = Manager_Audio.Find(Sounds, Sounds_Turret.OnFire);
 
 
         if (triggerType == TriggerTypes.SemiAutomatic && !currentStats.firesInBurst)
         {
             if (onKeyDown && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
+                Manager_Audio.Play_Manually(overRideSound);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -233,7 +235,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 if (onRegularFire)
                     currentStats.burstCounter = currentStats.burstCount;
 
-                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
+                Manager_Audio.Play_Manually(overRideSound);
                 currentStats.burstCounter--;
 
                 fireRate_GlobalCD = currentStats.burstCounter > 0 ? 1f / currentStats.burst_fireRate : 1f / currentStats.Primary.fireRate;
@@ -249,7 +251,7 @@ public class Weapon_Versatilium : MonoBehaviour
         {
             if (onKeyTrue && fireRate_GlobalCD < 0) // basic Fire
             {
-                Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
+                Manager_Audio.Play_Manually(overRideSound);
 
                 fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                 CreateProjectile(currentStats, currentStats.Primary);
@@ -271,8 +273,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 if (Charge_current < Charge_minimumTime)
                 {
                     // On Tap fire
-
-                    Sound.Play(Sound.SoundTypes_Weapon.OnFire, Sounds, audioSource);
+                    Manager_Audio.Play_Manually(overRideSound);
 
                     fireRate_GlobalCD = 1f / currentStats.Primary.fireRate;
                     CreateProjectile(currentStats, currentStats.Primary);
@@ -280,8 +281,7 @@ public class Weapon_Versatilium : MonoBehaviour
                 else
                 {
                     // On Charged shot
-
-                    Sound.Play(Sound.SoundTypes_Weapon.OnFire_Charged, Sounds, audioSource);
+                    Manager_Audio.Play_Manually(overRideSound);
 
                     fireRate_GlobalCD = 1f / currentStats.Secondary.fireRate;
                     CreateProjectile(WeaponStats_Alt, currentStats.Secondary);
@@ -292,6 +292,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         }
 
+        return fireRate_GlobalCD;
 
     }
 
