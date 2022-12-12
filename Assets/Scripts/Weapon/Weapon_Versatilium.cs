@@ -304,11 +304,16 @@ public class Weapon_Versatilium : MonoBehaviour
         if(gunParticles != null)
             gunParticles.Play();
 
+
         if (isWieldedByPlayer)
         {
             playerScript.velocity += User_POV.forward * projectileStats.knockback_self;
         }
-  
+
+        if (!isWieldedByPlayer)
+        {
+            
+        }
 
         #region Charge Options
         float chargePercentage = (triggerType == TriggerTypes.Charge) ? Charge_current / Charge_maximumTime : 1;
