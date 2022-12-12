@@ -312,7 +312,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         if (!isWieldedByPlayer)
         {
-            
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Weapons/CQC Shotgun/CQC Shotgun Fire");
         }
 
         #region Charge Options
