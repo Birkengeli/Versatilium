@@ -312,7 +312,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
         if (!isWieldedByPlayer)
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemies/Turret_Small/Turret Shoot");
+
         }
 
         #region Charge Options
