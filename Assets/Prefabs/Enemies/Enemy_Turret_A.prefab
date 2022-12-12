@@ -216,35 +216,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d0a521751d0a494d9cbad47a9b35ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Audio:
+  - Turret: 0
+    Weapon: 0
+    audioPath: 
+  - Turret: 2
+    Weapon: 0
+    audioPath: event:/Character/Enemies/Turret_Small/Turret Activate
   debugMode: 1
   DetectionRange: 10
   AimSpeed: 100
   ConeOfFire: 45
   isLeadingTarget: 1
   Weapon: {fileID: 4877620946721651445}
+  drops: []
   enemyType: 0
   isInvincible: 0
   player: {fileID: 0}
   Sounds:
-  - name: OnTakingDamage
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 0
+    UI: 0
     audioClips:
     - {fileID: 8300000, guid: fb47977fa16f56f468ee023290a93015, type: 3}
-    volumeScale: 1
     random: 0
-  - name: OnTakingDamage_Invincible
+    volumeSlider: 1
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 0
+    UI: 0
     audioClips:
     - {fileID: 8300000, guid: b14afc46d85166040b5884240df0d386, type: 3}
-    volumeScale: 1
     random: 0
+    volumeSlider: 1
   rememberPlayerFor: 3
   ActivationTime: 1
   ActivationTime_Timer: 0
   isRetraciting: 0
   viewEuler: {x: 0, y: 0}
   moveSpeed: 2
+  friction: 10
   isInCombat: 0
+  hasAirControl: 1
   moveFrequency: 5
   wanderMax: 50
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &4877620946721651445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,13 +275,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sounds:
-  - name: Fire
+  - Weapon: 0
+    Combat: 0
+    Enviormental: 0
+    UI: 0
     audioClips:
     - {fileID: 8300000, guid: 7844bb425ea33df468f8c9a9c21bbd68, type: 3}
-    volumeScale: 1
     random: 0
+    volumeSlider: 1
   debugMode: 0
-  isWieldedByPlayer: 0
   canFire: 1
   WeaponStats:
     triggerType: 1
@@ -279,6 +298,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 1
       sciFiProjectile_prefab: {fileID: 4974367610149320718, guid: 151375af1d7c7084da869a934447904f, type: 3}
       sciFi_DetachTrail: 1
@@ -295,6 +315,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -318,6 +339,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -334,6 +356,7 @@ MonoBehaviour:
       fireRate: 2
       PelletCount: 1
       Deviation: 0.01
+      knockback_self: 0
       useScifipackProjectiles: 0
       sciFiProjectile_prefab: {fileID: 0}
       sciFi_DetachTrail: 1
@@ -487,8 +510,6 @@ MonoBehaviour:
   deathCountdown_SpeedModifier: 2
   deathCountdown_SpeedDuration: 0.5
   Prop_Weapon: {fileID: 0}
-  POV_Death: {fileID: 0}
-  Text_Health: {fileID: 0}
 --- !u!1 &5139203246875817703
 GameObject:
   m_ObjectHideFlags: 0

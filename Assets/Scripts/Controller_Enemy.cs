@@ -16,6 +16,8 @@ public class Controller_Enemy : MonoBehaviour
     }
 
 
+    public Manager_Audio[] Audio;
+
 
     public enum EnemyTypes
     {
@@ -211,6 +213,7 @@ public class Controller_Enemy : MonoBehaviour
 
     }
 
+
     #region Turret
     void TurretBehavior(float timeStep)
     {
@@ -223,6 +226,11 @@ public class Controller_Enemy : MonoBehaviour
         Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, DetectionRange + 0.1f);
 
         bool hasDetectedPlayer = (distanceToPlayer <= DetectionRange && hit.transform != null && hit.transform.tag == "Player");
+
+
+        if (hasDetectedPlayer && !stillRemembersPlayer)
+            Manager_Audio.Play(Audio, Sounds_Turret.OnActivate);
+
 
         if (!hasDetectedPlayer && !stillRemembersPlayer)
         {
