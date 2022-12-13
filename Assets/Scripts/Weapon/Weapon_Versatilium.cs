@@ -206,7 +206,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
         if (overRideSound == null)
-            overRideSound = Manager_Audio.Find(Sounds, Sounds_Turret.OnFire);
+            overRideSound = Manager_Audio.Find(Sounds, Sounds_Weapon.OnFire);
 
 
         if (triggerType == TriggerTypes.SemiAutomatic && !currentStats.firesInBurst)

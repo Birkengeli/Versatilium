@@ -107,6 +107,22 @@ public class Manager_Audio
         return null;
     }
 
+    public static Manager_Audio Find(Manager_Audio[] sounds, Sounds_Weapon soundType, bool ignoreMissingSounds = false)
+    {
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i].Weapon == soundType)
+            {
+                return sounds[i];
+            }
+        }
+
+        if (!ignoreMissingSounds)
+            Debug.LogWarning("Could Not find '" + soundType.ToString() + "' among the given Sounds.");
+
+        return null;
+    }
+
     public static void Play_Manually(Manager_Audio sound)
     {
         if(sound != null)
