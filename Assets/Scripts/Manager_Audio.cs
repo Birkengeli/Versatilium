@@ -57,6 +57,9 @@ public class Manager_Audio
 
     public static void Play(Manager_Audio[] sounds, Sounds_Generic soundType, bool ignoreMissingSounds = false)
     {
+        if (sounds == null)
+            return;
+
         for (int i = 0; i < sounds.Length; i++)
         {
             if (sounds[i].Generic == soundType)
