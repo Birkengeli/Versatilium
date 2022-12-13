@@ -33,7 +33,6 @@ public class Weapon_Versatilium : MonoBehaviour
 				#endregion
 
 				#region Classes & Structs
-    public Manager_Audio[] Sounds;
 
     [System.Serializable]
     public struct Projectile
@@ -110,7 +109,7 @@ public class Weapon_Versatilium : MonoBehaviour
         public int bounceCount = 0;
         //  public bool freezeOnImpact = true;
 
-
+        public Manager_Audio Audio_OnFire;
     }
 
         #endregion
@@ -206,7 +205,7 @@ public class Weapon_Versatilium : MonoBehaviour
 
 
         if (overRideSound == null)
-            overRideSound = Manager_Audio.Find(Sounds, Sounds_Weapon.OnFire);
+            overRideSound = WeaponStats.Primary.Audio_OnFire;
 
 
         if (triggerType == TriggerTypes.SemiAutomatic && !currentStats.firesInBurst)
