@@ -318,6 +318,12 @@ public class Controller_Enemy : MonoBehaviour
 
             Weapon.OnFire(fire ? Weapon_Versatilium.TriggerTypes.SemiAutomatic : Weapon_Versatilium.TriggerTypes.None, Manager_Audio.Find(Audio, Sounds_Turret.OnFire));
 
+            if (hasDetectedPlayer)
+            {
+                TurretState = TurretStates.Ready;
+                rememberPlayer_Timer = rememberPlayerFor;
+            }
+
         }
         #endregion
 
