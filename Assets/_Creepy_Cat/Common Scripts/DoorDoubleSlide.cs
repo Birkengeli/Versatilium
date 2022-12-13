@@ -42,8 +42,7 @@ public class DoorDoubleSlide : MonoBehaviour {
     {
         opening = true;
 
-        AudioSource audio = GetComponent<AudioSource>();
-        audio.Play();
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Interactives/Door Open");
     }
 
     //Something left? close doors
@@ -51,8 +50,7 @@ public class DoorDoubleSlide : MonoBehaviour {
     {
         opening = false;
 
-        AudioSource audio = GetComponent<AudioSource>();
-        audio.Play();
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Interactives/Door Close");
     }
 	
 
